@@ -1,0 +1,8 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+
+com.sudoplatform.sudositereputation
+com.sudoplatform.sudositereputation.reputation
+com.sudoplatform.sudositereputation.storage
+com.sudoplatform.sudositereputation.types
+
