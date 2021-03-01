@@ -112,7 +112,7 @@ class SudoSiteReputationClientIntegrationTest : BaseIntegrationTest() {
 
         val clientImpl = client as DefaultSiteReputationClient
         val rulesets = clientImpl.listRulesets()
-        rulesets shouldHaveSize 1
+        rulesets shouldHaveSize 2
         with(rulesets[0]) {
             type shouldBe Ruleset.Type.MALICIOUS_DOMAINS
             id shouldNotBe ""

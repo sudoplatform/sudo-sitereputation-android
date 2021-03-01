@@ -71,7 +71,7 @@ dependencies {
 
     // Sudo Platform SDKs
     implementation "com.sudoplatform:sudokeymanager:3.6.1"
-    implementation "com.sudoplatform:sudouser:8.2.1"
+    implementation "com.sudoplatform:sudouser:9.2.0"
 
     testImplementation 'junit:junit:4.13.1'
     testImplementation 'org.robolectric:robolectric:4.3.1'
