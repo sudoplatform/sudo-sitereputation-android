@@ -11,8 +11,8 @@ import com.sudoplatform.sudositereputation.TestData.MALICIOUS
 import com.sudoplatform.sudositereputation.TestData.SHOULD_NOT_BE_BLOCKED
 import com.sudoplatform.sudositereputation.storage.DefaultStorageProvider
 import com.sudoplatform.sudositereputation.types.Ruleset
-import io.kotlintest.matchers.collections.shouldHaveSize
 import io.kotlintest.matchers.numerics.shouldBeGreaterThan
+import io.kotlintest.matchers.numerics.shouldBeGreaterThanOrEqual
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
 import io.kotlintest.shouldThrow
@@ -112,7 +112,7 @@ class SudoSiteReputationClientIntegrationTest : BaseIntegrationTest() {
 
         val clientImpl = client as DefaultSiteReputationClient
         val rulesets = clientImpl.listRulesets()
-        rulesets shouldHaveSize 2
+        rulesets.size shouldBeGreaterThanOrEqual 1
         with(rulesets[0]) {
             type shouldBe Ruleset.Type.MALICIOUS_DOMAINS
             id shouldNotBe ""
