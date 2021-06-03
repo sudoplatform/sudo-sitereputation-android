@@ -1,9 +1,9 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.3.72'
-    ext.coroutine_version = '1.3.8'
-    ext.dokka_version = '1.4.10.2'
+    ext.kotlin_version = '1.4.32'
+    ext.coroutine_version = '1.4.2'
+    ext.dokka_version = '1.4.30'
     ext.aws_version = '2.16.12'
 
     repositories {
@@ -13,34 +13,26 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.3'
+        classpath 'com.android.tools.build:gradle:4.2.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'org.owasp:dependency-check-gradle:6.1.0'
-        classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.22.0"
+        classpath 'org.owasp:dependency-check-gradle:6.1.1'
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:$dokka_version"
         if (project.file("${rootProject.projectDir}/util/sonarqube.gradle").exists()) {
-            classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.0"
+            classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.1.1"
         }
         classpath "com.cookpad.android.licensetools:license-tools-plugin:1.7.0"
-        classpath "org.jmailen.gradle:kotlinter-gradle:2.1.3"
+        classpath "org.jmailen.gradle:kotlinter-gradle:3.3.0"
     }
 }
+
 plugins {
-    id "io.codearte.nexus-staging" version "0.22.0"
-}
-ext {
-    projectGroup = 'com.sudoplatform'
-}
-nexusStaging {
-    packageGroup = projectGroup
-    stagingProfileId = '14314878e2a1b'
-    numberOfRetries = 40
-    delayBetweenRetriesInMillis = 5000
+    id "io.github.gradle-nexus.publish-plugin" version "1.1.0"
 }
 
 ext {
     projectGroup = 'com.sudoplatform'
 }
+
 if(project.file("${rootProject.projectDir}/util/internal-repo.gradle").exists()) {
     apply from: "${rootProject.projectDir}/util/internal-repo.gradle"
 }
@@ -51,6 +43,20 @@ else {
     ext["internalSnapshotRepoName"] = ""
     ext["internalReleaseRepoUrl"] = ""
     ext["internalReleaseRepoName"] = ""
+    ext["sonatypeStagingProfileId"] = ""
+}
+
+if (project.findProperty("tag") && sonatypeStagingProfileId) {
+    nexusPublishing {
+        repositories {
+            sonatype {
+                stagingProfileId = sonatypeStagingProfileId
+
+                username = nexusUsername
+                password = nexusPassword
+            }
+        }
+    }
 }
 
 allprojects {
