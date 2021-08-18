@@ -45,8 +45,6 @@ internal object TestData {
         "aboveandbelow.com.au",
         "wildnights.co.uk",
         "endurotanzania.co.tz",
-        "tadoo.ca",
-        "tandenblekenhoofddorp.nl",
         "tentandoserfitness.000webhostapp.com"
     )
     val SHOULD_NOT_BE_BLOCKED = setOf(

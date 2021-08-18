@@ -13,9 +13,9 @@ import com.sudoplatform.sudoconfigmanager.SudoConfigManager
 import com.sudoplatform.sudologging.Logger
 import org.json.JSONException
 
-private const val CONFIG_IDENTITY_SERVICE = "identityService"
+private const val CONFIG_SITE_REPUTATION_SERVICE = "siteReputationService"
 private const val CONFIG_REGION = "region"
-private const val CONFIG_STATIC_DATA_BUCKET = "staticDataBucket"
+private const val CONFIG_STATIC_DATA_BUCKET = "bucket"
 
 internal data class S3Configuration(
     val region: String,
@@ -33,10 +33,10 @@ internal fun readS3Configuration(
 ): S3Configuration {
 
     val preamble = "sudoplatformconfig.json does not contain"
-    val postamble = "the $CONFIG_IDENTITY_SERVICE stanza"
+    val postamble = "the $CONFIG_SITE_REPUTATION_SERVICE stanza"
 
     val identityConfig = try {
-        configManager.getConfigSet(CONFIG_IDENTITY_SERVICE)
+        configManager.getConfigSet(CONFIG_SITE_REPUTATION_SERVICE)
     } catch (e: JSONException) {
         throw SudoSiteReputationException.ConfigurationException("$preamble $postamble", e)
     }

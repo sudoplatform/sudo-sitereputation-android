@@ -29,7 +29,7 @@ internal class S3ConfigurationTest : BaseTests() {
     private fun configManager(configJson: String): SudoConfigManager {
         return object : SudoConfigManager {
             override fun getConfigSet(namespace: String): JSONObject? {
-                if (namespace == "identityService") {
+                if (namespace == "siteReputationService") {
                     return JSONObject(configJson)
                 }
                 return null
@@ -54,7 +54,7 @@ internal class S3ConfigurationTest : BaseTests() {
 
         val missingRegionJson = """
             {
-                "staticDataBucket": "ids-userdata-eml-dev-transientuserdatabucket0d043-5tkr1hts9sja"
+                "bucket": "ids-userdata-eml-dev-transientuserdatabucket0d043-5tkr1hts9sja"
             }
         """.trimIndent()
 
@@ -62,21 +62,10 @@ internal class S3ConfigurationTest : BaseTests() {
             readS3Configuration(mockContext, logger, configManager(missingRegionJson))
         }
 
-        val missingBucketJson = """
-            {
-                "region": "us-east-1"
-                "transientBucket": "ids-userdata-eml-dev-transientuserdatabucket0d043-5tkr1hts9sja"
-            }
-        """.trimIndent()
-
-        shouldThrow<SudoSiteReputationException.ConfigurationException> {
-            readS3Configuration(mockContext, logger, configManager(missingBucketJson))
-        }
-
         val completeConfigJson = """
             {
                 "region": "us-east-1",
-                "staticDataBucket": "foo"
+                "bucket": "foo"
             }
         """.trimIndent()
 

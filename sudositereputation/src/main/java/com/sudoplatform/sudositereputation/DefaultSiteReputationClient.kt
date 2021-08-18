@@ -54,7 +54,7 @@ internal class DefaultSiteReputationClient(
         @VisibleForTesting
         internal const val MALICIOUS_DOMAINS_SUBPATH = "MALICIOUSDOMAIN"
         @VisibleForTesting
-        internal const val S3_TOP_PATH = "/site-reputation/reputation-lists"
+        internal const val S3_TOP_PATH = "/reputation-lists"
         @VisibleForTesting
         internal const val LAST_UPDATED_FILE = "last_update_performed_at.txt"
     }

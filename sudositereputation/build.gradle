@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-parcelize'
 apply plugin: 'org.owasp.dependencycheck'
 apply plugin: "com.cookpad.android.licensetools"
 
@@ -241,7 +241,7 @@ if (project.file("${rootProject.projectDir}/util/sonarqube.gradle").exists()) {
 // License checking
 licenseTools {
     licensesYaml = file("licenses.yml")
-    ignoredGroups = ["com.nhaarman:mockito-kotlin", "com.anonyome", "com.sudoplatform"]
+    ignoredGroups = ["com.anonyome", "com.sudoplatform"]
     ignoredProjects = ["org.mockito"]
 }
 @Grab('org.yaml:snakeyaml:1.17') // Yaml parser
