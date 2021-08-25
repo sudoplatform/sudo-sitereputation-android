@@ -1,13 +1,23 @@
+## 1.2.1
+Released Aug 24, 2021
+
+### New
+- Exposed Entitlement Name
+
+### Fixed
+
+- None
+
 ## 1.2.0
 Released Aug 17, 2021
 
-## New
+### New
 
 - Update to be compatible with latest version of sudoplatformconfig.json
 - Replace android extensions
 - Remove jcenter and update some dependencies
 
-## Fixed
+### Fixed
 
 - None
 

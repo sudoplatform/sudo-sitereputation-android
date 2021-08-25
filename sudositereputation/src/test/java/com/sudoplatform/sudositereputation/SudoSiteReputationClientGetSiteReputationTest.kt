@@ -5,19 +5,21 @@
  */
 package com.sudoplatform.sudositereputation
 
-import org.mockito.kotlin.argWhere
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.doThrow
-import org.mockito.kotlin.stub
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyNoMoreInteractions
 import com.sudoplatform.sudositereputation.DefaultSiteReputationClient.Companion.LAST_UPDATED_FILE
+import io.kotlintest.shouldBe
+import io.kotlintest.shouldNotBe
 import io.kotlintest.shouldThrow
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyString
+import org.mockito.kotlin.argWhere
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.doThrow
+import org.mockito.kotlin.stub
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.robolectric.RobolectricTestRunner
 import java.util.concurrent.CancellationException
 
@@ -30,7 +32,7 @@ import java.util.concurrent.CancellationException
 internal class SudoSiteReputationClientGetSiteReputationTest : BaseTests() {
 
     @After
-    fun fini() {
+    fun finish() {
         verifyMocksUsedInClientInit()
         verifyNoMoreInteractions(
             mockContext,
@@ -95,5 +97,12 @@ internal class SudoSiteReputationClientGetSiteReputationTest : BaseTests() {
         verify(mockStorageProvider).read(LAST_UPDATED_FILE)
         verify(mockStorageProvider).read(argWhere { it != LAST_UPDATED_FILE })
         verify(mockReputationProvider).checkIsUrlMalicious(anyString())
+    }
+
+    @Test
+    fun `ENTITLEMENT_NAME should not be null and should have the correct value`() = runBlocking {
+        val entitlementName: String = siteReputationClient.ENTITLEMENT_NAME
+        entitlementName shouldNotBe null
+        entitlementName shouldBe "sudoplatform.sr.srUserEntitled"
     }
 }

@@ -44,17 +44,21 @@ internal class DefaultSiteReputationClient(
     @VisibleForTesting
     private val s3Client: S3Client = DefaultS3Client(context, sudoUserClient, region, bucket, logger),
     @VisibleForTesting
-    private val reputationProvider: ReputationProvider = DefaultReputationProvider(logger)
+    private val reputationProvider: ReputationProvider = DefaultReputationProvider(logger),
+    override val ENTITLEMENT_NAME: String = "sudoplatform.sr.srUserEntitled"
 ) : SudoSiteReputationClient, CoroutineScope {
 
     companion object {
         /** Reputation Ruleset file names and paths */
         @VisibleForTesting
         internal const val MALICIOUS_DOMAINS_FILE = "urlhaus-filter-domains-online.txt"
+
         @VisibleForTesting
         internal const val MALICIOUS_DOMAINS_SUBPATH = "MALICIOUSDOMAIN"
+
         @VisibleForTesting
         internal const val S3_TOP_PATH = "/reputation-lists"
+
         @VisibleForTesting
         internal const val LAST_UPDATED_FILE = "last_update_performed_at.txt"
     }

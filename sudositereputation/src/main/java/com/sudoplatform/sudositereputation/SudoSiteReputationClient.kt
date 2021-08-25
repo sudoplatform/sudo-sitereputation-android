@@ -26,6 +26,7 @@ import java.util.Objects
  * @since 2021-01-04
  */
 interface SudoSiteReputationClient : AutoCloseable {
+    val ENTITLEMENT_NAME: String
 
     companion object {
         /** Create a [Builder] for [SudoSiteReputationClient]. */

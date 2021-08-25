@@ -42,8 +42,8 @@ internal object TestData {
     )
 
     val MALICIOUS = setOf(
-        "aboveandbelow.com.au",
-        "wildnights.co.uk",
+        "dezcom.com",
+        "brightstarshop.com",
         "endurotanzania.co.tz",
         "tentandoserfitness.000webhostapp.com"
     )
