@@ -56,7 +56,12 @@ internal class DefaultStorageProvider(private val context: Context) : StoragePro
 
     override fun write(fileName: String, data: ByteArray) {
         ensureDirsExist()
-        getFile(fileName).writeBytes(data)
+        val file = getFile(fileName)
+        if (file.exists()) {
+            file.appendBytes(data)
+        } else {
+            file.writeBytes(data)
+        }
     }
 
     override fun delete(fileName: String): Boolean {

@@ -7,6 +7,9 @@ package com.sudoplatform.sudositereputation.reputation
 
 import android.net.Uri
 import com.sudoplatform.sudologging.Logger
+import com.sudoplatform.sudositereputation.types.Ruleset
+import com.sudoplatform.sudositereputation.types.SiteReputationRule
+import com.sudoplatform.sudositereputation.types.SiteReputationRuleList
 import java.io.ByteArrayInputStream
 import java.util.concurrent.CancellationException
 
@@ -19,13 +22,19 @@ private const val COMMENT = '#'
  */
 internal class DefaultReputationProvider(private val logger: Logger) : ReputationProvider {
 
-    private var maliciousDomains = mutableSetOf<String>()
+    private var ruleLists = mutableListOf<SiteReputationRuleList>()
 
-    override suspend fun setRules(reputationRulesBytes: ByteArray) {
+    override suspend fun setRules(reputationRulesBytes: ByteArray, rulesetType: Ruleset.Type) {
         try {
-            maliciousDomains.clear()
+            val matchingRuleList = ruleLists.firstOrNull { it.type == rulesetType }
+            if (matchingRuleList != null) {
+                ruleLists.remove(matchingRuleList)
+            }
+            val ruleList = SiteReputationRuleList(rulesetType, mutableSetOf<SiteReputationRule>())
+            ruleLists.add(ruleList)
             ByteArrayInputStream(reputationRulesBytes).bufferedReader().use { reader ->
-                reader.readLines()
+                val lines = reader.readLines()
+                lines
                     .map { line ->
                         line.trim()
                     }
@@ -33,10 +42,9 @@ internal class DefaultReputationProvider(private val logger: Logger) : Reputatio
                         line.isNotBlank() && !line.startsWith(COMMENT)
                     }
                     .forEach { line ->
-                        maliciousDomains.add(line)
+                        ruleList.rules.add(SiteReputationRule(line))
                     }
             }
-            logger.info("Reputation provider rules set with ${maliciousDomains.size} entries.")
         } catch (e: CancellationException) {
             // Never suppress this exception it's used by coroutines to cancel outstanding work
             throw e
@@ -44,7 +52,7 @@ internal class DefaultReputationProvider(private val logger: Logger) : Reputatio
     }
 
     override fun close() {
-        maliciousDomains.clear()
+        ruleLists.clear()
     }
 
     override suspend fun checkIsUrlMalicious(url: String): Boolean {
@@ -57,6 +65,11 @@ internal class DefaultReputationProvider(private val logger: Logger) : Reputatio
         if (host.isNullOrBlank()) {
             return false
         }
-        return maliciousDomains.contains(host)
+        for (list in ruleLists) {
+            if (list.rules.any { it.host == host }) {
+                return true
+            }
+        }
+        return false
     }
 }

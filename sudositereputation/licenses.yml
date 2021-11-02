@@ -465,9 +465,14 @@
   license: The Apache Software License, Version 2.0
   licenseUrl: https://www.apache.org/licenses/LICENSE-2.0.txt
   url: https://github.com/Kotlin/kotlinx.coroutines
-- artifact: org.jetbrains.kotlin:kotlin-parcelize-runtime:+
-  name: Parcelize Runtime
-  copyrightHolder: JetBrains, Inc.
-  license: The Apache License, Version 2.0
-  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.txt
-  url: https://kotlinlang.org/
+- artifact: org.hamcrest:hamcrest-core:+
+  name: Hamcrest Core
+  copyrightHolder: hamcrest.org
+  license: BSD License
+  url: https://search.maven.org/artifact/org.hamcrest/hamcrest
+- artifact: junit:junit:+
+  name: JUnit
+  copyrightHolder: The JUnit Team
+  license: Eclipse Public License 1.0
+  licenseUrl: http://www.eclipse.org/legal/epl-v10.html
+  url: http://junit.org

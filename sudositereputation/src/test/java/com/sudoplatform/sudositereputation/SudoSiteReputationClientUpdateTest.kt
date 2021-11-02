@@ -13,9 +13,9 @@ import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 import com.sudoplatform.sudositereputation.DefaultSiteReputationClient.Companion.LAST_UPDATED_FILE
-import com.sudoplatform.sudositereputation.DefaultSiteReputationClient.Companion.MALICIOUS_DOMAINS_FILE
+import com.sudoplatform.sudositereputation.DefaultSiteReputationClient.Companion.BASE_RULESET_FILENAME
+import com.sudoplatform.sudositereputation.DefaultSiteReputationClient.Companion.MALWARE_DOMAINS_SUBPATH
 import com.sudoplatform.sudositereputation.DefaultSiteReputationClient.Companion.S3_TOP_PATH
-import com.sudoplatform.sudositereputation.TestData.S3_PATH_MALICIOUS_DOMAINS
 import com.sudoplatform.sudositereputation.s3.S3Exception
 import io.kotlintest.shouldThrow
 import kotlinx.coroutines.runBlocking
@@ -26,6 +26,7 @@ import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.anyString
 import org.robolectric.RobolectricTestRunner
 import java.util.concurrent.CancellationException
+import org.mockito.kotlin.atLeast
 
 /**
  * Test the operation of [SudoSiteReputationClient.update] using mocks and spies.
@@ -52,12 +53,15 @@ internal class SudoSiteReputationClientUpdateTest : BaseTests() {
 
         siteReputationClient.update()
 
+        val fileName = "$BASE_RULESET_FILENAME-$MALWARE_DOMAINS_SUBPATH.txt"
+        verify(mockReputationProvider, atLeast(1)).close()
+        verify(mockStorageProvider).deleteFiles()
         verify(mockS3Client).list(eq(S3_TOP_PATH), anyInt())
-        verify(mockStorageProvider).readFileETag(MALICIOUS_DOMAINS_FILE)
-        verify(mockS3Client).download(eq(S3_PATH_MALICIOUS_DOMAINS))
-        verify(mockStorageProvider, times(2)).read(anyString())
-        verify(mockStorageProvider).write(eq(MALICIOUS_DOMAINS_FILE), any())
-        verify(mockStorageProvider).writeFileETag(eq(MALICIOUS_DOMAINS_FILE), any())
+        verify(mockStorageProvider).readFileETag(fileName)
+        verify(mockS3Client).download(eq("malware"))
+        verify(mockStorageProvider, times(6)).read(anyString())
+        verify(mockStorageProvider).write(eq(fileName), any())
+        verify(mockStorageProvider).writeFileETag(eq(fileName), any())
         verify(mockStorageProvider).write(eq(LAST_UPDATED_FILE), any())
     }
 
@@ -70,6 +74,8 @@ internal class SudoSiteReputationClientUpdateTest : BaseTests() {
 
         siteReputationClient.update()
 
+        verify(mockReputationProvider).close()
+        verify(mockStorageProvider).deleteFiles()
         verify(mockStorageProvider).readFileETag(anyString())
         verify(mockS3Client).list(anyString(), anyInt())
         verify(mockS3Client).download(anyString())
@@ -86,6 +92,8 @@ internal class SudoSiteReputationClientUpdateTest : BaseTests() {
             siteReputationClient.update()
         }
 
+        verify(mockReputationProvider).close()
+        verify(mockStorageProvider).deleteFiles()
         verify(mockStorageProvider).readFileETag(anyString())
         verify(mockS3Client).list(anyString(), anyInt())
         verify(mockS3Client).download(anyString())
@@ -102,6 +110,8 @@ internal class SudoSiteReputationClientUpdateTest : BaseTests() {
             siteReputationClient.update()
         }
 
+        verify(mockReputationProvider).close()
+        verify(mockStorageProvider).deleteFiles()
         verify(mockStorageProvider).readFileETag(anyString())
         verify(mockS3Client).list(anyString(), anyInt())
         verify(mockS3Client).download(anyString())

@@ -5,6 +5,7 @@
  */
 package com.sudoplatform.sudositereputation
 
+import com.sudoplatform.sudositereputation.s3.S3Client
 import org.mockito.kotlin.any
 import org.mockito.kotlin.atLeastOnce
 import org.mockito.kotlin.doReturn
@@ -16,6 +17,7 @@ import org.mockito.kotlin.verifyNoMoreInteractions
 import com.sudoplatform.sudositereputation.s3.S3Exception
 import io.kotlintest.matchers.collections.shouldHaveSize
 import io.kotlintest.shouldThrow
+import java.util.Date
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Test
@@ -65,6 +67,38 @@ internal class SudoSiteReputationClientListRulesetsTest : BaseTests() {
         siteReputationClient.listRulesets() shouldHaveSize 0
 
         verify(mockS3Client, atLeastOnce()).list(eq(DefaultSiteReputationClient.S3_TOP_PATH), any())
+    }
+
+    @Test
+    fun `listRulesets() should not return MALICIOUS_DOMAIN rulesets`() = runBlocking<Unit> {
+
+        val s3Objects = listOf(
+            S3Client.S3ObjectInfo(
+                key = "malware",
+                eTag = "etag1",
+                lastModified = Date(1L),
+                userMetadata = TestData.S3_REPUTATION_OBJECT_USER_METADATA_MALWARE
+            ),
+            S3Client.S3ObjectInfo(
+                key = "phishing",
+                eTag = "etag1",
+                lastModified = Date(1L),
+                userMetadata = TestData.S3_REPUTATION_OBJECT_USER_METADATA_PHISHING
+            ),
+            S3Client.S3ObjectInfo(
+                key = "malicious-domains",
+                eTag = "etag1",
+                lastModified = Date(1L),
+                userMetadata = TestData.S3_REPUTATION_OBJECT_USER_METADATA_MALICIOUSDOMAIN
+            )
+        )
+        mockS3Client.stub {
+            onBlocking { list(anyString(), any()) } doReturn s3Objects
+        }
+
+        siteReputationClient.listRulesets() shouldHaveSize 2
+
+        verify(mockS3Client).list(eq(DefaultSiteReputationClient.S3_TOP_PATH), any())
     }
 
     @Test

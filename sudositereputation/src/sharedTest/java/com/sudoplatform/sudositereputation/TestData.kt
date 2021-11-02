@@ -6,9 +6,6 @@
 
 package com.sudoplatform.sudositereputation
 
-import com.sudoplatform.sudositereputation.DefaultSiteReputationClient.Companion.MALICIOUS_DOMAINS_FILE
-import com.sudoplatform.sudositereputation.DefaultSiteReputationClient.Companion.MALICIOUS_DOMAINS_SUBPATH
-import com.sudoplatform.sudositereputation.DefaultSiteReputationClient.Companion.S3_TOP_PATH
 import com.sudoplatform.sudositereputation.s3.S3Client
 import com.sudoplatform.sudositereputation.transformers.RulesetTransformer
 import java.util.Date
@@ -24,9 +21,19 @@ internal object TestData {
     const val USER_ID = "slartibartfast"
     val USER_SUBJECT = UUID.randomUUID().toString()
 
-    val S3_PATH_MALICIOUS_DOMAINS = "$S3_TOP_PATH/$MALICIOUS_DOMAINS_SUBPATH/$MALICIOUS_DOMAINS_FILE"
+    val S3_REPUTATION_OBJECT_USER_METADATA_MALWARE = mapOf(
+        RulesetTransformer.METADATA_BLOB to """{
+            "${RulesetTransformer.METADATA_TYPE}": "${RulesetTransformer.METADATA_CATEGORY_MALWARE}"
+        }"""
+    )
 
-    val S3_REPUTATION_OBJECT_USER_METADATA = mapOf(
+    val S3_REPUTATION_OBJECT_USER_METADATA_PHISHING = mapOf(
+        RulesetTransformer.METADATA_BLOB to """{
+            "${RulesetTransformer.METADATA_TYPE}": "${RulesetTransformer.METADATA_CATEGORY_PHISHING}"
+        }"""
+    )
+
+    val S3_REPUTATION_OBJECT_USER_METADATA_MALICIOUSDOMAIN = mapOf(
         RulesetTransformer.METADATA_BLOB to """{
             "${RulesetTransformer.METADATA_TYPE}": "${RulesetTransformer.METADATA_CATEGORY_MALICIOUSDOMAIN}"
         }"""
@@ -34,10 +41,10 @@ internal object TestData {
 
     val S3_OBJECTS = listOf(
         S3Client.S3ObjectInfo(
-            key = "maliciousdomain",
+            key = "malware",
             eTag = "etag1",
             lastModified = Date(1L),
-            userMetadata = S3_REPUTATION_OBJECT_USER_METADATA
+            userMetadata = S3_REPUTATION_OBJECT_USER_METADATA_MALWARE
         )
     )
 

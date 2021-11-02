@@ -1,8 +1,19 @@
+## 1.3.0
+Released Nov 2, 2021
+
+### New
+- A wider selection of malicious domains will now be reported as malicious. This includes a large selection of phishing URLs.
+
+### Fixed
+
+- None
+
 ## 1.2.1
 Released Aug 24, 2021
 
 ### New
 - Exposed Entitlement Name
+- Updated Tests
 
 ### Fixed
 

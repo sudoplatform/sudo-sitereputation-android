@@ -1,9 +1,5 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
-$dokka.location:com.sudoplatform.sudositereputation.reputation////PointingToDeclaration/sudositereputation/com.sudoplatform.sudositereputation.reputation/index.html
-$dokka.location:com.sudoplatform.sudositereputation.reputation/ReputationProvider///PointingToDeclaration/sudositereputation/com.sudoplatform.sudositereputation.reputation/-reputation-provider/index.html
-$dokka.location:com.sudoplatform.sudositereputation.reputation/ReputationProvider/checkIsUrlMalicious/#kotlin.String/PointingToDeclaration/sudositereputation/com.sudoplatform.sudositereputation.reputation/-reputation-provider/check-is-url-malicious.html
-$dokka.location:com.sudoplatform.sudositereputation.reputation/ReputationProvider/setRules/#kotlin.ByteArray/PointingToDeclaration/sudositereputation/com.sudoplatform.sudositereputation.reputation/-reputation-provider/set-rules.html
 $dokka.location:com.sudoplatform.sudositereputation.storage////PointingToDeclaration/sudositereputation/com.sudoplatform.sudositereputation.storage/index.html
 $dokka.location:com.sudoplatform.sudositereputation.storage/StorageProvider///PointingToDeclaration/sudositereputation/com.sudoplatform.sudositereputation.storage/-storage-provider/index.html
 $dokka.location:com.sudoplatform.sudositereputation.storage/StorageProvider/delete/#kotlin.String/PointingToDeclaration/sudositereputation/com.sudoplatform.sudositereputation.storage/-storage-provider/delete.html
@@ -49,7 +45,6 @@ $dokka.location:com.sudoplatform.sudositereputation/SudoSiteReputationException.
 $dokka.location:com.sudoplatform.sudositereputation/SudoSiteReputationException.UnknownException/UnknownException/#kotlin.Throwable/PointingToDeclaration/sudositereputation/com.sudoplatform.sudositereputation/-sudo-site-reputation-exception/-unknown-exception/-unknown-exception.html
 $dokka.location:com.sudoplatform.sudositereputation/SudoSiteReputationException///PointingToDeclaration/sudositereputation/com.sudoplatform.sudositereputation/-sudo-site-reputation-exception/index.html
 com.sudoplatform.sudositereputation
-com.sudoplatform.sudositereputation.reputation
 com.sudoplatform.sudositereputation.storage
 com.sudoplatform.sudositereputation.types
 

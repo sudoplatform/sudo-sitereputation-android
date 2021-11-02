@@ -22,6 +22,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.robolectric.RobolectricTestRunner
 import java.util.concurrent.CancellationException
+import org.mockito.kotlin.times
 
 /**
  * Test the operation of [SudoSiteReputationClient.getSiteReputation] using mocks and spies.
@@ -48,8 +49,9 @@ internal class SudoSiteReputationClientGetSiteReputationTest : BaseTests() {
 
         siteReputationClient.getSiteReputation("a")
 
+        verify(mockReputationProvider).close()
         verify(mockStorageProvider).read(LAST_UPDATED_FILE)
-        verify(mockStorageProvider).read(argWhere { it != LAST_UPDATED_FILE })
+        verify(mockStorageProvider, times(3)).read(argWhere { it != LAST_UPDATED_FILE })
         verify(mockReputationProvider).checkIsUrlMalicious(anyString())
     }
 
@@ -64,6 +66,7 @@ internal class SudoSiteReputationClientGetSiteReputationTest : BaseTests() {
             siteReputationClient.getSiteReputation("a")
         }
 
+        verify(mockReputationProvider).close()
         verify(mockStorageProvider).read(LAST_UPDATED_FILE)
     }
 
@@ -78,8 +81,9 @@ internal class SudoSiteReputationClientGetSiteReputationTest : BaseTests() {
             siteReputationClient.getSiteReputation("a")
         }
 
+        verify(mockReputationProvider).close()
         verify(mockStorageProvider).read(LAST_UPDATED_FILE)
-        verify(mockStorageProvider).read(argWhere { it != LAST_UPDATED_FILE })
+        verify(mockStorageProvider, times(3)).read(argWhere { it != LAST_UPDATED_FILE })
         verify(mockReputationProvider).checkIsUrlMalicious(anyString())
     }
 
@@ -94,8 +98,9 @@ internal class SudoSiteReputationClientGetSiteReputationTest : BaseTests() {
             siteReputationClient.getSiteReputation("a")
         }
 
+        verify(mockReputationProvider).close()
         verify(mockStorageProvider).read(LAST_UPDATED_FILE)
-        verify(mockStorageProvider).read(argWhere { it != LAST_UPDATED_FILE })
+        verify(mockStorageProvider, times(3)).read(argWhere { it != LAST_UPDATED_FILE })
         verify(mockReputationProvider).checkIsUrlMalicious(anyString())
     }
 
@@ -104,5 +109,7 @@ internal class SudoSiteReputationClientGetSiteReputationTest : BaseTests() {
         val entitlementName: String = siteReputationClient.ENTITLEMENT_NAME
         entitlementName shouldNotBe null
         entitlementName shouldBe "sudoplatform.sr.srUserEntitled"
+
+        verify(mockReputationProvider).close()
     }
 }

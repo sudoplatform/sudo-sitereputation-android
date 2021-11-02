@@ -27,6 +27,8 @@ class RulesetTransformerTest {
     fun `transformer should convert all Ruleset types`() {
         val testCases = listOf(
             "MALICIOUSDOMAIN",
+            "MALWARE",
+            "PHISHING",
             "UNKNOWN"
         )
         val types = Ruleset.Type.values().toList()
@@ -71,6 +73,16 @@ class RulesetTransformerTest {
                 )
             ),
             S3Client.S3ObjectInfo(
+                key = "keyGood",
+                eTag = "42",
+                lastModified = Date(1L),
+                userMetadata = mapOf(
+                    RulesetTransformer.METADATA_BLOB to """{
+                        "${RulesetTransformer.METADATA_TYPE}": "MALWARE"
+                    }"""
+                )
+            ),
+            S3Client.S3ObjectInfo(
                 key = "key2",
                 eTag = "43",
                 lastModified = Date(1L),
@@ -92,10 +104,10 @@ class RulesetTransformerTest {
         val rulesetList = RulesetTransformer.toRulesetList(s3ObjectInfo)
         rulesetList shouldHaveSize 1
         with(rulesetList[0]) {
-            id shouldBe "key"
+            id shouldBe "keyGood"
             eTag shouldBe "42"
             updatedAt.time shouldBe 1L
-            type shouldBe Ruleset.Type.MALICIOUS_DOMAINS
+            type shouldBe Ruleset.Type.MALWARE
         }
     }
 }

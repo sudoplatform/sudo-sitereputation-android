@@ -65,7 +65,9 @@ internal abstract class BaseTests : PropertyResetter by ActualPropertyResetter()
 
     protected val mockS3Client by before {
         mock<S3Client>().stub {
-            onBlocking { list(anyString(), any()) } doReturn S3_OBJECTS
+            onBlocking {
+                list(anyString(), any())
+            } doReturn S3_OBJECTS
             onBlocking { download(anyString()) } doReturn ByteArray(42)
         }
     }

@@ -27,10 +27,13 @@ internal object RulesetTransformer {
     const val METADATA_TYPE = "categoryEnum"
     @VisibleForTesting
     const val METADATA_CATEGORY_MALICIOUSDOMAIN = "MALICIOUSDOMAIN"
+    const val METADATA_CATEGORY_MALWARE = "MALWARE"
+    const val METADATA_CATEGORY_PHISHING = "PHISHING"
 
     fun toRulesetList(s3ObjectInfoList: List<S3Client.S3ObjectInfo>): List<Ruleset> {
         return s3ObjectInfoList.filter {
-            extractRulesetTypeFromMetadata(it.userMetadata) != Ruleset.Type.UNKNOWN
+            val rulesetType = extractRulesetTypeFromMetadata(it.userMetadata)
+            rulesetType != Ruleset.Type.UNKNOWN && rulesetType != Ruleset.Type.MALICIOUS_DOMAINS
         }.map {
             toRuleset(it)
         }
@@ -58,6 +61,8 @@ internal object RulesetTransformer {
     fun String?.toRulesetType(): Ruleset.Type {
         return when (this?.trim()) {
             METADATA_CATEGORY_MALICIOUSDOMAIN -> Ruleset.Type.MALICIOUS_DOMAINS
+            METADATA_CATEGORY_MALWARE -> Ruleset.Type.MALWARE
+            METADATA_CATEGORY_PHISHING -> Ruleset.Type.PHISHING
             else -> Ruleset.Type.UNKNOWN
         }
     }

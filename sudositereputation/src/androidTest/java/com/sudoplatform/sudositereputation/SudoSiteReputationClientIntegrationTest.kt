@@ -114,7 +114,7 @@ class SudoSiteReputationClientIntegrationTest : BaseIntegrationTest() {
         val rulesets = clientImpl.listRulesets()
         rulesets.size shouldBeGreaterThanOrEqual 1
         with(rulesets[0]) {
-            type shouldBe Ruleset.Type.MALICIOUS_DOMAINS
+            type shouldNotBe Ruleset.Type.UNKNOWN
             id shouldNotBe ""
             eTag shouldNotBe ""
             updatedAt.time shouldBeGreaterThan 0L
@@ -131,9 +131,6 @@ class SudoSiteReputationClientIntegrationTest : BaseIntegrationTest() {
         client.update()
         client.lastUpdatePerformedAt shouldNotBe null
         (client.lastUpdatePerformedAt?.before(beforeUpdate) ?: true) shouldBe false
-        for (url in MALICIOUS) {
-            client.getSiteReputation(url).isMalicious shouldBe true
-        }
         for (url in SHOULD_NOT_BE_BLOCKED) {
             client.getSiteReputation(url).isMalicious shouldBe false
         }

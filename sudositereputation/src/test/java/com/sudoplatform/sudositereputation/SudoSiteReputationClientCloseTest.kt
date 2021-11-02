@@ -44,7 +44,8 @@ internal class SudoSiteReputationClientCloseTest : BaseTests() {
 
         siteReputationClient.close()
 
-        verify(mockReputationProvider).close()
+        // should call close() twice because it does it first on setup
+        verify(mockReputationProvider, times(2)).close()
     }
 
     @Test
@@ -56,7 +57,7 @@ internal class SudoSiteReputationClientCloseTest : BaseTests() {
 
         siteReputationClient.close()
 
-        verify(mockReputationProvider).close()
+        verify(mockReputationProvider, times(2)).close()
     }
 
     @Test
@@ -70,6 +71,6 @@ internal class SudoSiteReputationClientCloseTest : BaseTests() {
             siteReputationClient.close()
         }
 
-        verify(mockReputationProvider).close()
+        verify(mockReputationProvider, times(2)).close()
     }
 }

@@ -51,10 +51,12 @@ internal class DefaultSiteReputationClient(
     companion object {
         /** Reputation Ruleset file names and paths */
         @VisibleForTesting
-        internal const val MALICIOUS_DOMAINS_FILE = "urlhaus-filter-domains-online.txt"
+        internal const val BASE_RULESET_FILENAME = "malicious-domains"
 
         @VisibleForTesting
         internal const val MALICIOUS_DOMAINS_SUBPATH = "MALICIOUSDOMAIN"
+        internal const val MALWARE_DOMAINS_SUBPATH = "MALWARE"
+        internal const val PHISHING_DOMAINS_SUBPATH = "PHISHING"
 
         @VisibleForTesting
         internal const val S3_TOP_PATH = "/reputation-lists"
@@ -106,30 +108,28 @@ internal class DefaultSiteReputationClient(
     @VisibleForTesting
     internal suspend fun listRulesets(): List<Ruleset> {
         try {
+
+            val list = s3Client.list(path = S3_TOP_PATH)
             return RulesetTransformer.toRulesetList(
-                s3Client.list(path = S3_TOP_PATH)
+                list
             )
         } catch (e: Throwable) {
             logger.debug("Error $e")
             throw interpretException(e)
         }
     }
-
     override suspend fun update() {
         try {
             var isReputationProviderSetupRequired = false
-            listRulesets().forEach { ruleset ->
-                val (subPath, fileName) = ruleset.type.toPathAndFileName()
-                    ?: run {
-                        logger.debug("Unsupported ruleset ${ruleset.type} requested")
-                        return@forEach
-                    }
+            storageProvider.deleteFiles()
+            val rulesets = listRulesets()
+            rulesets.forEach { ruleset ->
+                val fileName = ruleset.type.toPathAndFileName()?.second ?: ""
                 val localETag = storageProvider.readFileETag(fileName)
                 if (ruleset.eTag != localETag) {
                     // eTag from the service is different to what we have locally, this
                     // means the rules have been updated on the backend
-                    val s3Path = makeS3Path(subPath, fileName)
-                    s3Client.download(s3Path).also { rulesetBytes ->
+                    s3Client.download(ruleset.id).also { rulesetBytes ->
                         storageProvider.write(fileName, rulesetBytes)
                         storageProvider.writeFileETag(fileName, ruleset.eTag)
                     }
@@ -150,14 +150,13 @@ internal class DefaultSiteReputationClient(
     }
 
     private fun Ruleset.Type.toPathAndFileName(): Pair<String, String>? {
-        return when (this) {
-            Ruleset.Type.MALICIOUS_DOMAINS -> Pair(MALICIOUS_DOMAINS_SUBPATH, MALICIOUS_DOMAINS_FILE)
-            else -> null
+        val subPath = when (this) {
+            Ruleset.Type.MALICIOUS_DOMAINS -> MALICIOUS_DOMAINS_SUBPATH
+            Ruleset.Type.MALWARE -> MALWARE_DOMAINS_SUBPATH
+            Ruleset.Type.PHISHING -> PHISHING_DOMAINS_SUBPATH
+            else -> return null
         }
-    }
-
-    private fun makeS3Path(path: String, fileName: String): String {
-        return "$S3_TOP_PATH/$path/$fileName"
+        return Pair(subPath, "$BASE_RULESET_FILENAME-$subPath.txt")
     }
 
     override suspend fun getSiteReputation(url: String): SiteReputation {
@@ -175,14 +174,19 @@ internal class DefaultSiteReputationClient(
 
     private suspend fun setupReputationProvider() {
         try {
+            reputationProvider.close()
             logger.info("Starting reputation initialization.")
-            val rules = getRules(Ruleset.Type.MALICIOUS_DOMAINS)
-            if (rules != null) {
-                reputationProvider.close()
-                reputationProvider.setRules(rules)
-                logger.info("Reputation initialization completed successfully.")
-            } else {
-                logger.info("Reputation initialization skipped, rules have not been downloaded.")
+            val maliciousRules = getRules(Ruleset.Type.MALICIOUS_DOMAINS)
+            val malwareRules = getRules(Ruleset.Type.MALWARE)
+            val phishingRules = getRules(Ruleset.Type.PHISHING)
+            if (maliciousRules != null) {
+                reputationProvider.setRules(maliciousRules, Ruleset.Type.MALICIOUS_DOMAINS)
+            }
+            if (malwareRules != null) {
+                reputationProvider.setRules(malwareRules, Ruleset.Type.MALWARE)
+            }
+            if (phishingRules != null) {
+                reputationProvider.setRules(phishingRules, Ruleset.Type.PHISHING)
             }
         } catch (e: CancellationException) {
             // Never suppress this exception it's used by coroutines to cancel outstanding work
