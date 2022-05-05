@@ -1,3 +1,13 @@
+## 1.3.1
+Released May 5, 2022
+
+### New
+- Updated dependencies and Kotlin version
+
+### Fixed
+
+- None
+
 ## 1.3.0
 Released Nov 2, 2021
 

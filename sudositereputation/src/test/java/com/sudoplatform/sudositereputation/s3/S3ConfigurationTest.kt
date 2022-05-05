@@ -6,10 +6,12 @@
 
 package com.sudoplatform.sudositereputation.s3
 
+import com.sudoplatform.sudoconfigmanager.ServiceCompatibilityInfo
 import com.sudoplatform.sudositereputation.BaseTests
 import com.sudoplatform.sudositereputation.SudoSiteReputationException
 import com.sudoplatform.sudositereputation.logging.LogConstants
 import com.sudoplatform.sudoconfigmanager.SudoConfigManager
+import com.sudoplatform.sudoconfigmanager.ValidationResult
 import com.sudoplatform.sudologging.AndroidUtilsLogDriver
 import com.sudoplatform.sudologging.LogLevel
 import io.kotlintest.shouldThrow
@@ -33,6 +35,19 @@ internal class S3ConfigurationTest : BaseTests() {
                     return JSONObject(configJson)
                 }
                 return null
+            }
+
+            /**
+             * Validates the client configuration (sudoplatformconfig.json) against the currently deployed set of
+             * backend services. If the client configuration is valid, i.e. the client is compatible will all deployed
+             * backend services, then the call will complete with `success` result. If any part of the client
+             * configuration is incompatible then a detailed information on the incompatible service will be
+             * returned in `failure` result. See `SudoConfigManagerError.compatibilityIssueFound` for more details.
+             *
+             * @return validation result with the details of incompatible or deprecated service configurations.
+             */
+            override suspend fun validateConfig(): ValidationResult {
+                return ValidationResult(listOf<ServiceCompatibilityInfo>(), listOf<ServiceCompatibilityInfo>())
             }
         }
     }
