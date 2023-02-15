@@ -1,0 +1,9 @@
+overwrite: true
+schema:
+  - "./schema/**/*.graphql"
+documents:
+  - "../sudositereputation/src/main/graphql/com/sudoplatform/sudositereputation/documents/**/*.graphql"
+generates:
+  "../sudositereputation/src/main/graphql/com/sudoplatform/sudositereputation/schema.json":
+    plugins:
+      - introspection

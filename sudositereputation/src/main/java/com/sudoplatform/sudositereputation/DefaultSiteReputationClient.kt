@@ -7,7 +7,6 @@ package com.sudoplatform.sudositereputation
 
 import android.content.Context
 import androidx.annotation.VisibleForTesting
-import com.amazonaws.services.cognitoidentity.model.NotAuthorizedException
 import com.sudoplatform.sudologging.Logger
 import com.sudoplatform.sudositereputation.reputation.DefaultReputationProvider
 import com.sudoplatform.sudositereputation.reputation.ReputationProvider
@@ -16,6 +15,7 @@ import com.sudoplatform.sudositereputation.s3.S3Client
 import com.sudoplatform.sudositereputation.s3.S3Exception
 import com.sudoplatform.sudositereputation.storage.StorageProvider
 import com.sudoplatform.sudositereputation.transformers.RulesetTransformer
+import com.sudoplatform.sudositereputation.transformers.SudoSiteReputationExceptionTransformer
 import com.sudoplatform.sudositereputation.types.Ruleset
 import com.sudoplatform.sudositereputation.types.SiteReputation
 import com.sudoplatform.sudouser.SudoUserClient
@@ -24,7 +24,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
-import java.io.IOException
 import java.util.Date
 import java.util.concurrent.CancellationException
 import kotlin.coroutines.CoroutineContext
@@ -87,7 +86,7 @@ internal class DefaultSiteReputationClient(
             storageProvider.deleteFileETags()
         } catch (e: Throwable) {
             logger.debug("Error $e")
-            throw interpretException(e)
+            throw SudoSiteReputationExceptionTransformer.interpretException(e)
         }
     }
 
@@ -115,7 +114,7 @@ internal class DefaultSiteReputationClient(
             )
         } catch (e: Throwable) {
             logger.debug("Error $e")
-            throw interpretException(e)
+            throw SudoSiteReputationExceptionTransformer.interpretException(e)
         }
     }
     override suspend fun update() {
@@ -145,7 +144,7 @@ internal class DefaultSiteReputationClient(
             logger.debug("Reputation data not found $e")
         } catch (e: Throwable) {
             logger.debug("Error $e")
-            throw interpretException(e)
+            throw SudoSiteReputationExceptionTransformer.interpretException(e)
         }
     }
 
@@ -168,7 +167,7 @@ internal class DefaultSiteReputationClient(
             return SiteReputation(reputationProvider.checkIsUrlMalicious(url))
         } catch (e: Throwable) {
             logger.debug("Error $e")
-            throw interpretException(e)
+            throw SudoSiteReputationExceptionTransformer.interpretException(e)
         }
     }
 
@@ -214,27 +213,7 @@ internal class DefaultSiteReputationClient(
             return Date(timestamp.toLong())
         } catch (e: Throwable) {
             logger.debug("Error $e")
-            throw interpretException(e)
-        }
-    }
-
-    /**
-     * Interpret an exception from SudoUserClient or S3 and map it to an exception
-     * declared in this SDK's API that the caller is expecting.
-     *
-     * @param exception The exception from the secure value client.
-     * @return The exception mapped to [SudoSiteReputationException]
-     * or [CancellationException]
-     */
-    private fun interpretException(exception: Throwable): Throwable {
-        return when (exception) {
-            is CancellationException, // Never wrap or reinterpret Kotlin coroutines cancellation exception
-            is SudoSiteReputationException -> exception
-            is S3Exception.MetadataException -> SudoSiteReputationException.DataFormatException(cause = exception)
-            is S3Exception -> throw SudoSiteReputationException.FailedException(cause = exception)
-            is NotAuthorizedException -> throw SudoSiteReputationException.UnauthorizedUserException(cause = exception)
-            is IOException -> throw SudoSiteReputationException.FailedException(cause = exception)
-            else -> SudoSiteReputationException.UnknownException(exception)
+            throw SudoSiteReputationExceptionTransformer.interpretException(e)
         }
     }
 }

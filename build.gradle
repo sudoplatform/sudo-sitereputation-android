@@ -4,7 +4,8 @@ buildscript {
     ext.kotlin_version = '1.6.20'
     ext.coroutine_version = '1.5.2-native-mt'
     ext.dokka_version = '1.5.0'
-    ext.aws_version = '2.42.0'
+    ext.aws_version = '2.52.1'
+    ext.appsync_version = '3.3.2'
 
     repositories {
         google()
@@ -21,11 +22,13 @@ buildscript {
         }
         classpath "com.cookpad.android.licensetools:license-tools-plugin:1.7.0"
         classpath "org.jmailen.gradle:kotlinter-gradle:3.6.0"
+        classpath "com.amazonaws:aws-android-sdk-appsync-gradle-plugin:$appsync_version"
     }
 }
 
 plugins {
     id "io.github.gradle-nexus.publish-plugin" version "1.1.0"
+    id "com.github.ben-manes.versions" version "0.39.0"
 }
 
 ext {
@@ -86,4 +89,9 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+// Check outdated dependencies with suppressions
+if (project.file("${rootProject.projectDir}/util/outdated-with-suppressions.gradle").exists()) {
+    apply from: "${rootProject.projectDir}/util/outdated-with-suppressions.gradle"
 }

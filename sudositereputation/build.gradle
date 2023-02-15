@@ -3,12 +3,17 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'org.owasp.dependencycheck'
 apply plugin: "com.cookpad.android.licensetools"
+apply plugin: 'com.amazonaws.appsync'
+
+node {
+    version = "16.18.0"
+}
 
 android {
     compileSdkVersion 31
 
     defaultConfig {
-        minSdkVersion 23
+        minSdkVersion 24
         targetSdkVersion 31
         versionCode 1
         versionName "1.0"
@@ -75,12 +80,13 @@ dependencies {
     // for updating AWS SDK versions.
     implementation "com.amazonaws:aws-android-sdk-core:$aws_version!!"
     implementation "com.amazonaws:aws-android-sdk-s3:$aws_version!!"
+    implementation "com.amazonaws:aws-android-sdk-appsync:$appsync_version!!"
 
     // Sudo Platform SDKs
     implementation "com.sudoplatform:sudologging:1.2.0"
     implementation "com.sudoplatform:sudoconfigmanager:2.0.0"
     implementation "com.sudoplatform:sudouser:11.1.1"
-
+    implementation 'com.sudoplatform:sudoapiclient:4.0.0'
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.robolectric:robolectric:4.7.3'
@@ -273,5 +279,11 @@ task checkLicenseHaveRequiredFields {
         }
     }
 }
+
+// Apollo Code Generation
+apollo {
+    outputPackageName = "com.sudoplatform.sudositereputation.graphql"
+}
+
 checkLicenses.finalizedBy checkLicenseHaveRequiredFields
 

@@ -6,9 +6,9 @@
 
 package com.sudoplatform.sudositereputation.rules
 
-import kotlin.reflect.KProperty
 import org.junit.Rule
 import org.junit.rules.ExternalResource
+import kotlin.reflect.KProperty
 
 /**
  * Allows property setup to be done inline instead of inside a [org.junit.Before]

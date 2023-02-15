@@ -7,17 +7,11 @@
 package com.sudoplatform.sudositereputation
 
 import android.content.Context
-import org.mockito.kotlin.any
-import org.mockito.kotlin.atLeastOnce
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.stub
-import org.mockito.kotlin.verify
-import com.sudoplatform.sudositereputation.TestData.S3_OBJECTS
 import com.sudoplatform.sudologging.LogDriverInterface
 import com.sudoplatform.sudologging.LogLevel
 import com.sudoplatform.sudologging.Logger
 import com.sudoplatform.sudositereputation.DefaultSiteReputationClient.Companion.LAST_UPDATED_FILE
+import com.sudoplatform.sudositereputation.TestData.S3_OBJECTS
 import com.sudoplatform.sudositereputation.TestData.USER_ID
 import com.sudoplatform.sudositereputation.TestData.USER_SUBJECT
 import com.sudoplatform.sudositereputation.reputation.ReputationProvider
@@ -31,6 +25,12 @@ import com.sudoplatform.sudouser.SudoUserClient
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.mockito.ArgumentMatchers.anyString
+import org.mockito.kotlin.any
+import org.mockito.kotlin.atLeastOnce
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.stub
+import org.mockito.kotlin.verify
 
 /**
  * Base class that sets up:

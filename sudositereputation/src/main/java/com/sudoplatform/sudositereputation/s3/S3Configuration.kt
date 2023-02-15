@@ -7,10 +7,10 @@
 package com.sudoplatform.sudositereputation.s3
 
 import android.content.Context
-import com.sudoplatform.sudositereputation.SudoSiteReputationException
 import com.sudoplatform.sudoconfigmanager.DefaultSudoConfigManager
 import com.sudoplatform.sudoconfigmanager.SudoConfigManager
 import com.sudoplatform.sudologging.Logger
+import com.sudoplatform.sudositereputation.SudoSiteReputationException
 import org.json.JSONException
 
 private const val CONFIG_SITE_REPUTATION_SERVICE = "siteReputationService"

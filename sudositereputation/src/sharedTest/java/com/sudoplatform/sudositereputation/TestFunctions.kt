@@ -21,5 +21,5 @@ fun checkReputationList(reputationListBytes: ByteArray?) {
     reputationListBytes!!.size shouldBeGreaterThan 10_000
     val reputationList = String(reputationListBytes)
     reputationList shouldStartWith "# Title: Online Malicious Domains Blocklist"
-    reputationList shouldContain "# Homepage: https://gitlab.com/curben/urlhaus-filter"
+    reputationList shouldContain "# Homepage: https://gitlab.com/malware-filter/urlhaus-filter"
 }

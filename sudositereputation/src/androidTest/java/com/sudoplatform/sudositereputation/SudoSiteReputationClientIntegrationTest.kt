@@ -24,7 +24,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import timber.log.Timber
 import java.util.Date
-
 /**
  * Test the operation of the [SudoSiteReputationClient].
  *

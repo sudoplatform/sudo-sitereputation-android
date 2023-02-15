@@ -7,13 +7,13 @@
 package com.sudoplatform.sudositereputation.s3
 
 import com.sudoplatform.sudoconfigmanager.ServiceCompatibilityInfo
-import com.sudoplatform.sudositereputation.BaseTests
-import com.sudoplatform.sudositereputation.SudoSiteReputationException
-import com.sudoplatform.sudositereputation.logging.LogConstants
 import com.sudoplatform.sudoconfigmanager.SudoConfigManager
 import com.sudoplatform.sudoconfigmanager.ValidationResult
 import com.sudoplatform.sudologging.AndroidUtilsLogDriver
 import com.sudoplatform.sudologging.LogLevel
+import com.sudoplatform.sudositereputation.BaseTests
+import com.sudoplatform.sudositereputation.SudoSiteReputationException
+import com.sudoplatform.sudositereputation.logging.LogConstants
 import io.kotlintest.shouldThrow
 import org.json.JSONObject
 import org.junit.Test

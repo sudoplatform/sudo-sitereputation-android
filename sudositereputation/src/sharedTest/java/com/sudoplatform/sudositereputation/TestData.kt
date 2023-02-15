@@ -10,7 +10,6 @@ import com.sudoplatform.sudositereputation.s3.S3Client
 import com.sudoplatform.sudositereputation.transformers.RulesetTransformer
 import java.util.Date
 import java.util.UUID
-
 /**
  * Data common to many tests.
  *

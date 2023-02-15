@@ -35,7 +35,7 @@ class RulesetTransformerTest {
         var unknownCount = 0
         testCases.forEach { testCase ->
             testCase.toRulesetType() shouldBeOneOf types
-            testCase.toLowerCase(Locale.ROOT).toRulesetType() shouldBeOneOf types
+            testCase.lowercase(Locale.ROOT).toRulesetType() shouldBeOneOf types
             " $testCase ".toRulesetType() shouldBeOneOf types
             if (testCase.toRulesetType() == Ruleset.Type.UNKNOWN) {
                 ++unknownCount
@@ -54,7 +54,7 @@ class RulesetTransformerTest {
         )
         testCases.forEach { testCase ->
             testCase.toRulesetType() shouldBe Ruleset.Type.UNKNOWN
-            testCase.toLowerCase(Locale.ROOT).toRulesetType() shouldBe Ruleset.Type.UNKNOWN
+            testCase.lowercase(Locale.ROOT).toRulesetType() shouldBe Ruleset.Type.UNKNOWN
             " $testCase ".toRulesetType() shouldBe Ruleset.Type.UNKNOWN
         }
     }
