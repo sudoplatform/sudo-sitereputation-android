@@ -47,8 +47,17 @@
         </notes>
         <packageUrl regex="true">^pkg:maven/com\.fasterxml\.jackson\.core/jackson\-databind@.*$</packageUrl>
         <cve>CVE-2020-36518</cve>
+        <cve>CVE-2021-46877</cve>
         <cve>CVE-2022-42003</cve>
         <cve>CVE-2022-42004</cve>
+    </suppress>
+    <suppress until="2023-07-31">
+        <notes><![CDATA[
+            file name: jackson-core-2.11.1.jar
+            ]]>
+        </notes>
+        <packageUrl regex="true">^pkg:maven/com\.fasterxml\.jackson\.core/jackson\-core@.*$</packageUrl>
+        <cve>CVE-2022-45688</cve>
     </suppress>
     <suppress until="2023-07-31">
         <notes><![CDATA[
@@ -80,6 +89,14 @@
         </notes>
         <packageUrl regex="true">^pkg:maven/org\.jetbrains\.dokka/kotlin\-analysis\-intellij@.*$</packageUrl>
         <cve>CVE-2022-24329</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+           file name: kotlin-analysis-intellij-1.5.0.jar (shaded: log4j:log4j:1.2.17)
+           ]]>
+        </notes>
+        <packageUrl regex="true">^pkg:maven/log4j/log4j@.*$</packageUrl>
+        <cve>CVE-2023-26464</cve>
     </suppress>
     <suppress until="2023-07-31">
         <notes><![CDATA[

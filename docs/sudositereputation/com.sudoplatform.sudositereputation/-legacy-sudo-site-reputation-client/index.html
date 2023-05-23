@@ -1,0 +1,211 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>LegacySudoSiteReputationClient</title>
+<link href="../../../../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script><script src="https://unpkg.com/kotlin-playground@1" data-selector="code.runnablesample"></script><script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script><script type="text/javascript" src="../../../scripts/main.js" async="async"></script>  </head>
+  <body>
+    <div id="container">
+      <div id="leftColumn"><a href="../../../index.html">
+          <div id="logo"></div>
+        </a>
+        <div id="paneSearch"></div>
+        <div id="sideMenu"></div>
+      </div>
+      <div id="main">
+        <div id="leftToggler"><span class="icon-toggler"></span></div>
+<script type="text/javascript" src="../../../scripts/main.js"></script>        <div class="main-content" id="content" pageIds="sudositereputation::com.sudoplatform.sudositereputation/LegacySudoSiteReputationClient///PointingToDeclaration//-366431457">
+          <div class="navigation-wrapper" id="navigation-wrapper">
+            <div class="breadcrumbs"><a href="../../../index.html">sudositereputation</a>/<a href="../index.html">com.sudoplatform.sudositereputation</a>/<a href="index.html">LegacySudoSiteReputationClient</a></div>
+            <div class="pull-right d-flex">
+              <div id="searchBar"></div>
+            </div>
+          </div>
+          <div class="cover ">
+            <h1 class="cover"><span>Legacy</span><wbr></wbr><span>Sudo</span><wbr></wbr><span>Site</span><wbr></wbr><span>Reputation</span><wbr></wbr><span>Client</span></h1>
+            <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":sudositereputation:dokkaHtml/release"><div class="symbol monospace">interface <a href="index.html">LegacySudoSiteReputationClient</a> : <a href="https://developer.android.com/reference/kotlin/java/lang/AutoCloseable.html">AutoCloseable</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">Interface encapsulating a library for interacting with the Sudo Site Reputation service.</p><h4 class="">Since</h4><p class="paragraph">2021-01-04</p></div></div>
+          </div>
+          <div class="tabbedcontent">
+            <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Types">Types</button><button class="section-tab" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Properties">Properties</button><button class="section-tab" data-togglable="Samples">Samples</button></div>
+            <div class="tabs-section-body">
+              <h2 class="">Samples</h2>
+              <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Samples"><div class="content sourceset-depenent-content" data-active="" data-togglable=":sudositereputation:dokkaHtml/release"><div class="sample-container"><code class="runnablesample monospace" theme="idea"><pre>import android.content.Context
+import com.sudoplatform.sudologging.AndroidUtilsLogDriver
+import com.sudoplatform.sudologging.LogLevel
+import com.sudoplatform.sudologging.Logger
+import com.sudoplatform.sudositereputation.LegacySudoSiteReputationClient
+import com.sudoplatform.sudositereputation.SudoSiteReputationException
+import com.sudoplatform.sudouser.SudoUserClient
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.kotlin.mock
+import org.robolectric.RobolectricTestRunner
+import java.util.Calendar
+fun main() { 
+   //sampleStart 
+   // This is how to construct the SudoSiteReputationClient
+
+// Create a logger for any messages or errors
+val logger = Logger(&quot;MyApplication&quot;, AndroidUtilsLogDriver(LogLevel.INFO))
+
+// Create an instance of SudoUserClient to perform registration and sign in.
+val sudoUserClient = SudoUserClient.builder(context)
+    .setNamespace(&quot;com.mycompany.myapplication&quot;)
+    .setLogger(logger)
+    .build()
+
+// Create an instance of SudoSiteReputationClient block advertisers and trackers
+val sudoAdTrackerBlocker = LegacySudoSiteReputationClient.builder()
+    .setContext(context)
+    .setSudoUserClient(sudoUserClient)
+    .setLogger(logger)
+    .build() 
+   //sampleEnd
+}</pre></code></div></div></div>
+              <h2 class="">Types</h2>
+              <div class="table" data-togglable="Types"><a data-name="-1079033790%2FClasslikes%2F-366431457" anchor-label="Builder" id="-1079033790%2FClasslikes%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a>
+                <div class="table-row" data-filterable-current=":sudositereputation:dokkaHtml/release" data-filterable-set=":sudositereputation:dokkaHtml/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="-builder/index.html">Builder</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1079033790%2FClasslikes%2F-366431457"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title"><div class="divergent-group" data-filterable-current=":sudositereputation:dokkaHtml/release" data-filterable-set=":sudositereputation:dokkaHtml/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":sudositereputation:dokkaHtml/release"><div class="symbol monospace">class <a href="-builder/index.html">Builder</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+<a data-name="-1079033790%2FClasslikes%2F-366431457" anchor-label="Builder" id="-1079033790%2FClasslikes%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a><div class="brief "><a data-name="-1079033790%2FClasslikes%2F-366431457" anchor-label="Builder" id="-1079033790%2FClasslikes%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a>Builder used to construct the <a href="index.html">LegacySudoSiteReputationClient</a>.</div></div>
+</div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="-1064682767%2FClasslikes%2F-366431457" anchor-label="Companion" id="-1064682767%2FClasslikes%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a>
+                <div class="table-row" data-filterable-current=":sudositereputation:dokkaHtml/release" data-filterable-set=":sudositereputation:dokkaHtml/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="-companion/index.html">Companion</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1064682767%2FClasslikes%2F-366431457"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title"><div class="divergent-group" data-filterable-current=":sudositereputation:dokkaHtml/release" data-filterable-set=":sudositereputation:dokkaHtml/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":sudositereputation:dokkaHtml/release"><div class="symbol monospace">object <a href="-companion/index.html">Companion</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+</div>
+</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h2 class="">Functions</h2>
+              <div class="table" data-togglable="Functions"><a data-name="63811330%2FFunctions%2F-366431457" anchor-label="clearStorage" id="63811330%2FFunctions%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a>
+                <div class="table-row" data-filterable-current=":sudositereputation:dokkaHtml/release" data-filterable-set=":sudositereputation:dokkaHtml/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="clear-storage.html">clearStorage</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="63811330%2FFunctions%2F-366431457"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title"><div class="divergent-group" data-filterable-current=":sudositereputation:dokkaHtml/release" data-filterable-set=":sudositereputation:dokkaHtml/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":sudositereputation:dokkaHtml/release"><div class="symbol monospace">abstract suspend fun <a href="clear-storage.html">clearStorage</a>()<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+<a data-name="63811330%2FFunctions%2F-366431457" anchor-label="clearStorage" id="63811330%2FFunctions%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a><div class="brief "><a data-name="63811330%2FFunctions%2F-366431457" anchor-label="clearStorage" id="63811330%2FFunctions%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a>Delete all cached data.</div></div>
+</div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="-1117130810%2FFunctions%2F-366431457" anchor-label="close" id="-1117130810%2FFunctions%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a>
+                <div class="table-row" data-filterable-current=":sudositereputation:dokkaHtml/release" data-filterable-set=":sudositereputation:dokkaHtml/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="../-sudo-site-reputation-client/index.html#-1117130810%2FFunctions%2F-366431457">close</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1117130810%2FFunctions%2F-366431457"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title"><div class="divergent-group" data-filterable-current=":sudositereputation:dokkaHtml/release" data-filterable-set=":sudositereputation:dokkaHtml/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":sudositereputation:dokkaHtml/release"><div class="symbol monospace">abstract fun <a href="../-sudo-site-reputation-client/index.html#-1117130810%2FFunctions%2F-366431457">close</a>()<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+</div>
+</div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="-89642960%2FFunctions%2F-366431457" anchor-label="getSiteReputation" id="-89642960%2FFunctions%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a>
+                <div class="table-row" data-filterable-current=":sudositereputation:dokkaHtml/release" data-filterable-set=":sudositereputation:dokkaHtml/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="get-site-reputation.html">getSiteReputation</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-89642960%2FFunctions%2F-366431457"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title"><div class="divergent-group" data-filterable-current=":sudositereputation:dokkaHtml/release" data-filterable-set=":sudositereputation:dokkaHtml/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":sudositereputation:dokkaHtml/release"><div class="symbol monospace">abstract suspend fun <a href="get-site-reputation.html">getSiteReputation</a>(url: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>): <a href="../../com.sudoplatform.sudositereputation.types/-legacy-site-reputation/index.html">LegacySiteReputation</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+<a data-name="-89642960%2FFunctions%2F-366431457" anchor-label="getSiteReputation" id="-89642960%2FFunctions%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a><div class="brief "><a data-name="-89642960%2FFunctions%2F-366431457" anchor-label="getSiteReputation" id="-89642960%2FFunctions%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a>Checks the host or domain of a URL to determine if it is listed as malicious.</div></div>
+</div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="-823560121%2FFunctions%2F-366431457" anchor-label="update" id="-823560121%2FFunctions%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a>
+                <div class="table-row" data-filterable-current=":sudositereputation:dokkaHtml/release" data-filterable-set=":sudositereputation:dokkaHtml/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="update.html">update</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-823560121%2FFunctions%2F-366431457"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title"><div class="divergent-group" data-filterable-current=":sudositereputation:dokkaHtml/release" data-filterable-set=":sudositereputation:dokkaHtml/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":sudositereputation:dokkaHtml/release"><div class="symbol monospace">abstract suspend fun <a href="update.html">update</a>()<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+<a data-name="-823560121%2FFunctions%2F-366431457" anchor-label="update" id="-823560121%2FFunctions%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a><div class="brief "><a data-name="-823560121%2FFunctions%2F-366431457" anchor-label="update" id="-823560121%2FFunctions%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a>Request the <span data-unresolved-link="com.sudoplatform.sudositereputation.types/Ruleset///PointingToDeclaration/">Ruleset</span>s are updated from the service.</div></div>
+</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h2 class="">Properties</h2>
+              <div class="table" data-togglable="Properties"><a data-name="-1079388845%2FProperties%2F-366431457" anchor-label="ENTITLEMENT_NAME" id="-1079388845%2FProperties%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a>
+                <div class="table-row" data-filterable-current=":sudositereputation:dokkaHtml/release" data-filterable-set=":sudositereputation:dokkaHtml/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="-e-n-t-i-t-l-e-m-e-n-t_-n-a-m-e.html">ENTITLEMENT_NAME</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1079388845%2FProperties%2F-366431457"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":sudositereputation:dokkaHtml/release"><a data-name="-1079388845%2FProperties%2F-366431457" anchor-label="ENTITLEMENT_NAME" id="-1079388845%2FProperties%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a><div class="symbol monospace">abstract val <a href="-e-n-t-i-t-l-e-m-e-n-t_-n-a-m-e.html">ENTITLEMENT_NAME</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="757395734%2FProperties%2F-366431457" anchor-label="lastUpdatePerformedAt" id="757395734%2FProperties%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a>
+                <div class="table-row" data-filterable-current=":sudositereputation:dokkaHtml/release" data-filterable-set=":sudositereputation:dokkaHtml/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="last-update-performed-at.html">lastUpdatePerformedAt</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="757395734%2FProperties%2F-366431457"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":sudositereputation:dokkaHtml/release"><a data-name="757395734%2FProperties%2F-366431457" anchor-label="lastUpdatePerformedAt" id="757395734%2FProperties%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a><div class="symbol monospace">abstract val <a href="last-update-performed-at.html">lastUpdatePerformedAt</a>: <a href="https://developer.android.com/reference/kotlin/java/util/Date.html">Date</a>?<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="757395734%2FProperties%2F-366431457" anchor-label="lastUpdatePerformedAt" id="757395734%2FProperties%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a>The date/time of when the last call to <a href="update.html">update</a> was made, null if it has never been called or if the cached rulesets have been deleted.</div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="footer"><span class="go-to-top-icon"><a href="#content"></a></span><span>© 2023 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+      </div>
+    </div>
+  </body>
+</html>
+

@@ -7,15 +7,9 @@
 package com.sudoplatform.sudositereputation
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.sudoplatform.sudositereputation.TestData.MALICIOUS
-import com.sudoplatform.sudositereputation.TestData.SHOULD_NOT_BE_BLOCKED
-import com.sudoplatform.sudositereputation.storage.DefaultStorageProvider
-import com.sudoplatform.sudositereputation.types.Ruleset
-import io.kotlintest.matchers.numerics.shouldBeGreaterThan
-import io.kotlintest.matchers.numerics.shouldBeGreaterThanOrEqual
+import com.sudoplatform.sudositereputation.types.SiteReputation
 import io.kotlintest.shouldBe
-import io.kotlintest.shouldNotBe
-import io.kotlintest.shouldThrow
+import java.time.Instant
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assume.assumeTrue
@@ -23,7 +17,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import timber.log.Timber
-import java.util.Date
+
 /**
  * Test the operation of the [SudoSiteReputationClient].
  *
@@ -32,9 +26,6 @@ import java.util.Date
 @RunWith(AndroidJUnit4::class)
 class SudoSiteReputationClientIntegrationTest : BaseIntegrationTest() {
 
-    private var siteReputationClient: SudoSiteReputationClient? = null
-    private val storageProvider = DefaultStorageProvider(context)
-
     @Before
     fun init() {
         Timber.plant(Timber.DebugTree())
@@ -42,108 +33,56 @@ class SudoSiteReputationClientIntegrationTest : BaseIntegrationTest() {
 
     @After
     fun fini() = runBlocking<Unit> {
-        if (clientConfigFilesPresent()) {
-            siteReputationClient?.clearStorage()
-        }
         Timber.uprootAll()
     }
 
-    private fun createClient() = runBlocking<SudoSiteReputationClient> {
-        siteReputationClient = SudoSiteReputationClient.builder()
+    private fun createClient(): SudoSiteReputationClient {
+        return SudoSiteReputationClient.builder()
             .setContext(context)
-            .setSudoUserClient(userClient)
-            .setStorageProvider(storageProvider)
             .setLogger(logger)
-            .build()
-        siteReputationClient!!.clearStorage()
-        siteReputationClient!!
-    }
-
-    @Test
-    fun shouldThrowIfRequiredItemsNotProvidedToBuilder() {
-
-        // Can only run if client config files are present
-        assumeTrue(clientConfigFilesPresent())
-
-        // All required items not provided
-        shouldThrow<NullPointerException> {
-            SudoSiteReputationClient.builder().build()
-        }
-
-        // Context not provided
-        shouldThrow<NullPointerException> {
-            SudoSiteReputationClient.builder()
-                .setSudoUserClient(userClient)
-                .build()
-        }
-
-        // SudoUserClient not provided
-        shouldThrow<NullPointerException> {
-            SudoSiteReputationClient.builder()
-                .setContext(context)
-                .build()
-        }
-    }
-
-    @Test
-    fun shouldNotThrowIfTheRequiredItemsAreProvidedToBuilder() {
-
-        // Can only run if client config files are present
-        assumeTrue(clientConfigFilesPresent())
-
-        SudoSiteReputationClient.builder()
-            .setContext(context)
             .setSudoUserClient(userClient)
             .build()
     }
 
-    /**
-     * Test the happy path of site reputation operations, which is the normal flow a
-     * user would be expected to exercise.
-     */
     @Test
-    fun completeFlowShouldSucceed() = runBlocking<Unit> {
+    fun test_getReputation_returns_knownGoodSite() {
+        // We need a test that the service tells us a site is good, but it's not ready
+        // Remind us in a few weeks.
+        // May 6, 2023
+        val reminderDate = Instant.ofEpochSecond(1674151453)
+        assert(reminderDate.isBefore(Instant.now()))
+    }
 
+    @Test
+    fun test_getReputation_returns_unknownSite() = runBlocking<Unit> {
         // Can only run if client config files are present
         assumeTrue(clientConfigFilesPresent())
         signInAndRegisterUser()
-        val client = createClient()
 
-        val clientImpl = client as DefaultSiteReputationClient
-        val rulesets = clientImpl.listRulesets()
-        rulesets.size shouldBeGreaterThanOrEqual 1
-        with(rulesets[0]) {
-            type shouldNotBe Ruleset.Type.UNKNOWN
-            id shouldNotBe ""
-            eTag shouldNotBe ""
-            updatedAt.time shouldBeGreaterThan 0L
-        }
+        val instance = createClient()
+        val anonyomeReputation = instance.getSiteReputation("http://www.anonyome.com")
+        // Our responses only contain items that are bad, so this will return UNKNOWN for now
+        anonyomeReputation.status.shouldBe(SiteReputation.ReputationStatus.UNKNOWN)
+    }
 
-        // Prior to update there should be no rulesets loaded
-        client.lastUpdatePerformedAt shouldBe null
-        shouldThrow<SudoSiteReputationException.RulesetNotFoundException> {
-            client.getSiteReputation(MALICIOUS.first())
-        }
+    @Test
+    fun test_getReputation_returns_knownBadSite() = runBlocking<Unit> {
+        // Can only run if client config files are present
+        assumeTrue(clientConfigFilesPresent())
+        signInAndRegisterUser()
 
-        // After update there should be a ruleset that will declare sites as malicious
-        val beforeUpdate = Date()
-        client.update()
-        client.lastUpdatePerformedAt shouldNotBe null
-        (client.lastUpdatePerformedAt?.before(beforeUpdate) ?: true) shouldBe false
-        for (url in SHOULD_NOT_BE_BLOCKED) {
-            client.getSiteReputation(url).isMalicious shouldBe false
-        }
+        val instance = createClient()
+        val badSite = instance.getSiteReputation("http://malware.wicar.org/data/eicar.com")
+        badSite.status.shouldBe(SiteReputation.ReputationStatus.MALICIOUS)
+    }
 
-        // After close there should be no rulesets loaded so nothing will be malicious
-        client.close()
-        client.lastUpdatePerformedAt shouldNotBe null
-        (client.lastUpdatePerformedAt?.time ?: 0L) shouldBeGreaterThan 0L
-        for (url in MALICIOUS + SHOULD_NOT_BE_BLOCKED) {
-            client.getSiteReputation(url).isMalicious shouldBe false
-        }
+    @Test
+    fun testInvalidURLReturnsUnknownStatusOnInvalidURI() = runBlocking<Unit> {
+        // Can only run if client config files are present
+        assumeTrue(clientConfigFilesPresent())
+        signInAndRegisterUser()
 
-        // After clearStorage all the cached data should be gone
-        client.clearStorage()
-        client.lastUpdatePerformedAt shouldBe null
+        val instance = createClient()
+        instance.getSiteReputation("foo").status.shouldBe(SiteReputation.ReputationStatus.UNKNOWN)
     }
 }

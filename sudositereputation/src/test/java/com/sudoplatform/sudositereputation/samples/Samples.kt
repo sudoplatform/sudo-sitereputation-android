@@ -10,7 +10,7 @@ import android.content.Context
 import com.sudoplatform.sudologging.AndroidUtilsLogDriver
 import com.sudoplatform.sudologging.LogLevel
 import com.sudoplatform.sudologging.Logger
-import com.sudoplatform.sudositereputation.SudoSiteReputationClient
+import com.sudoplatform.sudositereputation.LegacySudoSiteReputationClient
 import com.sudoplatform.sudositereputation.SudoSiteReputationException
 import com.sudoplatform.sudouser.SudoUserClient
 import kotlinx.coroutines.CoroutineScope
@@ -54,14 +54,14 @@ class Samples {
             .build()
 
         // Create an instance of SudoSiteReputationClient block advertisers and trackers
-        val sudoAdTrackerBlocker = SudoSiteReputationClient.builder()
+        val sudoAdTrackerBlocker = LegacySudoSiteReputationClient.builder()
             .setContext(context)
             .setSudoUserClient(sudoUserClient)
             .setLogger(logger)
             .build()
     }
 
-    private lateinit var client: SudoSiteReputationClient
+    private lateinit var client: LegacySudoSiteReputationClient
 
     // This function hides the GlobalScope from the code used in the documentation. The use
     // of GlobalScope is not something that should be recommended in the code samples.

@@ -6,7 +6,7 @@
 package com.sudoplatform.sudositereputation.s3
 
 import com.sudoplatform.sudositereputation.BaseIntegrationTest
-import com.sudoplatform.sudositereputation.DefaultSiteReputationClient
+import com.sudoplatform.sudositereputation.DefaultLegacySiteReputationClient
 import com.sudoplatform.sudositereputation.checkReputationList
 import io.kotlintest.matchers.collections.shouldHaveAtLeastSize
 import kotlinx.coroutines.runBlocking
@@ -53,7 +53,7 @@ class S3ClientIntegrationTest : BaseIntegrationTest() {
 
         signInAndRegisterUser()
 
-        val objects = s3Client.list(DefaultSiteReputationClient.S3_TOP_PATH)
+        val objects = s3Client.list(DefaultLegacySiteReputationClient.S3_TOP_PATH)
         objects shouldHaveAtLeastSize 1
         objects.forEach { println(it) }
     }
@@ -65,7 +65,7 @@ class S3ClientIntegrationTest : BaseIntegrationTest() {
 
         signInAndRegisterUser()
 
-        val objects = s3Client.list(DefaultSiteReputationClient.S3_TOP_PATH)
+        val objects = s3Client.list(DefaultLegacySiteReputationClient.S3_TOP_PATH)
 
         objects shouldHaveAtLeastSize 1
 

@@ -18,63 +18,6 @@
       },
       {
         "kind": "OBJECT",
-        "name": "Category",
-        "description": "Represents the categorization of a url",
-        "fields": [
-          {
-            "name": "id",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "SCALAR",
-        "name": "Float",
-        "description": "The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point).",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "SCALAR",
-        "name": "ID",
-        "description": "The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `\"4\"`) or integer (such as `4`) input value will be accepted as an ID.",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "SCALAR",
-        "name": "Int",
-        "description": "The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "OBJECT",
         "name": "Query",
         "description": "Retrieve site reputation results for the specified uri",
         "fields": [
@@ -123,67 +66,7 @@
         "description": "Representation of a site reputation search result",
         "fields": [
           {
-            "name": "categories",
-            "description": "Categories the URI is a member of",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "Category",
-                    "ofType": null
-                  }
-                }
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "confidence",
-            "description": "Confidence of the provided rating",
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "Float",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "isMalicious",
-            "description": "Service applied business logic of site maliciousness",
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "scope",
-            "description": "Scope of the match",
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "Scope",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "status",
+            "name": "reputationStatus",
             "description": "Search result status",
             "args": [],
             "type": {
@@ -192,22 +75,6 @@
               "ofType": {
                 "kind": "ENUM",
                 "name": "ReputationStatus",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "ttl",
-            "description": "Time to Live - cache expiry for the response in seconds",
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Int",
                 "ofType": null
               }
             },
@@ -229,37 +96,20 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "NotFound",
-            "description": "URI not found in dataset",
+            "name": "MALICIOUS",
+            "description": "URI found in dataset as malicious",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "Success",
-            "description": "URI found in dataset",
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "possibleTypes": null
-      },
-      {
-        "kind": "ENUM",
-        "name": "Scope",
-        "description": "Represents the scope of the search",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "Domain",
-            "description": "Matched on domain",
+            "name": "NOTMALICIOUS",
+            "description": "URI not in dataset as not malicious",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "Path",
-            "description": "Matched on path",
+            "name": "UNKNOWN",
+            "description": "URI not found in the dataset",
             "isDeprecated": false,
             "deprecationReason": null
           }

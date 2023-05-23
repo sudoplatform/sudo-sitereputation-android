@@ -28,11 +28,11 @@
   <div>
     <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":sudositereputation:dokkaHtml/release"><div class="symbol monospace">abstract suspend fun <a href="get-site-reputation.html">getSiteReputation</a>(url: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>): <a href="../../com.sudoplatform.sudositereputation.types/-site-reputation/index.html">SiteReputation</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
   </div>
-<p class="paragraph">Checks the host or domain of a URL to determine if it is listed as malicious.</p><h4 class="">Return</h4><p class="paragraph"><a href="../../com.sudoplatform.sudositereputation.types/-site-reputation/is-malicious.html">SiteReputation.isMalicious</a> will be true if the URL should not be loaded.</p><h2 class="">Samples</h2><div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Samples"><div class="content sourceset-depenent-content" data-active="" data-togglable=":sudositereputation:dokkaHtml/release"><div class="sample-container"><code class="runnablesample monospace" theme="idea"><pre>import android.content.Context
+<p class="paragraph">Checks the host or domain of a URL to determine if it is listed as malicious.</p><h4 class="">Return</h4><p class="paragraph"><a href="../../com.sudoplatform.sudositereputation.types/-legacy-site-reputation/is-malicious.html">LegacySiteReputation.isMalicious</a> will be true if the URL should not be loaded.</p><h2 class="">Samples</h2><div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Samples"><div class="content sourceset-depenent-content" data-active="" data-togglable=":sudositereputation:dokkaHtml/release"><div class="sample-container"><code class="runnablesample monospace" theme="idea"><pre>import android.content.Context
 import com.sudoplatform.sudologging.AndroidUtilsLogDriver
 import com.sudoplatform.sudologging.LogLevel
 import com.sudoplatform.sudologging.Logger
-import com.sudoplatform.sudositereputation.SudoSiteReputationClient
+import com.sudoplatform.sudositereputation.LegacySudoSiteReputationClient
 import com.sudoplatform.sudositereputation.SudoSiteReputationException
 import com.sudoplatform.sudouser.SudoUserClient
 import kotlinx.coroutines.CoroutineScope

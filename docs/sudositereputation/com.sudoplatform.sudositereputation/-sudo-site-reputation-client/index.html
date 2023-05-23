@@ -25,14 +25,14 @@
             <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":sudositereputation:dokkaHtml/release"><div class="symbol monospace">interface <a href="index.html">SudoSiteReputationClient</a> : <a href="https://developer.android.com/reference/kotlin/java/lang/AutoCloseable.html">AutoCloseable</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">Interface encapsulating a library for interacting with the Sudo Site Reputation service.</p><h4 class="">Since</h4><p class="paragraph">2021-01-04</p></div></div>
           </div>
           <div class="tabbedcontent">
-            <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Types">Types</button><button class="section-tab" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Properties">Properties</button><button class="section-tab" data-togglable="Samples">Samples</button></div>
+            <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Types">Types</button><button class="section-tab" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Samples">Samples</button></div>
             <div class="tabs-section-body">
               <h2 class="">Samples</h2>
               <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Samples"><div class="content sourceset-depenent-content" data-active="" data-togglable=":sudositereputation:dokkaHtml/release"><div class="sample-container"><code class="runnablesample monospace" theme="idea"><pre>import android.content.Context
 import com.sudoplatform.sudologging.AndroidUtilsLogDriver
 import com.sudoplatform.sudologging.LogLevel
 import com.sudoplatform.sudologging.Logger
-import com.sudoplatform.sudositereputation.SudoSiteReputationClient
+import com.sudoplatform.sudositereputation.LegacySudoSiteReputationClient
 import com.sudoplatform.sudositereputation.SudoSiteReputationException
 import com.sudoplatform.sudouser.SudoUserClient
 import kotlinx.coroutines.CoroutineScope
@@ -59,7 +59,7 @@ val sudoUserClient = SudoUserClient.builder(context)
     .build()
 
 // Create an instance of SudoSiteReputationClient block advertisers and trackers
-val sudoAdTrackerBlocker = SudoSiteReputationClient.builder()
+val sudoAdTrackerBlocker = LegacySudoSiteReputationClient.builder()
     .setContext(context)
     .setSudoUserClient(sudoUserClient)
     .setLogger(logger)
@@ -79,7 +79,7 @@ val sudoAdTrackerBlocker = SudoSiteReputationClient.builder()
   <div>
     <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":sudositereputation:dokkaHtml/release"><div class="symbol monospace">class <a href="-builder/index.html">Builder</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
   </div>
-<a data-name="-868737205%2FClasslikes%2F-366431457" anchor-label="Builder" id="-868737205%2FClasslikes%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a><div class="brief "><a data-name="-868737205%2FClasslikes%2F-366431457" anchor-label="Builder" id="-868737205%2FClasslikes%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a>Builder used to construct the <a href="index.html">SudoSiteReputationClient</a>.</div></div>
+<a data-name="-868737205%2FClasslikes%2F-366431457" anchor-label="Builder" id="-868737205%2FClasslikes%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a><div class="brief "><a data-name="-868737205%2FClasslikes%2F-366431457" anchor-label="Builder" id="-868737205%2FClasslikes%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a>Builder used to construct the <a href="../-legacy-sudo-site-reputation-client/index.html">LegacySudoSiteReputationClient</a>.</div></div>
 </div>
                     </div>
                   </div>
@@ -103,24 +103,7 @@ val sudoAdTrackerBlocker = SudoSiteReputationClient.builder()
                 </div>
               </div>
               <h2 class="">Functions</h2>
-              <div class="table" data-togglable="Functions"><a data-name="609471897%2FFunctions%2F-366431457" anchor-label="clearStorage" id="609471897%2FFunctions%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a>
-                <div class="table-row" data-filterable-current=":sudositereputation:dokkaHtml/release" data-filterable-set=":sudositereputation:dokkaHtml/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="clear-storage.html">clearStorage</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="609471897%2FFunctions%2F-366431457"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":sudositereputation:dokkaHtml/release" data-filterable-set=":sudositereputation:dokkaHtml/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":sudositereputation:dokkaHtml/release"><div class="symbol monospace">abstract suspend fun <a href="clear-storage.html">clearStorage</a>()<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="609471897%2FFunctions%2F-366431457" anchor-label="clearStorage" id="609471897%2FFunctions%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a><div class="brief "><a data-name="609471897%2FFunctions%2F-366431457" anchor-label="clearStorage" id="609471897%2FFunctions%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a>Delete all cached data.</div></div>
-</div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-1117130810%2FFunctions%2F-366431457" anchor-label="close" id="-1117130810%2FFunctions%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a>
+              <div class="table" data-togglable="Functions"><a data-name="-1117130810%2FFunctions%2F-366431457" anchor-label="close" id="-1117130810%2FFunctions%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a>
                 <div class="table-row" data-filterable-current=":sudositereputation:dokkaHtml/release" data-filterable-set=":sudositereputation:dokkaHtml/release">
                   <div class="main-subrow keyValue ">
                     <div class=""><span class="inline-flex"><a href="index.html#-1117130810%2FFunctions%2F-366431457">close</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1117130810%2FFunctions%2F-366431457"></span>
@@ -151,51 +134,6 @@ val sudoAdTrackerBlocker = SudoSiteReputationClient.builder()
   </div>
 <a data-name="-1935511801%2FFunctions%2F-366431457" anchor-label="getSiteReputation" id="-1935511801%2FFunctions%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a><div class="brief "><a data-name="-1935511801%2FFunctions%2F-366431457" anchor-label="getSiteReputation" id="-1935511801%2FFunctions%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a>Checks the host or domain of a URL to determine if it is listed as malicious.</div></div>
 </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="1538528286%2FFunctions%2F-366431457" anchor-label="update" id="1538528286%2FFunctions%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a>
-                <div class="table-row" data-filterable-current=":sudositereputation:dokkaHtml/release" data-filterable-set=":sudositereputation:dokkaHtml/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="update.html">update</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1538528286%2FFunctions%2F-366431457"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":sudositereputation:dokkaHtml/release" data-filterable-set=":sudositereputation:dokkaHtml/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":sudositereputation:dokkaHtml/release"><div class="symbol monospace">abstract suspend fun <a href="update.html">update</a>()<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="1538528286%2FFunctions%2F-366431457" anchor-label="update" id="1538528286%2FFunctions%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a><div class="brief "><a data-name="1538528286%2FFunctions%2F-366431457" anchor-label="update" id="1538528286%2FFunctions%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a>Request the <span data-unresolved-link="com.sudoplatform.sudositereputation.types/Ruleset///PointingToDeclaration/">Ruleset</span>s are updated from the service.</div></div>
-</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <h2 class="">Properties</h2>
-              <div class="table" data-togglable="Properties"><a data-name="-599732118%2FProperties%2F-366431457" anchor-label="ENTITLEMENT_NAME" id="-599732118%2FProperties%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a>
-                <div class="table-row" data-filterable-current=":sudositereputation:dokkaHtml/release" data-filterable-set=":sudositereputation:dokkaHtml/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="-e-n-t-i-t-l-e-m-e-n-t_-n-a-m-e.html">ENTITLEMENT_NAME</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-599732118%2FProperties%2F-366431457"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":sudositereputation:dokkaHtml/release"><a data-name="-599732118%2FProperties%2F-366431457" anchor-label="ENTITLEMENT_NAME" id="-599732118%2FProperties%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a><div class="symbol monospace">abstract val <a href="-e-n-t-i-t-l-e-m-e-n-t_-n-a-m-e.html">ENTITLEMENT_NAME</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="-168670113%2FProperties%2F-366431457" anchor-label="lastUpdatePerformedAt" id="-168670113%2FProperties%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a>
-                <div class="table-row" data-filterable-current=":sudositereputation:dokkaHtml/release" data-filterable-set=":sudositereputation:dokkaHtml/release">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="last-update-performed-at.html">lastUpdatePerformedAt</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-168670113%2FProperties%2F-366431457"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":sudositereputation:dokkaHtml/release"><a data-name="-168670113%2FProperties%2F-366431457" anchor-label="lastUpdatePerformedAt" id="-168670113%2FProperties%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a><div class="symbol monospace">abstract val <a href="last-update-performed-at.html">lastUpdatePerformedAt</a>: <a href="https://developer.android.com/reference/kotlin/java/util/Date.html">Date</a>?<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-168670113%2FProperties%2F-366431457" anchor-label="lastUpdatePerformedAt" id="-168670113%2FProperties%2F-366431457" data-filterable-set=":sudositereputation:dokkaHtml/release"></a>The date/time of when the last call to <a href="update.html">update</a> was made, null if it has never been called or if the cached rulesets have been deleted.</div></div></div>
-                      </div>
                     </div>
                   </div>
                 </div>

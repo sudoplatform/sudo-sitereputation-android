@@ -1,5 +1,6 @@
 package com.sudoplatform.sudositereputation
 
+import android.util.LruCache
 import com.amazonaws.mobileconnectors.appsync.AWSAppSyncClient
 import com.amazonaws.mobileconnectors.appsync.fetcher.AppSyncResponseFetchers
 import com.apollographql.apollo.api.Error
@@ -7,14 +8,19 @@ import com.apollographql.apollo.exception.ApolloException
 import com.sudoplatform.sudologging.Logger
 import com.sudoplatform.sudositereputation.appsync.enqueue
 import com.sudoplatform.sudositereputation.graphql.GetSiteReputationQuery
-import com.sudoplatform.sudositereputation.transformers.RealtimeReputationTransformer
 import com.sudoplatform.sudositereputation.transformers.SudoSiteReputationExceptionTransformer
-import com.sudoplatform.sudositereputation.types.RealtimeReputation
+import com.sudoplatform.sudositereputation.types.SiteReputation
+import com.sudoplatform.sudositereputation.transformers.SudoSiteReputationTransformer
 
 internal class APIClient(
     private val appSyncClient: AWSAppSyncClient,
-    private val logger: Logger
+    private val logger: Logger,
+    private val cache: LruCache<String, SiteReputation>?
 ) {
+
+    fun clearCache() {
+        cache?.evictAll()
+    }
 
     companion object {
         /** Exception messages */
@@ -25,30 +31,40 @@ internal class APIClient(
         private const val ERROR_SERVICE = "ServiceError"
     }
 
-    suspend fun getSiteReputation(uri: String): RealtimeReputation {
-        try {
-            val query = GetSiteReputationQuery.builder()
-                .uri(uri)
-                .build()
+    suspend fun getSiteReputation(uri: String): SiteReputation {
+        if (cache?.get(uri) != null) {
+            // if found in cache, return the item
+            return cache.get(uri)
+        } else {
 
-            val response = appSyncClient.query(query)
-                .responseFetcher(AppSyncResponseFetchers.NETWORK_ONLY)
-                .enqueue()
+            try {
+                val query = GetSiteReputationQuery.builder()
+                    .uri(uri)
+                    .build()
 
-            if (response.hasErrors()) {
-                logger.warning("Unexpected query response. ${response.errors()}")
-                throw interpretError(response.errors().first())
-            }
+                val response = appSyncClient.query(query)
+                    .responseFetcher(AppSyncResponseFetchers.NETWORK_ONLY)
+                    .enqueue()
 
-            response.data()?.siteReputation?.fragments()?.reputation()?.let {
-                return RealtimeReputationTransformer.toReputationFromGraphQL(it)
-            }
-            throw SudoSiteReputationException.FailedException(MISSING_RESPONSE)
-        } catch (e: Throwable) {
-            logger.debug("unexpected error $e")
-            when (e) {
-                is ApolloException -> throw SudoSiteReputationException.FailedException(cause = e)
-                else -> throw SudoSiteReputationExceptionTransformer.interpretException(e)
+                if (response.hasErrors()) {
+                    logger.warning("Unexpected query response. ${response.errors()}")
+                    throw interpretError(response.errors().first())
+                }
+
+                response.data()?.siteReputation?.fragments()?.reputation()?.let {
+                    // Cache the response here
+                    val reputation = SudoSiteReputationTransformer.toReputationFromGraphQL(it)
+                    cache?.put(uri, reputation)
+
+                    return reputation
+                }
+                throw SudoSiteReputationException.FailedException(MISSING_RESPONSE)
+            } catch (e: Throwable) {
+                logger.debug("unexpected error $e")
+                when (e) {
+                    is ApolloException -> throw SudoSiteReputationException.FailedException(cause = e)
+                    else -> throw SudoSiteReputationExceptionTransformer.interpretException(e)
+                }
             }
         }
     }

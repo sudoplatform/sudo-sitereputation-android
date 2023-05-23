@@ -7,7 +7,7 @@
 package com.sudoplatform.sudositereputation
 
 /**
- * Defines the exceptions thrown by the methods of the [SudoSiteReputationClient].
+ * Defines the exceptions thrown by the methods of the [LegacySudoSiteReputationClient].
  *
  * @property message Accompanying message for the exception.
  * @property cause The cause for the exception.

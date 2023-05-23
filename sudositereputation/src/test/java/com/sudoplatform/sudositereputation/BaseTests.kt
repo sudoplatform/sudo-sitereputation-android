@@ -10,7 +10,7 @@ import android.content.Context
 import com.sudoplatform.sudologging.LogDriverInterface
 import com.sudoplatform.sudologging.LogLevel
 import com.sudoplatform.sudologging.Logger
-import com.sudoplatform.sudositereputation.DefaultSiteReputationClient.Companion.LAST_UPDATED_FILE
+import com.sudoplatform.sudositereputation.DefaultLegacySiteReputationClient.Companion.LAST_UPDATED_FILE
 import com.sudoplatform.sudositereputation.TestData.S3_OBJECTS
 import com.sudoplatform.sudositereputation.TestData.USER_ID
 import com.sudoplatform.sudositereputation.TestData.USER_SUBJECT
@@ -86,7 +86,7 @@ internal abstract class BaseTests : PropertyResetter by ActualPropertyResetter()
     }
 
     protected val siteReputationClient by before {
-        DefaultSiteReputationClient(
+        DefaultLegacySiteReputationClient(
             context = mockContext,
             logger = mockLogger,
             sudoUserClient = mockUserClient,
