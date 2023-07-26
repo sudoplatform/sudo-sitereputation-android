@@ -31,7 +31,6 @@ internal fun readS3Configuration(
     logger: Logger,
     configManager: SudoConfigManager = DefaultSudoConfigManager(context, logger)
 ): S3Configuration {
-
     val preamble = "sudoplatformconfig.json does not contain"
     val postamble = "the $CONFIG_SITE_REPUTATION_SERVICE stanza"
 

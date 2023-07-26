@@ -16,7 +16,6 @@ import io.kotlintest.matchers.numerics.shouldBeGreaterThanOrEqual
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
 import io.kotlintest.shouldThrow
-import java.util.Date
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assume.assumeTrue
@@ -24,6 +23,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import timber.log.Timber
+import java.util.Date
 
 /**
  * Test the operation of the [LegacySudoSiteReputationClient].
@@ -62,7 +62,6 @@ class LegacySudoSiteReputationClientIntegrationTest : BaseIntegrationTest() {
 
     @Test
     fun shouldThrowIfRequiredItemsNotProvidedToBuilder() {
-
         // Can only run if client config files are present
         assumeTrue(clientConfigFilesPresent())
 
@@ -88,7 +87,6 @@ class LegacySudoSiteReputationClientIntegrationTest : BaseIntegrationTest() {
 
     @Test
     fun shouldNotThrowIfTheRequiredItemsAreProvidedToBuilder() {
-
         // Can only run if client config files are present
         assumeTrue(clientConfigFilesPresent())
 
@@ -104,7 +102,6 @@ class LegacySudoSiteReputationClientIntegrationTest : BaseIntegrationTest() {
      */
     @Test
     fun completeFlowShouldSucceed() = runBlocking<Unit> {
-
         // Can only run if client config files are present
         assumeTrue(clientConfigFilesPresent())
         signInAndRegisterUser()

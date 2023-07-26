@@ -41,7 +41,6 @@ internal class LegacySudoSiteReputationClientCloseTest : BaseTests() {
 
     @Test
     fun `close() should call reputation provider`() = runBlocking<Unit> {
-
         siteReputationClient.close()
 
         // should call close() twice because it does it first on setup
@@ -50,7 +49,6 @@ internal class LegacySudoSiteReputationClientCloseTest : BaseTests() {
 
     @Test
     fun `close() should suppress when reputation provider throws`() = runBlocking<Unit> {
-
         mockReputationProvider.stub {
             on { close() } doThrow IOException("mock")
         }
@@ -62,7 +60,6 @@ internal class LegacySudoSiteReputationClientCloseTest : BaseTests() {
 
     @Test
     fun `close() should not block coroutine cancellation exception`() = runBlocking<Unit> {
-
         mockReputationProvider.stub {
             on { close() } doThrow CancellationException("mock")
         }

@@ -40,7 +40,9 @@ import org.mockito.kotlin.verify
  * And provides convenient access to the [PropertyResetRule.before] via [PropertyResetter.before].
  */
 internal abstract class BaseTests : PropertyResetter by ActualPropertyResetter() {
-    @Rule @JvmField val timberLogRule = TimberLogRule()
+    @Rule
+    @JvmField
+    val timberLogRule = TimberLogRule()
 
     protected val mockContext by before {
         mock<Context>()

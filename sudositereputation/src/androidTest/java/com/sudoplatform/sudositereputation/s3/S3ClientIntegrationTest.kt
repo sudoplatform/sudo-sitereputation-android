@@ -48,7 +48,6 @@ class S3ClientIntegrationTest : BaseIntegrationTest() {
 
     @Test
     fun listShouldReturnObjectInfo() = runBlocking<Unit> {
-
         assumeTrue(clientConfigFilesPresent())
 
         signInAndRegisterUser()
@@ -60,7 +59,6 @@ class S3ClientIntegrationTest : BaseIntegrationTest() {
 
     @Test
     fun downloadShouldGetObject() = runBlocking<Unit> {
-
         assumeTrue(clientConfigFilesPresent())
 
         signInAndRegisterUser()

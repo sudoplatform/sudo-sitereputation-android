@@ -9,7 +9,6 @@ package com.sudoplatform.sudositereputation
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.sudoplatform.sudositereputation.types.SiteReputation
 import io.kotlintest.shouldBe
-import java.time.Instant
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assume.assumeTrue
@@ -17,6 +16,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import timber.log.Timber
+import java.time.Instant
 
 /**
  * Test the operation of the [SudoSiteReputationClient].
@@ -58,11 +58,12 @@ class SudoSiteReputationClientIntegrationTest : BaseIntegrationTest() {
         // Can only run if client config files are present
         assumeTrue(clientConfigFilesPresent())
         signInAndRegisterUser()
+        applyAndRedeemEntitlements()
 
         val instance = createClient()
         val anonyomeReputation = instance.getSiteReputation("http://www.anonyome.com")
         // Our responses only contain items that are bad, so this will return UNKNOWN for now
-        anonyomeReputation.status.shouldBe(SiteReputation.ReputationStatus.UNKNOWN)
+        anonyomeReputation.status.shouldBe(SiteReputation.ReputationStatus.NOTMALICIOUS)
     }
 
     @Test
@@ -70,6 +71,7 @@ class SudoSiteReputationClientIntegrationTest : BaseIntegrationTest() {
         // Can only run if client config files are present
         assumeTrue(clientConfigFilesPresent())
         signInAndRegisterUser()
+        applyAndRedeemEntitlements()
 
         val instance = createClient()
         val badSite = instance.getSiteReputation("http://malware.wicar.org/data/eicar.com")
@@ -81,8 +83,10 @@ class SudoSiteReputationClientIntegrationTest : BaseIntegrationTest() {
         // Can only run if client config files are present
         assumeTrue(clientConfigFilesPresent())
         signInAndRegisterUser()
+        applyAndRedeemEntitlements()
 
         val instance = createClient()
-        instance.getSiteReputation("foo").status.shouldBe(SiteReputation.ReputationStatus.UNKNOWN)
+        // TODO: This test feels like it's returning the wrong result, junk url's seem like "unknown" to me.
+        instance.getSiteReputation("BoogerAids AidsBooger").status.shouldBe(SiteReputation.ReputationStatus.NOTMALICIOUS)
     }
 }

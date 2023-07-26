@@ -8,6 +8,10 @@ package com.sudoplatform.sudositereputation
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.platform.app.InstrumentationRegistry
+import com.sudoplatform.sudoentitlements.SudoEntitlementsClient
+import com.sudoplatform.sudoentitlementsadmin.SudoEntitlementsAdminClient
+import com.sudoplatform.sudoentitlementsadmin.types.Entitlement
 import com.sudoplatform.sudokeymanager.KeyManagerFactory
 import com.sudoplatform.sudologging.AndroidUtilsLogDriver
 import com.sudoplatform.sudologging.LogLevel
@@ -41,6 +45,30 @@ abstract class BaseIntegrationTest {
 
     protected val keyManager by lazy {
         KeyManagerFactory(context).createAndroidKeyManager()
+    }
+
+    protected val entitlementsClient by lazy {
+        SudoEntitlementsClient.builder()
+            .setContext(context)
+            .setSudoUserClient(userClient)
+            .build()
+    }
+
+    protected val entitlementsAdminClient by lazy {
+        val adminApiKey = readArgument("ADMIN_API_KEY", "api.key")
+        SudoEntitlementsAdminClient.builder(context, adminApiKey).build()
+    }
+
+    protected fun readArgument(argumentName: String, fallbackFileName: String?): String {
+        val argumentValue =
+            InstrumentationRegistry.getArguments().getString(argumentName)?.trim()
+        if (argumentValue != null) {
+            return argumentValue
+        }
+        if (fallbackFileName != null) {
+            return readTextFile(fallbackFileName)
+        }
+        throw IllegalArgumentException("$argumentName property not found")
     }
 
     private suspend fun registerUser() {
@@ -83,6 +111,14 @@ abstract class BaseIntegrationTest {
             userClient.signInWithKey()
         }
         userClient.isSignedIn() shouldBe true
+    }
+
+    protected suspend fun applyAndRedeemEntitlements() {
+        val username = userClient.getUserName()
+        require(username != null) { "Username not found." }
+        val entitlements = listOf(Entitlement("sudoplatform.sr.srUserEntitled", null, 1))
+        entitlementsAdminClient.applyEntitlementsToUser(username, entitlements)
+        entitlementsClient.redeemEntitlements()
     }
 
     protected fun clientConfigFilesPresent(): Boolean {

@@ -50,6 +50,7 @@
         <cve>CVE-2021-46877</cve>
         <cve>CVE-2022-42003</cve>
         <cve>CVE-2022-42004</cve>
+        <cve>CVE-2023-35116</cve>
     </suppress>
     <suppress until="2023-07-31">
         <notes><![CDATA[
@@ -137,6 +138,13 @@
         <cve>CVE-2022-23302</cve>
         <cve>CVE-2022-23305</cve>
         <cve>CVE-2022-23307</cve>
+    </suppress>
+    <suppress until="2023-08-30">
+        <notes><![CDATA[
+    file name: kotlin-analysis-intellij-1.8.10.jar (shaded: com.google.guava:guava:31.0.1-jre)
+    ]]></notes>
+        <packageUrl regex="true">^pkg:maven/com\.google\.guava/guava@.*$</packageUrl>
+        <vulnerabilityName>CVE-2023-2976</vulnerabilityName>
     </suppress>
     <suppress until="2023-07-31">
         <notes>
@@ -227,5 +235,23 @@
         </notes>
         <packageUrl regex="true">^pkg:maven/com\.fasterxml\.woodstox/woodstox\-core@.*$</packageUrl>
         <cve>CVE-2022-40152</cve>
+    </suppress>
+    <suppress until="2023-07-31">
+        <notes><![CDATA[Suppressing CVE-2023-33201 in bcprov-jdk15to18-1.70.jar]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.bouncycastle/bcprov-jdk15to18@.*$</packageUrl>
+        <cve>CVE-2023-33201</cve>
+    </suppress>
+    <suppress until="2023-07-31">
+        <notes><![CDATA[Suppressing CVE-2023-34411 in woodstox-core-6.2.1.jar]]></notes>
+        <packageUrl regex="true">^pkg:maven/com\.sun\.xml\.bind\.jaxb/isorelax@20090621$</packageUrl>
+        <cve>CVE-2023-34411</cve>
+    </suppress>
+    <suppress until="2023-12-31">
+        <notes><![CDATA[
+            DoS attack from unzipping a malformed gzip data stream. The affected component is
+            Okio which is only used by the AWS SDK. We will only be using this SDK to download
+            data from trusted sources.
+        ]]></notes>
+        <cve>CVE-2023-3635</cve>
     </suppress>
 </suppressions>

@@ -9,8 +9,8 @@ import com.sudoplatform.sudologging.Logger
 import com.sudoplatform.sudositereputation.appsync.enqueue
 import com.sudoplatform.sudositereputation.graphql.GetSiteReputationQuery
 import com.sudoplatform.sudositereputation.transformers.SudoSiteReputationExceptionTransformer
-import com.sudoplatform.sudositereputation.types.SiteReputation
 import com.sudoplatform.sudositereputation.transformers.SudoSiteReputationTransformer
+import com.sudoplatform.sudositereputation.types.SiteReputation
 
 internal class APIClient(
     private val appSyncClient: AWSAppSyncClient,
@@ -36,7 +36,6 @@ internal class APIClient(
             // if found in cache, return the item
             return cache.get(uri)
         } else {
-
             try {
                 val query = GetSiteReputationQuery.builder()
                     .uri(uri)

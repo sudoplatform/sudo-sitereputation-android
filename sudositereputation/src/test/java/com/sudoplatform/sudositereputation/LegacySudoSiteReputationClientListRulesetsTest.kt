@@ -51,15 +51,12 @@ internal class LegacySudoSiteReputationClientListRulesetsTest : BaseTests() {
 
     @Test
     fun `listRulesets() should call S3 client`() = runBlocking<Unit> {
-
         siteReputationClient.listRulesets() shouldHaveSize 1
-
         verify(mockS3Client, atLeastOnce()).list(eq(DefaultLegacySiteReputationClient.S3_TOP_PATH), any())
     }
 
     @Test
     fun `listRulesets() should return none when S3 client does`() = runBlocking<Unit> {
-
         mockS3Client.stub {
             onBlocking { list(anyString(), any()) } doReturn emptyList()
         }
@@ -71,7 +68,6 @@ internal class LegacySudoSiteReputationClientListRulesetsTest : BaseTests() {
 
     @Test
     fun `listRulesets() should not return MALICIOUS_DOMAIN rulesets`() = runBlocking<Unit> {
-
         val s3Objects = listOf(
             S3Client.S3ObjectInfo(
                 key = "malware",
@@ -103,7 +99,6 @@ internal class LegacySudoSiteReputationClientListRulesetsTest : BaseTests() {
 
     @Test
     fun `listRulesets() should throw when s3 client throws`() = runBlocking<Unit> {
-
         mockS3Client.stub {
             onBlocking { list(anyString(), any()) } doThrow S3Exception.DownloadException("mock")
         }
@@ -117,7 +112,6 @@ internal class LegacySudoSiteReputationClientListRulesetsTest : BaseTests() {
 
     @Test
     fun `listRulesets() should throw when s3 client gets bad metadata`() = runBlocking<Unit> {
-
         mockS3Client.stub {
             onBlocking { list(anyString(), any()) } doThrow S3Exception.MetadataException("mock")
         }
@@ -131,7 +125,6 @@ internal class LegacySudoSiteReputationClientListRulesetsTest : BaseTests() {
 
     @Test
     fun `listRulesets() should not block coroutine cancellation exception`() = runBlocking<Unit> {
-
         mockS3Client.stub {
             onBlocking { list(anyString(), any()) } doThrow CancellationException("Mock")
         }

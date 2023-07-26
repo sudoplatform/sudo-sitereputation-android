@@ -7,14 +7,16 @@ import kotlinx.parcelize.Parcelize
 
 public data class SiteReputation(
     /** status of the search */
-    val status: ReputationStatus,
+    val status: ReputationStatus
 ) : Parcelable {
 
     enum class ReputationStatus {
         /** site is known to be malicious */
         MALICIOUS,
+
         /** site is not known to be malicious */
         NOTMALICIOUS,
+
         /** no site data available to make a determination */
         UNKNOWN
     }

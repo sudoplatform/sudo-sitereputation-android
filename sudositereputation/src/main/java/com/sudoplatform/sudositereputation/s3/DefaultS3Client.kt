@@ -46,6 +46,7 @@ internal class DefaultS3Client(
 
     companion object {
         internal const val DEFAULT_TIMEOUT = 10_000
+
         /**
          * Allow a margin of time when checking if the credentials must be refreshed
          * so there is enough time for the current operation to be completed before

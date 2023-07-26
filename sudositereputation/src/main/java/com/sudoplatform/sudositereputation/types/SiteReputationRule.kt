@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 internal data class SiteReputationRule(
     var host: String,
-    var path: String,
+    var path: String
 ) : Parcelable {
     constructor(urlString: String) : this("", "") {
         var uri = Uri.parse(urlString)

@@ -5,15 +5,8 @@
  */
 package com.sudoplatform.sudositereputation
 
-import org.mockito.kotlin.any
-import org.mockito.kotlin.doThrow
-import org.mockito.kotlin.eq
-import org.mockito.kotlin.stub
-import org.mockito.kotlin.times
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyNoMoreInteractions
-import com.sudoplatform.sudositereputation.DefaultLegacySiteReputationClient.Companion.LAST_UPDATED_FILE
 import com.sudoplatform.sudositereputation.DefaultLegacySiteReputationClient.Companion.BASE_RULESET_FILENAME
+import com.sudoplatform.sudositereputation.DefaultLegacySiteReputationClient.Companion.LAST_UPDATED_FILE
 import com.sudoplatform.sudositereputation.DefaultLegacySiteReputationClient.Companion.MALWARE_DOMAINS_SUBPATH
 import com.sudoplatform.sudositereputation.DefaultLegacySiteReputationClient.Companion.S3_TOP_PATH
 import com.sudoplatform.sudositereputation.s3.S3Exception
@@ -24,9 +17,16 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.anyString
+import org.mockito.kotlin.any
+import org.mockito.kotlin.atLeast
+import org.mockito.kotlin.doThrow
+import org.mockito.kotlin.eq
+import org.mockito.kotlin.stub
+import org.mockito.kotlin.times
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.robolectric.RobolectricTestRunner
 import java.util.concurrent.CancellationException
-import org.mockito.kotlin.atLeast
 
 /**
  * Test the operation of [LegacySudoSiteReputationClient.update] using mocks and spies.
@@ -50,7 +50,6 @@ internal class LegacySudoSiteReputationClientUpdateTest : BaseTests() {
 
     @Test
     fun `update() should call S3 client`() = runBlocking<Unit> {
-
         siteReputationClient.update()
 
         val fileName = "$BASE_RULESET_FILENAME-$MALWARE_DOMAINS_SUBPATH.txt"
@@ -67,7 +66,6 @@ internal class LegacySudoSiteReputationClientUpdateTest : BaseTests() {
 
     @Test
     fun `update() should return null when s3 client download fails`() = runBlocking<Unit> {
-
         mockS3Client.stub {
             onBlocking { download(anyString()) } doThrow S3Exception.DownloadException("mock")
         }
@@ -83,7 +81,6 @@ internal class LegacySudoSiteReputationClientUpdateTest : BaseTests() {
 
     @Test
     fun `update() should throw when s3 client throws`() = runBlocking<Unit> {
-
         mockS3Client.stub {
             onBlocking { download(anyString()) } doThrow IllegalStateException("mock")
         }
@@ -101,7 +98,6 @@ internal class LegacySudoSiteReputationClientUpdateTest : BaseTests() {
 
     @Test
     fun `update() should not block coroutine cancellation exception`() = runBlocking<Unit> {
-
         mockS3Client.stub {
             onBlocking { download(anyString()) } doThrow CancellationException("Mock")
         }

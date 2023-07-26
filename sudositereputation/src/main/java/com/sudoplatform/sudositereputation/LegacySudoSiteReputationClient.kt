@@ -14,8 +14,8 @@ import com.sudoplatform.sudositereputation.logging.LogConstants
 import com.sudoplatform.sudositereputation.s3.readS3Configuration
 import com.sudoplatform.sudositereputation.storage.DefaultStorageProvider
 import com.sudoplatform.sudositereputation.storage.StorageProvider
-import com.sudoplatform.sudositereputation.types.Ruleset
 import com.sudoplatform.sudositereputation.types.LegacySiteReputation
+import com.sudoplatform.sudositereputation.types.Ruleset
 import com.sudoplatform.sudouser.SudoUserClient
 import java.util.Date
 import java.util.Objects

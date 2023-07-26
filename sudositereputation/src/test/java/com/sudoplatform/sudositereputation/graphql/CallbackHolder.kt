@@ -14,19 +14,28 @@ import com.apollographql.apollo.fetcher.ResponseFetcher
 /**
  * A test helper for mocking GraphQL operations and callbacks.
  */
-class CallbackHolder<D>(public val name: String = "unnamed") {
+class CallbackHolder<D>(val name: String = "unnamed") {
 
     var callback: GraphQLCall.Callback<D>? = null
 
     val queryOperation = object : AppSyncQueryCall<D> {
         private var isCancelled = false
         override fun cacheHeaders(cacheHeaders: CacheHeaders) = this
-        override fun cancel() { isCancelled = true }
+        override fun cancel() {
+            isCancelled = true
+        }
+
         override fun clone() = this
         override fun httpCachePolicy(httpCachePolicy: HttpCachePolicy.Policy) = this
         override fun isCanceled() = isCancelled
-        override fun operation(): Operation<*, *, *> { throw IllegalAccessError() }
-        override fun watcher(): AppSyncQueryWatcher<D> { throw IllegalAccessError() }
+        override fun operation(): Operation<*, *, *> {
+            throw IllegalAccessError()
+        }
+
+        override fun watcher(): AppSyncQueryWatcher<D> {
+            throw IllegalAccessError()
+        }
+
         override fun responseFetcher(fetcher: ResponseFetcher) = this
         override fun enqueue(cb: GraphQLCall.Callback<D>?) {
             callback = cb
@@ -36,11 +45,17 @@ class CallbackHolder<D>(public val name: String = "unnamed") {
     val mutationOperation = object : AppSyncMutationCall<D> {
         private var isCancelled = false
         override fun cacheHeaders(cacheHeaders: CacheHeaders) = this
-        override fun cancel() { isCancelled = true }
+        override fun cancel() {
+            isCancelled = true
+        }
+
         override fun clone() = this
 
         override fun isCanceled() = isCancelled
-        override fun operation(): Operation<*, *, *> { throw IllegalAccessError() }
+        override fun operation(): Operation<*, *, *> {
+            throw IllegalAccessError()
+        }
+
         override fun refetchQueries(vararg operationNames: OperationName?) = this
         override fun refetchQueries(vararg queries: Query<*, *, *>?) = this
         override fun enqueue(cb: GraphQLCall.Callback<D>?) {

@@ -54,7 +54,6 @@ internal class S3ConfigurationTest : BaseTests() {
 
     @Test
     fun shouldThrowIfConfigMissing() {
-
         val logger = com.sudoplatform.sudologging.Logger(LogConstants.SUDOLOG_TAG, AndroidUtilsLogDriver(LogLevel.INFO))
 
         val noConfigJson = ""

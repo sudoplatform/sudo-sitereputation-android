@@ -11,7 +11,6 @@ import com.sudoplatform.sudositereputation.types.SiteReputation
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
 import io.kotlintest.shouldThrow
-import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
@@ -30,6 +29,7 @@ import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.stub
 import org.robolectric.RobolectricTestRunner
+import kotlin.coroutines.cancellation.CancellationException
 
 /**
  * Test the correct operation of [APIClient.getSiteReputation()] using mocks.
@@ -73,7 +73,6 @@ internal class APIClientTests : BaseTests() {
 
     @Test
     fun `getSiteReputation() should resolve when no error present`() = runBlocking<Unit> {
-
         queryHolder.callback.shouldBe(null)
 
         val deferredResult = async(Dispatchers.IO) {
@@ -111,7 +110,6 @@ internal class APIClientTests : BaseTests() {
 
     @Test
     fun `getSiteReputation() should throw when query response is null`() = runBlocking<Unit> {
-
         queryHolder.callback shouldBe null
 
         val nullResponse by before {
@@ -139,7 +137,6 @@ internal class APIClientTests : BaseTests() {
 
     @Test
     fun `getSiteReputation() should throw when response has an error`() = runBlocking<Unit> {
-
         queryHolder.callback shouldBe null
 
         val errorQueryResponse by before {
@@ -170,7 +167,6 @@ internal class APIClientTests : BaseTests() {
 
     @Test
     fun `getSiteReputation() should not block coroutine cancellation exception`() = runBlocking<Unit> {
-
         mockAppSyncClient.stub {
             on { query(any<GetSiteReputationQuery>()) } doThrow CancellationException("Mock Runtime Exception")
         }

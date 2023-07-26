@@ -8,7 +8,5 @@
 .externalNativeBuild
 .cxx
 /sudositereputation/.kotlintest
-/sudositereputation/src/main/assets/register_key.id
-/sudositereputation/src/main/assets/register_key.private
-/sudositereputation/src/main/assets/sudoplatformconfig.json
+/sudositereputation/src/main/assets/**/*
 /.editorconfig

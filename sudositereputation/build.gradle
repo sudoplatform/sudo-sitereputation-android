@@ -10,11 +10,11 @@ node {
 }
 
 android {
-    compileSdkVersion 31
-
+    compileSdkVersion 32
+    namespace "com.sudoplatform.sudositereputation"
     defaultConfig {
         minSdkVersion 24
-        targetSdkVersion 31
+        targetSdkVersion 32
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
@@ -52,9 +52,6 @@ android {
         animationsDisabled = true
         unitTests.all {
             outputs.upToDateWhen {false}
-            jacoco {
-                includeNoLocationClasses = true
-            }
         }
         unitTests {
             includeAndroidResources = true
@@ -64,6 +61,13 @@ android {
     packagingOptions {
         pickFirst("META-INF/atomicfu.kotlin_module")
         pickFirst("META-INF/sudositereputation_debug.kotlin_module")
+    }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar()
+        }
     }
 }
 
@@ -84,12 +88,12 @@ dependencies {
 
     // Sudo Platform SDKs
     implementation "com.sudoplatform:sudologging:2.1.0"
-    implementation "com.sudoplatform:sudoconfigmanager:4.0.0"
-    implementation "com.sudoplatform:sudouser:13.1.0"
-    implementation 'com.sudoplatform:sudoapiclient:5.1.0'
+    implementation "com.sudoplatform:sudoconfigmanager:5.0.0"
+    implementation "com.sudoplatform:sudouser:16.0.0"
+    implementation 'com.sudoplatform:sudoapiclient:7.0.0'
 
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.robolectric:robolectric:4.7.3'
+    testImplementation 'org.robolectric:robolectric:4.10.3'
     testImplementation 'io.kotlintest:kotlintest-runner-junit5:3.4.2'
     testImplementation "io.kotlintest:kotlintest-assertions:3.4.2"
     testImplementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
@@ -107,7 +111,10 @@ dependencies {
     androidTestImplementation "io.kotlintest:kotlintest-assertions:3.4.2"
     androidTestImplementation 'org.awaitility:awaitility:3.1.6'
     androidTestImplementation "com.google.guava:guava:30.1-android"
-    androidTestImplementation "com.sudoplatform:sudokeymanager:5.0.0"
+    androidTestImplementation "com.sudoplatform:sudokeymanager:5.2"
+    androidTestImplementation 'com.sudoplatform:sudoentitlements:7.0.0'
+    androidTestImplementation 'com.sudoplatform:sudoentitlementsadmin:5.0.0'
+    androidTestImplementation "com.jakewharton.timber:timber:4.7.1"
 }
 
 // Returns a list of `configurations` which should not be scanned for vulnerabilities
@@ -151,12 +158,11 @@ kotlinter {
 // Generate .editorconfig in the root directory of the project being built
 static void generateEditorConfig(final Project project) {
     File editorConfig = new File("${project.rootDir}/.editorconfig")
-
+    editorConfig.write("root = true\n")
     editorConfig.write("[*.{kt,kts}]\n")
     editorConfig.append("indent_style=space\n")
     editorConfig.append("indent_size=4\n")
     editorConfig.append("max_line_length=140\n")
-    editorConfig.append("disabled_rules=import-ordering\n")
     editorConfig.append("ij_continuation_indent_size=4\n")
     editorConfig.append("trim_trailing_whitespace=true\n")
     editorConfig.append("insert_final_newline=true\n")
@@ -173,7 +179,7 @@ afterEvaluate {
 apply plugin: 'jacoco'
 
 jacoco {
-    toolVersion = "0.8.7"
+    toolVersion = "0.8.10"
 }
 
 task jacocoTestReport(type: JacocoReport, dependsOn:"testDebugUnitTest") {
@@ -190,13 +196,8 @@ task jacocoTestReport(type: JacocoReport, dependsOn:"testDebugUnitTest") {
     )
     sourceDirectories.setFrom(files("${buildDir.parent}/sudositereputation/src/main/java"))
     executionData.setFrom(fileTree(["dir":"$buildDir", "includes":["**/*.exec", "**/*.ec"]]))
-    reports {
-        xml.enabled = true
-        html.enabled = true
-    }
 }
 
-// Dokka documentation generation
 apply plugin: 'org.jetbrains.dokka'
 
 dokkaHtml {
@@ -204,18 +205,9 @@ dokkaHtml {
 
     dokkaSourceSets {
         configureEach {
-
             jdkVersion.set(8)
             skipEmptyPackages.set(true)
-
             includes.from("packages.md")
-            samples.from("src/test/java/com/sudoplatform/sudositereputation/samples/Samples.kt")
-
-            // Root URL of the generated documentation to link with. The trailing slash is required!
-            externalDocumentationLink {
-                url.set(new URL("https://sudoplatform.github.io/sudo-user-android/sudouser/"))
-                packageListUrl.set(new URL("https://sudoplatform.github.io/sudo-user-android/sudouser/package-list"))
-            }
         }
     }
 }
@@ -254,6 +246,7 @@ licenseTools {
     ignoredGroups = ["com.anonyome", "com.sudoplatform"]
     ignoredProjects = ["org.mockito"]
 }
+
 @Grab('org.yaml:snakeyaml:1.17') // Yaml parser
 import org.yaml.snakeyaml.Yaml
 task checkLicenseHaveRequiredFields {

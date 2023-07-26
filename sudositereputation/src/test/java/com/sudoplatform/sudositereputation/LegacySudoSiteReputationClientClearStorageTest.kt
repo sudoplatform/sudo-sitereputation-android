@@ -39,7 +39,6 @@ internal class LegacySudoSiteReputationClientClearStorageTest : BaseTests() {
 
     @Test
     fun `clearStorage() should call storage provider`() = runBlocking<Unit> {
-
         siteReputationClient.clearStorage()
 
         verify(mockStorageProvider).deleteFiles()
@@ -48,7 +47,6 @@ internal class LegacySudoSiteReputationClientClearStorageTest : BaseTests() {
 
     @Test
     fun `clearStorage() should throw when storage provider throws`() = runBlocking<Unit> {
-
         mockStorageProvider.stub {
             onBlocking { deleteFiles() } doThrow IOException("mock")
         }
@@ -62,7 +60,6 @@ internal class LegacySudoSiteReputationClientClearStorageTest : BaseTests() {
 
     @Test
     fun `clearStorage() should throw when storage provider throws from eTags`() = runBlocking<Unit> {
-
         mockStorageProvider.stub {
             onBlocking { deleteFileETags() } doThrow IOException("mock")
         }
@@ -77,7 +74,6 @@ internal class LegacySudoSiteReputationClientClearStorageTest : BaseTests() {
 
     @Test
     fun `clearStorage() should not block coroutine cancellation exception`() = runBlocking<Unit> {
-
         mockStorageProvider.stub {
             onBlocking { deleteFiles() } doThrow CancellationException("mock")
         }

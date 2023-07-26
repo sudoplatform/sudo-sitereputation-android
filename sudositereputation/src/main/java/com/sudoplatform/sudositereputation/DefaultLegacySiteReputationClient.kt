@@ -16,8 +16,8 @@ import com.sudoplatform.sudositereputation.s3.S3Exception
 import com.sudoplatform.sudositereputation.storage.StorageProvider
 import com.sudoplatform.sudositereputation.transformers.RulesetTransformer
 import com.sudoplatform.sudositereputation.transformers.SudoSiteReputationExceptionTransformer
-import com.sudoplatform.sudositereputation.types.Ruleset
 import com.sudoplatform.sudositereputation.types.LegacySiteReputation
+import com.sudoplatform.sudositereputation.types.Ruleset
 import com.sudoplatform.sudouser.SudoUserClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -107,7 +107,6 @@ internal class DefaultLegacySiteReputationClient(
     @VisibleForTesting
     internal suspend fun listRulesets(): List<Ruleset> {
         try {
-
             val list = s3Client.list(path = S3_TOP_PATH)
             return RulesetTransformer.toRulesetList(
                 list

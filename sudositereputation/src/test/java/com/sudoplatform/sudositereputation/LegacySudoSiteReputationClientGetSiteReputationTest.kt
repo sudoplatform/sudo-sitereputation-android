@@ -46,7 +46,6 @@ internal class LegacySudoSiteReputationClientGetSiteReputationTest : BaseTests()
 
     @Test
     fun `checkIsUrlMalicious() should call reputation provider`() = runBlocking<Unit> {
-
         siteReputationClient.getSiteReputation("a")
 
         verify(mockReputationProvider).close()
@@ -57,7 +56,6 @@ internal class LegacySudoSiteReputationClientGetSiteReputationTest : BaseTests()
 
     @Test
     fun `checkIsUrlMalicious() should throw when ruleset not downloaded`() = runBlocking<Unit> {
-
         mockStorageProvider.stub {
             on { read(LAST_UPDATED_FILE) } doReturn null
         }
@@ -72,7 +70,6 @@ internal class LegacySudoSiteReputationClientGetSiteReputationTest : BaseTests()
 
     @Test
     fun `checkIsUrlMalicious() should throw when reputation provider throws`() = runBlocking<Unit> {
-
         mockReputationProvider.stub {
             onBlocking { checkIsUrlMalicious(anyString()) } doThrow SudoSiteReputationException.DataFormatException("mock")
         }
@@ -89,7 +86,6 @@ internal class LegacySudoSiteReputationClientGetSiteReputationTest : BaseTests()
 
     @Test
     fun `checkIsUrlMalicious() should not block coroutine cancellation exception`() = runBlocking<Unit> {
-
         mockReputationProvider.stub {
             onBlocking { checkIsUrlMalicious(anyString()) } doThrow CancellationException("mock")
         }

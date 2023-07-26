@@ -23,8 +23,10 @@ internal object RulesetTransformer {
     // {sudoplatformblob={"categoryEnum":"MALICIOUSDOMAIN","name.en":"uBlock Origin"}}
     @VisibleForTesting
     const val METADATA_BLOB = "sudoplatformblob"
+
     @VisibleForTesting
     const val METADATA_TYPE = "categoryEnum"
+
     @VisibleForTesting
     const val METADATA_CATEGORY_MALICIOUSDOMAIN = "MALICIOUSDOMAIN"
     const val METADATA_CATEGORY_MALWARE = "MALWARE"
