@@ -40,9 +40,9 @@ internal class DefaultLegacySiteReputationClient(
     private val region: String,
     private val bucket: String,
     private val storageProvider: StorageProvider,
-    @VisibleForTesting
+    @get:VisibleForTesting
     private val s3Client: S3Client = DefaultS3Client(context, sudoUserClient, region, bucket, logger),
-    @VisibleForTesting
+    @get:VisibleForTesting
     private val reputationProvider: ReputationProvider = DefaultReputationProvider(logger),
     override val ENTITLEMENT_NAME: String = "sudoplatform.sr.srUserEntitled"
 ) : LegacySudoSiteReputationClient, CoroutineScope {

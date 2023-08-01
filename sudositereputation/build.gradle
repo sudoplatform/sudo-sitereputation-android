@@ -13,7 +13,7 @@ android {
     compileSdkVersion 32
     namespace "com.sudoplatform.sudositereputation"
     defaultConfig {
-        minSdkVersion 24
+        minSdkVersion 26
         targetSdkVersion 32
         versionCode 1
         versionName "1.0"
@@ -87,9 +87,9 @@ dependencies {
     implementation "com.amazonaws:aws-android-sdk-appsync:$appsync_version!!"
 
     // Sudo Platform SDKs
-    implementation "com.sudoplatform:sudologging:2.1.0"
-    implementation "com.sudoplatform:sudoconfigmanager:5.0.0"
-    implementation "com.sudoplatform:sudouser:16.0.0"
+    implementation "com.sudoplatform:sudologging:3.0.0"
+    implementation "com.sudoplatform:sudoconfigmanager:6.0.0"
+    implementation "com.sudoplatform:sudouser:17.0.0"
     implementation 'com.sudoplatform:sudoapiclient:7.0.0'
 
     testImplementation 'junit:junit:4.13.2'
@@ -111,8 +111,8 @@ dependencies {
     androidTestImplementation "io.kotlintest:kotlintest-assertions:3.4.2"
     androidTestImplementation 'org.awaitility:awaitility:3.1.6'
     androidTestImplementation "com.google.guava:guava:30.1-android"
-    androidTestImplementation "com.sudoplatform:sudokeymanager:5.2"
-    androidTestImplementation 'com.sudoplatform:sudoentitlements:7.0.0'
+    androidTestImplementation "com.sudoplatform:sudokeymanager:6.0.0"
+    androidTestImplementation 'com.sudoplatform:sudoentitlements:8.0.0'
     androidTestImplementation 'com.sudoplatform:sudoentitlementsadmin:5.0.0'
     androidTestImplementation "com.jakewharton.timber:timber:4.7.1"
 }

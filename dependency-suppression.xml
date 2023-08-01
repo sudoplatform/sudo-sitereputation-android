@@ -16,7 +16,7 @@
         </notes>
         <cve>CVE-2020-8908</cve>
     </suppress>
-    <suppress until="2023-07-31">
+    <suppress until="2023-12-31">
         <notes><![CDATA[
            file name: aws-android-sdk-appsync-api-3.3.2.jar
            ]]>
@@ -24,7 +24,7 @@
         <packageUrl regex="true">^pkg:maven/com\.amazonaws/aws\-android\-sdk\-appsync\-api@.*$</packageUrl>
         <cve>CVE-2015-10043</cve>
     </suppress>
-    <suppress until="2023-07-31">
+    <suppress until="2023-12-31">
         <notes><![CDATA[
            file name: aws-android-sdk-appsync-runtime-3.3.2.jar
            ]]>
@@ -40,7 +40,7 @@
         <packageUrl regex="true">^pkg:maven/com\.amazonaws/aws\-android\-sdk\-core@.*$</packageUrl>
         <vulnerabilityName>CVE-2022-4725</vulnerabilityName>
     </suppress>
-    <suppress until="2023-07-31">
+    <suppress until="2023-12-31">
         <notes><![CDATA[
            file name: jackson-databind-2.11.1.jar
            ]]>
@@ -68,7 +68,7 @@
         <cve>CVE-2021-37714</cve>
         <cve>CVE-2022-36033</cve>
     </suppress>
-    <suppress until="2023-07-31">
+    <suppress until="2023-12-31">
         <notes><![CDATA[
         file name: junit-4.12.jar
         ]]></notes>
@@ -99,7 +99,7 @@
         <packageUrl regex="true">^pkg:maven/log4j/log4j@.*$</packageUrl>
         <cve>CVE-2023-26464</cve>
     </suppress>
-    <suppress until="2023-07-31">
+    <suppress until="2023-12-31">
         <notes><![CDATA[
            file name: kotlin-analysis-intellij-1.5.0.jar (shaded: com.google.code.gson:gson:2.8.6)
            ]]>
@@ -107,7 +107,7 @@
         <packageUrl regex="true">^pkg:maven/com\.google\.code\.gson/gson@.*$</packageUrl>
         <cve>CVE-2022-25647</cve>
     </suppress>
-    <suppress until="2023-07-31">
+    <suppress until="2023-12-31">
         <notes><![CDATA[
            file name: kotlin-analysis-intellij-1.5.0.jar (shaded: com.google.guava:guava:29.0-jre)
            ]]>
@@ -115,7 +115,7 @@
         <packageUrl regex="true">^pkg:maven/com\.google\.guava/guava@.*$</packageUrl>
         <cve>CVE-2020-8908</cve>
     </suppress>
-    <suppress until="2023-07-31">
+    <suppress until="2023-12-31">
         <notes><![CDATA[
            file name: kotlin-analysis-intellij-1.5.0.jar (shaded: com.google.protobuf:protobuf-java:2.6.1)
            ]]>
@@ -220,7 +220,7 @@
         <packageUrl regex="true">^pkg:maven/com\.squareup\.okhttp3/okhttp@.*$</packageUrl>
         <vulnerabilityName>CVE-2021-0341</vulnerabilityName>
     </suppress>
-    <suppress until="2023-07-31">
+    <suppress until="2023-12-31">
         <notes><![CDATA[
            file name: stax2-api-4.2.1.jar
            ]]>
@@ -228,7 +228,7 @@
         <packageUrl regex="true">^pkg:maven/org\.codehaus\.woodstox/stax2\-api@.*$</packageUrl>
         <cve>CVE-2022-40152</cve>
     </suppress>
-    <suppress until="2023-07-31">
+    <suppress until="2023-12-31">
         <notes><![CDATA[
            file name: woodstox-core-6.2.1.jar
            ]]>
@@ -253,5 +253,14 @@
             data from trusted sources.
         ]]></notes>
         <cve>CVE-2023-3635</cve>
+    </suppress>
+    <suppress until="2023-08-31">
+        <notes>
+            <![CDATA[
+                file name: okhttp-4.11.0.jar
+            ]]>
+        </notes>
+        <packageUrl regex="true">^pkg:maven/com\.squareup\.okhttp3/okhttp@.*$</packageUrl>
+        <cve>CVE-2023-3782</cve>
     </suppress>
 </suppressions>

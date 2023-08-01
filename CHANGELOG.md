@@ -1,3 +1,9 @@
+## 2.0.4
+- Update to target minSDK 26, update dependencies from sudo platform, and AWS to 2.72.0 in line with the rest of the Android SDK's
+
+## 2.0.3
+- Update to Gradle 8
+
 ## 2.0.2
 - Updates the AWS version used to 2.62.0
 
