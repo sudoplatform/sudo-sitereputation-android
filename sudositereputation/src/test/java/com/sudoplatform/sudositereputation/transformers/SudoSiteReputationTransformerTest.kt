@@ -17,10 +17,12 @@ class SudoSiteReputationTransformerTest {
     fun `transforms graphQL response correctly`() {
         val input = Reputation(
             "Reputation",
-            ReputationStatus.NOTMALICIOUS
+            ReputationStatus.NOTMALICIOUS,
+            listOf("35")
         )
 
         val output = SudoSiteReputationTransformer.toReputationFromGraphQL(input)
         output.status shouldBe SiteReputation.ReputationStatus.NOTMALICIOUS
+        output.categories[0] shouldBe "35"
     }
 }

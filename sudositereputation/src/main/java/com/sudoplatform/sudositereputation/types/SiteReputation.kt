@@ -7,7 +7,8 @@ import kotlinx.parcelize.Parcelize
 
 public data class SiteReputation(
     /** status of the search */
-    val status: ReputationStatus
+    val status: ReputationStatus,
+    val categories: List<String>
 ) : Parcelable {
 
     enum class ReputationStatus {

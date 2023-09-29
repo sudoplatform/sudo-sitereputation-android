@@ -1,3 +1,10 @@
+## 3.0.0
+- The categories of a site is now included in the response when fetching the site reputation.
+
+### Enhancements
+- `SiteReputation` object now contains the field `categories` that is returned from the response body. 
+Now more information can be shown alongside the `status` for users to make better choices about the site in question. 
+
 ## 2.0.4
 - Update to target minSDK 26, update dependencies from sudo platform, and AWS to 2.72.0 in line with the rest of the Android SDK's
 

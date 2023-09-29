@@ -86,7 +86,8 @@ internal class APIClientTests : BaseTests() {
 
         val reputation = Reputation(
             "Reputation",
-            ReputationStatus.NOTMALICIOUS
+            ReputationStatus.NOTMALICIOUS,
+            emptyList()
         )
 
         val queryData = GetSiteReputationQuery.Data(

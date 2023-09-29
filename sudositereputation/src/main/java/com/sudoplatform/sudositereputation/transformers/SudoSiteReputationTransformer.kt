@@ -16,8 +16,11 @@ internal object SudoSiteReputationTransformer {
                 SiteReputation.ReputationStatus.UNKNOWN
             }
 
+        val categories = result.categories()
+
         return SiteReputation(
-            status = reputationStatus
+            status = reputationStatus,
+            categories = categories
         )
     }
 }

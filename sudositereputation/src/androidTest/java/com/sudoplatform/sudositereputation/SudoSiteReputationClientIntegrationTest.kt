@@ -16,7 +16,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import timber.log.Timber
-import java.time.Instant
 
 /**
  * Test the operation of the [SudoSiteReputationClient].
@@ -45,16 +44,7 @@ class SudoSiteReputationClientIntegrationTest : BaseIntegrationTest() {
     }
 
     @Test
-    fun test_getReputation_returns_knownGoodSite() {
-        // We need a test that the service tells us a site is good, but it's not ready
-        // Remind us in a few weeks.
-        // May 6, 2023
-        val reminderDate = Instant.ofEpochSecond(1674151453)
-        assert(reminderDate.isBefore(Instant.now()))
-    }
-
-    @Test
-    fun test_getReputation_returns_unknownSite() = runBlocking<Unit> {
+    fun test_getReputation_returns_notMalicous() = runBlocking<Unit> {
         // Can only run if client config files are present
         assumeTrue(clientConfigFilesPresent())
         signInAndRegisterUser()
@@ -62,8 +52,8 @@ class SudoSiteReputationClientIntegrationTest : BaseIntegrationTest() {
 
         val instance = createClient()
         val anonyomeReputation = instance.getSiteReputation("http://www.anonyome.com")
-        // Our responses only contain items that are bad, so this will return UNKNOWN for now
         anonyomeReputation.status.shouldBe(SiteReputation.ReputationStatus.NOTMALICIOUS)
+        anonyomeReputation.categories.shouldBe(emptyList())
     }
 
     @Test
@@ -76,6 +66,7 @@ class SudoSiteReputationClientIntegrationTest : BaseIntegrationTest() {
         val instance = createClient()
         val badSite = instance.getSiteReputation("http://malware.wicar.org/data/eicar.com")
         badSite.status.shouldBe(SiteReputation.ReputationStatus.MALICIOUS)
+        badSite.categories.shouldBe(listOf("MALWARE"))
     }
 
     @Test
@@ -87,6 +78,9 @@ class SudoSiteReputationClientIntegrationTest : BaseIntegrationTest() {
 
         val instance = createClient()
         // TODO: This test feels like it's returning the wrong result, junk url's seem like "unknown" to me.
-        instance.getSiteReputation("BoogerAids AidsBooger").status.shouldBe(SiteReputation.ReputationStatus.NOTMALICIOUS)
+        // Maybe junk URL's should throw an error.
+        val reputation = instance.getSiteReputation("BoogerAids AidsBooger")
+        reputation.status.shouldBe(SiteReputation.ReputationStatus.NOTMALICIOUS)
+        reputation.categories.shouldBe(emptyList())
     }
 }
