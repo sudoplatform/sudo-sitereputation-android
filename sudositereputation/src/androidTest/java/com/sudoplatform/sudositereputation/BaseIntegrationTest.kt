@@ -74,15 +74,15 @@ abstract class BaseIntegrationTest {
     private suspend fun registerUser() {
         userClient.isRegistered() shouldBe false
 
-        val privateKey = readTextFile("register_key.private")
-        val keyId = readTextFile("register_key.id")
+        val privateKey = readArgument("REGISTER_KEY", "register_key.private")
+        val keyId = readArgument("REGISTER_KEY", "register_key.id")
 
         val authProvider = TESTAuthenticationProvider(
             name = "sr-client-test",
             privateKey = privateKey,
             publicKey = null,
             keyManager = keyManager,
-            keyId = keyId
+            keyId = keyId,
         )
 
         userClient.registerWithAuthenticationProvider(authProvider, "sr-client-test")

@@ -6,7 +6,6 @@
 package com.sudoplatform.sudositereputation
 
 import android.content.Context
-import com.amazonaws.mobileconnectors.appsync.AWSAppSyncClient
 import com.sudoplatform.sudologging.AndroidUtilsLogDriver
 import com.sudoplatform.sudologging.LogLevel
 import com.sudoplatform.sudologging.Logger
@@ -43,7 +42,6 @@ interface LegacySudoSiteReputationClient : AutoCloseable {
         private var sudoUserClient: SudoUserClient? = null
         private var logger: Logger = Logger(LogConstants.SUDOLOG_TAG, AndroidUtilsLogDriver(LogLevel.INFO))
         private var storageProvider: StorageProvider? = null
-        private var appSyncClient: AWSAppSyncClient? = null
 
         /**
          * Provide the application context (required input).
@@ -96,7 +94,7 @@ interface LegacySudoSiteReputationClient : AutoCloseable {
                 logger = logger,
                 region = region,
                 bucket = bucket,
-                storageProvider = storageProvider ?: DefaultStorageProvider(context!!)
+                storageProvider = storageProvider ?: DefaultStorageProvider(context!!),
             )
         }
     }

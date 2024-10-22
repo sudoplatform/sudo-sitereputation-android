@@ -13,5 +13,5 @@ package com.sudoplatform.sudositereputation.types
  */
 data class LegacySiteReputation(
     /** True if the host or domains is in the list of malicious sites */
-    val isMalicious: Boolean
+    val isMalicious: Boolean,
 )

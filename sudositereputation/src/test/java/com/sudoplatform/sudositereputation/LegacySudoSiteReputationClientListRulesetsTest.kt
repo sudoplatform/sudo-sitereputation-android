@@ -42,7 +42,7 @@ internal class LegacySudoSiteReputationClientListRulesetsTest : BaseTests() {
             mockContext,
             mockUserClient,
             mockS3Client,
-            mockStorageProvider
+            mockStorageProvider,
         )
         runBlocking {
             siteReputationClient.clearStorage()
@@ -73,20 +73,20 @@ internal class LegacySudoSiteReputationClientListRulesetsTest : BaseTests() {
                 key = "malware",
                 eTag = "etag1",
                 lastModified = Date(1L),
-                userMetadata = TestData.S3_REPUTATION_OBJECT_USER_METADATA_MALWARE
+                userMetadata = TestData.S3_REPUTATION_OBJECT_USER_METADATA_MALWARE,
             ),
             S3Client.S3ObjectInfo(
                 key = "phishing",
                 eTag = "etag1",
                 lastModified = Date(1L),
-                userMetadata = TestData.S3_REPUTATION_OBJECT_USER_METADATA_PHISHING
+                userMetadata = TestData.S3_REPUTATION_OBJECT_USER_METADATA_PHISHING,
             ),
             S3Client.S3ObjectInfo(
                 key = "malicious-domains",
                 eTag = "etag1",
                 lastModified = Date(1L),
-                userMetadata = TestData.S3_REPUTATION_OBJECT_USER_METADATA_MALICIOUSDOMAIN
-            )
+                userMetadata = TestData.S3_REPUTATION_OBJECT_USER_METADATA_MALICIOUSDOMAIN,
+            ),
         )
         mockS3Client.stub {
             onBlocking { list(anyString(), any()) } doReturn s3Objects

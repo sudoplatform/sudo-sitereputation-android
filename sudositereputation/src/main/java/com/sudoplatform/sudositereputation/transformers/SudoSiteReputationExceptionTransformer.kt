@@ -18,7 +18,7 @@ internal object SudoSiteReputationExceptionTransformer {
      */
     internal fun interpretException(exception: Throwable): Throwable {
         return when (exception) {
-            is CancellationException, // Never wrap or reinterpret Kotlin coroutines cancellation exception
+            is CancellationException -> exception // Never wrap or reinterpret Kotlin coroutines cancellation exception
             is SudoSiteReputationException -> exception
             is S3Exception.MetadataException -> SudoSiteReputationException.DataFormatException(cause = exception)
             is S3Exception -> throw SudoSiteReputationException.FailedException(cause = exception)

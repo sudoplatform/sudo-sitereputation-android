@@ -40,7 +40,7 @@ internal class LegacySudoSiteReputationClientGetSiteReputationTest : BaseTests()
             mockUserClient,
             mockS3Client,
             mockStorageProvider,
-            mockReputationProvider
+            mockReputationProvider,
         )
     }
 

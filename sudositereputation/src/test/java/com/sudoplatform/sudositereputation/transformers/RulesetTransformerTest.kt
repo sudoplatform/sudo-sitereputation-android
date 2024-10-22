@@ -29,7 +29,7 @@ class RulesetTransformerTest {
             "MALICIOUSDOMAIN",
             "MALWARE",
             "PHISHING",
-            "UNKNOWN"
+            "UNKNOWN",
         )
         val types = Ruleset.Type.values().toList()
         var unknownCount = 0
@@ -50,7 +50,7 @@ class RulesetTransformerTest {
             "xMALICIOUSDOMAINS",
             "UNKNOWN",
             "UNKNOWNs",
-            ""
+            "",
         )
         testCases.forEach { testCase ->
             testCase.toRulesetType() shouldBe Ruleset.Type.UNKNOWN
@@ -69,8 +69,8 @@ class RulesetTransformerTest {
                 userMetadata = mapOf(
                     RulesetTransformer.METADATA_BLOB to """{
                         "${RulesetTransformer.METADATA_TYPE}": "MALICIOUSDOMAIN"
-                    }"""
-                )
+                    }""",
+                ),
             ),
             S3Client.S3ObjectInfo(
                 key = "keyGood",
@@ -79,8 +79,8 @@ class RulesetTransformerTest {
                 userMetadata = mapOf(
                     RulesetTransformer.METADATA_BLOB to """{
                         "${RulesetTransformer.METADATA_TYPE}": "MALWARE"
-                    }"""
-                )
+                    }""",
+                ),
             ),
             S3Client.S3ObjectInfo(
                 key = "key2",
@@ -89,17 +89,17 @@ class RulesetTransformerTest {
                 userMetadata = mapOf(
                     RulesetTransformer.METADATA_BLOB to """{
                         "${RulesetTransformer.METADATA_TYPE}": "unsupported"
-                    }"""
-                )
+                    }""",
+                ),
             ),
             S3Client.S3ObjectInfo(
                 key = "key3",
                 eTag = "44",
                 lastModified = Date(1L),
                 userMetadata = mapOf(
-                    RulesetTransformer.METADATA_BLOB to "{"
-                )
-            )
+                    RulesetTransformer.METADATA_BLOB to "{",
+                ),
+            ),
         )
         val rulesetList = RulesetTransformer.toRulesetList(s3ObjectInfo)
         rulesetList shouldHaveSize 1

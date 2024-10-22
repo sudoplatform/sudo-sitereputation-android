@@ -66,7 +66,7 @@ class Samples {
     // This function hides the GlobalScope from the code used in the documentation. The use
     // of GlobalScope is not something that should be recommended in the code samples.
     private fun launch(
-        block: suspend CoroutineScope.() -> Unit
+        block: suspend CoroutineScope.() -> Unit,
     ) = GlobalScope.launch { block.invoke(GlobalScope) }
 
     fun update() {
@@ -103,7 +103,7 @@ class Samples {
         launch {
             val siteReputation = withContext(Dispatchers.IO) {
                 client.getSiteReputation(
-                    url = "http://somedodgyhost.com/somewhere"
+                    url = "http://somedodgyhost.com/somewhere",
                 )
             }
             if (siteReputation.isMalicious) {

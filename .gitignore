@@ -1,5 +1,11 @@
 *.iml
 .gradle
+# Ignore everything in the /gradle folder...
+/gradle/*
+# ...except for the /wrapper folder...
+!/gradle/wrapper/
+# ...but do ignore the /dists folder
+/gradle/wrapper/dists/
 /local.properties
 /.idea/**
 .DS_Store

@@ -36,7 +36,7 @@ class S3ClientIntegrationTest : BaseIntegrationTest() {
                 sudoUserClient = userClient,
                 logger = logger,
                 bucket = config.bucket,
-                region = config.region
+                region = config.region,
             )
         }
     }

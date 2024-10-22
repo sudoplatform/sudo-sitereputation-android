@@ -6,5 +6,5 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 internal data class SiteReputationRuleList(
     val type: Ruleset.Type,
-    val rules: MutableSet<SiteReputationRule>
+    val rules: MutableSet<SiteReputationRule>,
 ) : Parcelable

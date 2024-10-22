@@ -33,7 +33,7 @@ internal class LegacySudoSiteReputationClientClearStorageTest : BaseTests() {
             mockContext,
             mockUserClient,
             mockS3Client,
-            mockStorageProvider
+            mockStorageProvider,
         )
     }
 

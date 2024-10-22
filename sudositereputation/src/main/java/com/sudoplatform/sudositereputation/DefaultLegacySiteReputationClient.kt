@@ -44,7 +44,7 @@ internal class DefaultLegacySiteReputationClient(
     private val s3Client: S3Client = DefaultS3Client(context, sudoUserClient, region, bucket, logger),
     @get:VisibleForTesting
     private val reputationProvider: ReputationProvider = DefaultReputationProvider(logger),
-    override val ENTITLEMENT_NAME: String = "sudoplatform.sr.srUserEntitled"
+    override val ENTITLEMENT_NAME: String = "sudoplatform.sr.srUserEntitled",
 ) : LegacySudoSiteReputationClient, CoroutineScope {
 
     companion object {
@@ -109,7 +109,7 @@ internal class DefaultLegacySiteReputationClient(
         try {
             val list = s3Client.list(path = S3_TOP_PATH)
             return RulesetTransformer.toRulesetList(
-                list
+                list,
             )
         } catch (e: Throwable) {
             logger.debug("Error $e")
@@ -160,7 +160,7 @@ internal class DefaultLegacySiteReputationClient(
     override suspend fun getSiteReputation(url: String): LegacySiteReputation {
         lastUpdatePerformedAt
             ?: throw SudoSiteReputationException.RulesetNotFoundException(
-                "Reputation data is not present. Please call update to obtain the latest reputation data."
+                "Reputation data is not present. Please call update to obtain the latest reputation data.",
             )
         try {
             return LegacySiteReputation(reputationProvider.checkIsUrlMalicious(url))

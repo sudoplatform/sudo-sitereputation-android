@@ -1,21 +1,19 @@
 package com.sudoplatform.sudositereputation
 
 import android.util.LruCache
-import com.amazonaws.mobileconnectors.appsync.AWSAppSyncClient
-import com.amazonaws.mobileconnectors.appsync.fetcher.AppSyncResponseFetchers
-import com.apollographql.apollo.api.Error
-import com.apollographql.apollo.exception.ApolloException
+import com.amplifyframework.api.graphql.GraphQLResponse
+import com.apollographql.apollo3.exception.ApolloException
 import com.sudoplatform.sudologging.Logger
-import com.sudoplatform.sudositereputation.appsync.enqueue
 import com.sudoplatform.sudositereputation.graphql.GetSiteReputationQuery
 import com.sudoplatform.sudositereputation.transformers.SudoSiteReputationExceptionTransformer
 import com.sudoplatform.sudositereputation.transformers.SudoSiteReputationTransformer
 import com.sudoplatform.sudositereputation.types.SiteReputation
+import com.sudoplatform.sudouser.amplify.GraphQLClient
 
 internal class APIClient(
-    private val appSyncClient: AWSAppSyncClient,
+    private val graphQLClient: GraphQLClient,
     private val logger: Logger,
-    private val cache: LruCache<String, SiteReputation>?
+    private val cache: LruCache<String, SiteReputation>?,
 ) {
 
     fun clearCache() {
@@ -37,20 +35,17 @@ internal class APIClient(
             return cache.get(uri)
         } else {
             try {
-                val query = GetSiteReputationQuery.builder()
-                    .uri(uri)
-                    .build()
-
-                val response = appSyncClient.query(query)
-                    .responseFetcher(AppSyncResponseFetchers.NETWORK_ONLY)
-                    .enqueue()
+                val response = graphQLClient.query<GetSiteReputationQuery, GetSiteReputationQuery.Data>(
+                    GetSiteReputationQuery.OPERATION_DOCUMENT,
+                    mapOf("uri" to uri),
+                )
 
                 if (response.hasErrors()) {
-                    logger.warning("Unexpected query response. ${response.errors()}")
-                    throw interpretError(response.errors().first())
+                    logger.warning("Unexpected query response. ${response.errors}")
+                    throw interpretError(response.errors.first())
                 }
 
-                response.data()?.siteReputation?.fragments()?.reputation()?.let {
+                response.data?.getSiteReputation?.reputation?.let {
                     // Cache the response here
                     val reputation = SudoSiteReputationTransformer.toReputationFromGraphQL(it)
                     cache?.put(uri, reputation)
@@ -68,8 +63,8 @@ internal class APIClient(
         }
     }
 
-    fun interpretError(e: Error): SudoSiteReputationException {
-        val error = e.customAttributes()[ERROR_TYPE]?.toString() ?: ""
+    fun interpretError(e: GraphQLResponse.Error): SudoSiteReputationException {
+        val error = if (e.message.contains(ERROR_TYPE)) e.message else ""
         if (error.contains(ERROR_SERVICE)) {
             // At time of writing the service only returns "ServiceError".
             return SudoSiteReputationException.FailedException(e.toString())

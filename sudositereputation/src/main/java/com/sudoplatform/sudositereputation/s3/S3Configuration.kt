@@ -19,7 +19,7 @@ private const val CONFIG_STATIC_DATA_BUCKET = "bucket"
 
 internal data class S3Configuration(
     val region: String,
-    val bucket: String
+    val bucket: String,
 )
 
 /**
@@ -29,7 +29,7 @@ internal data class S3Configuration(
 internal fun readS3Configuration(
     context: Context,
     logger: Logger,
-    configManager: SudoConfigManager = DefaultSudoConfigManager(context, logger)
+    configManager: SudoConfigManager = DefaultSudoConfigManager(context, logger),
 ): S3Configuration {
     val preamble = "sudoplatformconfig.json does not contain"
     val postamble = "the $CONFIG_SITE_REPUTATION_SERVICE stanza"

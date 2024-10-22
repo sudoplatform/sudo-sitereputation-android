@@ -4,11 +4,10 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-
 public data class SiteReputation(
     /** status of the search */
     val status: ReputationStatus,
-    val categories: List<String>
+    val categories: List<String>,
 ) : Parcelable {
 
     enum class ReputationStatus {
@@ -19,6 +18,6 @@ public data class SiteReputation(
         NOTMALICIOUS,
 
         /** no site data available to make a determination */
-        UNKNOWN
+        UNKNOWN,
     }
 }

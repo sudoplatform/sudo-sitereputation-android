@@ -18,7 +18,7 @@ import kotlin.coroutines.CoroutineContext
 internal class DefaultSudoSiteReputationClient(
     context: Context,
     private val logger: Logger,
-    val apiClient: APIClient
+    val apiClient: APIClient,
 ) : SudoSiteReputationClient, CoroutineScope {
 
     override val coroutineContext: CoroutineContext = Dispatchers.IO

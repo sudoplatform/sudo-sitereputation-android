@@ -41,7 +41,7 @@ internal class DefaultS3Client(
     override val bucket: String,
     private val logger: Logger,
     private val timeoutMs: Int = DEFAULT_TIMEOUT,
-    private val idGenerator: IdGenerator = DefaultIdGenerator()
+    private val idGenerator: IdGenerator = DefaultIdGenerator(),
 ) : S3Client {
 
     companion object {
@@ -123,7 +123,7 @@ internal class DefaultS3Client(
                 key = objectSummary.key,
                 eTag = metadata.eTag,
                 lastModified = metadata.lastModified,
-                userMetadata = metadata.userMetadata
+                userMetadata = metadata.userMetadata,
             )
         }
     }

@@ -43,7 +43,7 @@ internal interface S3Client {
         val key: String,
         val userMetadata: Map<String, String>,
         val eTag: String,
-        val lastModified: Date
+        val lastModified: Date,
     )
 
     /**

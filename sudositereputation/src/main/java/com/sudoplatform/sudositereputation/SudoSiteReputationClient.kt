@@ -2,7 +2,6 @@ package com.sudoplatform.sudositereputation
 
 import android.content.Context
 import android.util.LruCache
-import com.amazonaws.mobileconnectors.appsync.AWSAppSyncClient
 import com.sudoplatform.sudoapiclient.ApiClientManager
 import com.sudoplatform.sudologging.AndroidUtilsLogDriver
 import com.sudoplatform.sudologging.LogLevel
@@ -12,6 +11,7 @@ import com.sudoplatform.sudositereputation.storage.StorageProvider
 import com.sudoplatform.sudositereputation.types.LegacySiteReputation
 import com.sudoplatform.sudositereputation.types.SiteReputation
 import com.sudoplatform.sudouser.SudoUserClient
+import com.sudoplatform.sudouser.amplify.GraphQLClient
 import java.util.Objects
 
 /**
@@ -36,7 +36,7 @@ interface SudoSiteReputationClient : AutoCloseable {
         private var sudoUserClient: SudoUserClient? = null
         private var logger: Logger = Logger(LogConstants.SUDOLOG_TAG, AndroidUtilsLogDriver(LogLevel.INFO))
         private var storageProvider: StorageProvider? = null
-        private var appSyncClient: AWSAppSyncClient? = null
+        private var graphQLClient: GraphQLClient? = null
 
         /**
          * Provide the application context (required input).
@@ -54,12 +54,12 @@ interface SudoSiteReputationClient : AutoCloseable {
         }
 
         /**
-         * Provide an [AWSAppSyncClient] for the [SiteReputationClient] to use
-         * (optional input). If this is not supplied, an [AWSAppSyncClient] will
+         * Provide an [GraphQLClient] for the [SiteReputationClient] to use
+         * (optional input). If this is not supplied, an [GraphQLClient] will
          * be constructed and used.
          */
-        fun setAppSyncClient(appSyncClient: AWSAppSyncClient) = also {
-            this.appSyncClient = appSyncClient
+        fun setGraphQLClient(graphQLClient: GraphQLClient) = also {
+            this.graphQLClient = graphQLClient
         }
 
         /**
@@ -81,11 +81,11 @@ interface SudoSiteReputationClient : AutoCloseable {
             Objects.requireNonNull(context, "Context must be provided.")
             Objects.requireNonNull(sudoUserClient, "SudoUserClient must be provided.")
 
-            val appSyncClient = appSyncClient ?: ApiClientManager.getClient(this@Builder.context!!, this@Builder.sudoUserClient!!)
+            val graphQLClient = graphQLClient ?: ApiClientManager.getClient(this@Builder.context!!, this@Builder.sudoUserClient!!)
             return DefaultSudoSiteReputationClient(
                 context = context!!,
                 logger = logger,
-                apiClient = APIClient(appSyncClient = appSyncClient, logger = logger, cache = LruCache<String, SiteReputation>(1024))
+                apiClient = APIClient(graphQLClient = graphQLClient, logger = logger, cache = LruCache<String, SiteReputation>(1024)),
             )
         }
     }

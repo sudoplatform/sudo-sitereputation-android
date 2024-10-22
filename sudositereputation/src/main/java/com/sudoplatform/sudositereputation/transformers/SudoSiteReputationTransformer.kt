@@ -8,19 +8,17 @@ internal object SudoSiteReputationTransformer {
 
     fun toReputationFromGraphQL(result: Reputation): SiteReputation {
         val reputationStatus: SiteReputation.ReputationStatus =
-            if (result.reputationStatus() == ReputationStatus.MALICIOUS) {
-                SiteReputation.ReputationStatus.MALICIOUS
-            } else if (result.reputationStatus() == ReputationStatus.NOTMALICIOUS) {
-                SiteReputation.ReputationStatus.NOTMALICIOUS
-            } else {
-                SiteReputation.ReputationStatus.UNKNOWN
+            when (result.reputationStatus) {
+                ReputationStatus.MALICIOUS -> SiteReputation.ReputationStatus.MALICIOUS
+                ReputationStatus.NOTMALICIOUS -> SiteReputation.ReputationStatus.NOTMALICIOUS
+                else -> SiteReputation.ReputationStatus.UNKNOWN
             }
 
-        val categories = result.categories()
+        val categories = result.categories
 
         return SiteReputation(
             status = reputationStatus,
-            categories = categories
+            categories = categories,
         )
     }
 }
