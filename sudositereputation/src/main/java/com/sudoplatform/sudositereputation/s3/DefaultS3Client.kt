@@ -18,10 +18,10 @@ import com.amazonaws.services.s3.model.ListObjectsV2Request
 import com.sudoplatform.sudologging.Logger
 import com.sudoplatform.sudouser.IdGenerator
 import com.sudoplatform.sudouser.SudoUserClient
+import kotlinx.coroutines.suspendCancellableCoroutine
 import java.io.File
 import java.util.Date
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 /**
  * Default S3 client implementation.
@@ -79,7 +79,7 @@ internal class DefaultS3Client(
         logger.info("Downloading a blob from S3.")
         refreshCredentials()
 
-        return suspendCoroutine { cont ->
+        return suspendCancellableCoroutine { cont ->
             val id = idGenerator.generateId()
             val tmpFile = File.createTempFile(id, ".tmp")
             val observer = transferUtility.download(bucket, key, tmpFile)
@@ -87,7 +87,9 @@ internal class DefaultS3Client(
                 override fun onStateChanged(id: Int, state: TransferState?) {
                     if (TransferState.COMPLETED == state) {
                         logger.info("S3 download completed successfully.")
-                        cont.resume(tmpFile.readBytes())
+                        if (cont.isActive) {
+                            cont.resume(tmpFile.readBytes())
+                        }
                     }
                 }
 
