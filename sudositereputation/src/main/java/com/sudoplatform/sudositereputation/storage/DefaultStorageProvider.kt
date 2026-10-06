@@ -29,8 +29,9 @@ private const val ETAG_SUBDIR = "$PACKAGE.etag"
  *
  * @since 2021-01-04
  */
-internal class DefaultStorageProvider(private val context: Context) : StorageProvider {
-
+internal class DefaultStorageProvider(
+    private val context: Context,
+) : StorageProvider {
     private val cacheDir = File(context.cacheDir, CACHE_SUBDIR)
     private val eTagDir = File(context.cacheDir, ETAG_SUBDIR)
 
@@ -54,7 +55,10 @@ internal class DefaultStorageProvider(private val context: Context) : StoragePro
         return null
     }
 
-    override fun write(fileName: String, data: ByteArray) {
+    override fun write(
+        fileName: String,
+        data: ByteArray,
+    ) {
         ensureDirsExist()
         val file = getFile(fileName)
         if (file.exists()) {
@@ -81,7 +85,8 @@ internal class DefaultStorageProvider(private val context: Context) : StoragePro
 
     override fun listFiles(): List<String> {
         if (cacheDir.exists()) {
-            return cacheDir.listFiles()
+            return cacheDir
+                .listFiles()
                 ?.filter { it.isFile }
                 ?.map { it.name }
                 ?: emptyList()
@@ -102,7 +107,10 @@ internal class DefaultStorageProvider(private val context: Context) : StoragePro
         return null
     }
 
-    override fun writeFileETag(fileName: String, eTag: String) {
+    override fun writeFileETag(
+        fileName: String,
+        eTag: String,
+    ) {
         ensureDirsExist()
         FileOutputStream(getETagFile(fileName)).bufferedWriter().use { writer ->
             writer.write(eTag.trim())

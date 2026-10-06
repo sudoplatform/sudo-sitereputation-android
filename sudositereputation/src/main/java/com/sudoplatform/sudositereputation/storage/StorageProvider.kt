@@ -16,7 +16,6 @@ import java.io.IOException
  * @since 2021-01-04
  */
 interface StorageProvider {
-
     /**
      * Reads all the bytes from a file.
      *
@@ -42,7 +41,10 @@ interface StorageProvider {
      * @param data The contents of the file.
      */
     @Throws(IOException::class)
-    fun write(fileName: String, data: ByteArray)
+    fun write(
+        fileName: String,
+        data: ByteArray,
+    )
 
     /**
      * Delete a file.
@@ -84,7 +86,10 @@ interface StorageProvider {
      * @param eTag The eTag of the file.
      */
     @Throws(IOException::class)
-    fun writeFileETag(fileName: String, eTag: String)
+    fun writeFileETag(
+        fileName: String,
+        eTag: String,
+    )
 
     /**
      * Delete the eTag of a file.

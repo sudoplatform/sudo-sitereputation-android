@@ -26,7 +26,6 @@ import java.util.concurrent.CancellationException
  */
 @RunWith(RobolectricTestRunner::class)
 internal class LegacySudoSiteReputationClientCloseTest : BaseTests() {
-
     @After
     fun fini() {
         verifyMocksUsedInClientInit()
@@ -40,34 +39,37 @@ internal class LegacySudoSiteReputationClientCloseTest : BaseTests() {
     }
 
     @Test
-    fun `close() should call reputation provider`() = runBlocking<Unit> {
-        siteReputationClient.close()
-
-        // should call close() twice because it does it first on setup
-        verify(mockReputationProvider, times(2)).close()
-    }
-
-    @Test
-    fun `close() should suppress when reputation provider throws`() = runBlocking<Unit> {
-        mockReputationProvider.stub {
-            on { close() } doThrow IOException("mock")
-        }
-
-        siteReputationClient.close()
-
-        verify(mockReputationProvider, times(2)).close()
-    }
-
-    @Test
-    fun `close() should not block coroutine cancellation exception`() = runBlocking<Unit> {
-        mockReputationProvider.stub {
-            on { close() } doThrow CancellationException("mock")
-        }
-
-        shouldThrow<CancellationException> {
+    fun `close() should call reputation provider`() =
+        runBlocking<Unit> {
             siteReputationClient.close()
+
+            // should call close() twice because it does it first on setup
+            verify(mockReputationProvider, times(2)).close()
         }
 
-        verify(mockReputationProvider, times(2)).close()
-    }
+    @Test
+    fun `close() should suppress when reputation provider throws`() =
+        runBlocking<Unit> {
+            mockReputationProvider.stub {
+                on { close() } doThrow IOException("mock")
+            }
+
+            siteReputationClient.close()
+
+            verify(mockReputationProvider, times(2)).close()
+        }
+
+    @Test
+    fun `close() should not block coroutine cancellation exception`() =
+        runBlocking<Unit> {
+            mockReputationProvider.stub {
+                on { close() } doThrow CancellationException("mock")
+            }
+
+            shouldThrow<CancellationException> {
+                siteReputationClient.close()
+            }
+
+            verify(mockReputationProvider, times(2)).close()
+        }
 }

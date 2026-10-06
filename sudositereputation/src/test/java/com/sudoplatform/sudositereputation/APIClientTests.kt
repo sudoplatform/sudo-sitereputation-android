@@ -36,7 +36,6 @@ import kotlin.coroutines.cancellation.CancellationException
  */
 @RunWith(RobolectricTestRunner::class)
 internal class APIClientTests : BaseTests() {
-
     private val mockGraphQLClient: ApiCategory = mock()
 
     private val spyLruCache by before {
@@ -57,102 +56,109 @@ internal class APIClientTests : BaseTests() {
     }
 
     @Test
-    fun `getSiteReputation() should resolve when no error present`() = runBlocking<Unit> {
-        whenever(
-            mockGraphQLClient.query<String>(
-                argThat {
-                    this.query.equals(GetSiteReputationQuery.OPERATION_DOCUMENT)
-                },
-                any(),
-                any(),
-            ),
-        ).thenAnswer {
-            // this queryResponse must contain the json object you wish to represent
-            // just as it comes back on the wire from the service
-            val queryResponse = JSONObject(
-                """
-                {
-                    "getSiteReputation": {
-                        "__typename": 'Reputation',
-                        "reputationStatus": "MALICIOUS",
-                        "categories": ["fake"]
+    fun `getSiteReputation() should resolve when no error present`() =
+        runBlocking<Unit> {
+            whenever(
+                mockGraphQLClient.query<String>(
+                    argThat {
+                        this.query.equals(GetSiteReputationQuery.OPERATION_DOCUMENT)
+                    },
+                    any(),
+                    any(),
+                ),
+            ).thenAnswer {
+                // this queryResponse must contain the json object you wish to represent
+                // just as it comes back on the wire from the service
+                val queryResponse =
+                    JSONObject(
+                        """
+                        {
+                            "getSiteReputation": {
+                                "__typename": 'Reputation',
+                                "reputationStatus": "MALICIOUS",
+                                "categories": ["fake"]
+                            }
+                        }
+                        """.trimIndent(),
+                    )
+                @Suppress("UNCHECKED_CAST")
+                (it.arguments[1] as Consumer<GraphQLResponse<String>>).accept(
+                    GraphQLResponse(queryResponse.toString(), null),
+                )
+                mock<GraphQLOperation<String>>()
+            }
+
+            val deferredResult =
+                async(Dispatchers.IO) {
+                    mockApiClient.getSiteReputation("http://www.storytrain.com")
+                    mockApiClient.getSiteReputation("http://www.storytrain.com") // This should be pulled from the cache
+                }
+
+            deferredResult.start()
+
+            delay(100L)
+
+            deferredResult.await()
+
+            // Service response should have been cached, make sure the service is only called once
+            verify(mockGraphQLClient, times(1)).query(any<GraphQLRequest<GetSiteReputationQuery>>(), any(), any())
+        }
+
+    @Test
+    fun `getSiteReputation() should throw when response has an error`() =
+        runBlocking<Unit> {
+            whenever(
+                mockGraphQLClient.query<String>(
+                    argThat { this.query.equals(GetSiteReputationQuery.OPERATION_DOCUMENT) },
+                    any(),
+                    any(),
+                ),
+            ).thenAnswer {
+                // build the error response you want to deliver
+                val error =
+                    GraphQLResponse.Error(
+                        "mock",
+                        emptyList(),
+                        emptyList(),
+                        mapOf("errorType" to "serviceError"),
+                    )
+                @Suppress("UNCHECKED_CAST")
+                (it.arguments[1] as Consumer<GraphQLResponse<String>>).accept(
+                    GraphQLResponse(null, listOf(error)),
+                )
+                mock<GraphQLOperation<String>>()
+            }
+
+            val deferredResult =
+                async(Dispatchers.IO) {
+                    shouldThrow<SudoSiteReputationException.FailedException> {
+                        mockApiClient.getSiteReputation("http://www.storytrainanthology.com")
                     }
                 }
-                """.trimIndent(),
-            )
-            @Suppress("UNCHECKED_CAST")
-            (it.arguments[1] as Consumer<GraphQLResponse<String>>).accept(
-                GraphQLResponse(queryResponse.toString(), null),
-            )
-            mock<GraphQLOperation<String>>()
+            deferredResult.start()
+
+            delay(100L)
+
+            verify(mockGraphQLClient).query(any<GraphQLRequest<GetSiteReputationQuery>>(), any(), any())
         }
-
-        val deferredResult = async(Dispatchers.IO) {
-            mockApiClient.getSiteReputation("http://www.storytrain.com")
-            mockApiClient.getSiteReputation("http://www.storytrain.com") // This should be pulled from the cache
-        }
-
-        deferredResult.start()
-
-        delay(100L)
-
-        deferredResult.await()
-
-        // Service response should have been cached, make sure the service is only called once
-        verify(mockGraphQLClient, times(1)).query(any<GraphQLRequest<GetSiteReputationQuery>>(), any(), any())
-    }
 
     @Test
-    fun `getSiteReputation() should throw when response has an error`() = runBlocking<Unit> {
-        whenever(
-            mockGraphQLClient.query<String>(
-                argThat { this.query.equals(GetSiteReputationQuery.OPERATION_DOCUMENT) },
-                any(),
-                any(),
-            ),
-        ).thenAnswer {
-            // build the error response you want to deliver
-            val error = GraphQLResponse.Error(
-                "mock",
-                emptyList(),
-                emptyList(),
-                mapOf("errorType" to "serviceError"),
-            )
-            @Suppress("UNCHECKED_CAST")
-            (it.arguments[1] as Consumer<GraphQLResponse<String>>).accept(
-                GraphQLResponse(null, listOf(error)),
-            )
-            mock<GraphQLOperation<String>>()
-        }
-
-        val deferredResult = async(Dispatchers.IO) {
-            shouldThrow<SudoSiteReputationException.FailedException> {
-                mockApiClient.getSiteReputation("http://www.storytrainanthology.com")
+    fun `getSiteReputation() should not block coroutine cancellation exception`() =
+        runBlocking<Unit> {
+            mockGraphQLClient.stub {
+                on {
+                    query(
+                        any<GraphQLRequest<GetSiteReputationQuery>>(),
+                        any(),
+                        any(),
+                    )
+                } doThrow CancellationException("Mock Runtime Exception")
             }
+
+            shouldThrow<CancellationException> {
+                mockApiClient.getSiteReputation("foo.com")
+            }
+
+            verify(mockGraphQLClient).query(any<GraphQLRequest<GetSiteReputationQuery>>(), any(), any())
         }
-        deferredResult.start()
-
-        delay(100L)
-
-        verify(mockGraphQLClient).query(any<GraphQLRequest<GetSiteReputationQuery>>(), any(), any())
-    }
-
-    @Test
-    fun `getSiteReputation() should not block coroutine cancellation exception`() = runBlocking<Unit> {
-        mockGraphQLClient.stub {
-            on {
-                query(
-                    any<GraphQLRequest<GetSiteReputationQuery>>(),
-                    any(),
-                    any(),
-                )
-            } doThrow CancellationException("Mock Runtime Exception")
-        }
-
-        shouldThrow<CancellationException> {
-            mockApiClient.getSiteReputation("foo.com")
-        }
-
-        verify(mockGraphQLClient).query(any<GraphQLRequest<GetSiteReputationQuery>>(), any(), any())
-    }
 }

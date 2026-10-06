@@ -12,13 +12,13 @@ import io.kotlintest.shouldBe
 import org.junit.Test
 
 class SudoSiteReputationTransformerTest {
-
     @Test
     fun `transforms graphQL response correctly`() {
-        val input = Reputation(
-            ReputationStatus.NOTMALICIOUS,
-            listOf("35"),
-        )
+        val input =
+            Reputation(
+                ReputationStatus.NOTMALICIOUS,
+                listOf("35"),
+            )
 
         val output = SudoSiteReputationTransformer.toReputationFromGraphQL(input)
         output.status shouldBe SiteReputation.ReputationStatus.NOTMALICIOUS

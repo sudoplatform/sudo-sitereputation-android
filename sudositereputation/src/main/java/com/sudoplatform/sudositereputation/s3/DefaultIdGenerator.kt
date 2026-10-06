@@ -16,7 +16,5 @@ import java.util.UUID
  * @since 2021-01-04
  */
 internal class DefaultIdGenerator : IdGenerator {
-    override fun generateId(): String {
-        return UUID.randomUUID().toString().uppercase(Locale.ROOT)
-    }
+    override fun generateId(): String = UUID.randomUUID().toString().uppercase(Locale.ROOT)
 }

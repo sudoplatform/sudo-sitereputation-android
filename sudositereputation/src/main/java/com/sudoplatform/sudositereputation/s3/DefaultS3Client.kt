@@ -43,7 +43,6 @@ internal class DefaultS3Client(
     private val timeoutMs: Int = DEFAULT_TIMEOUT,
     private val idGenerator: IdGenerator = DefaultIdGenerator(),
 ) : S3Client {
-
     companion object {
         internal const val DEFAULT_TIMEOUT = 10_000
 
@@ -63,16 +62,19 @@ internal class DefaultS3Client(
     private val credentialsProvider: CognitoCredentialsProvider = sudoUserClient.getCredentialsProvider()
 
     init {
-        val s3ClientConfig = ClientConfiguration().apply {
-            connectionTimeout = timeoutMs
-            socketTimeout = timeoutMs
-        }
+        val s3ClientConfig =
+            ClientConfiguration().apply {
+                connectionTimeout = timeoutMs
+                socketTimeout = timeoutMs
+            }
         amazonS3Client = AmazonS3Client(credentialsProvider, Region.getRegion(region), s3ClientConfig)
-        transferUtility = TransferUtility.builder()
-            .context(context)
-            .s3Client(amazonS3Client)
-            .defaultBucket(bucket)
-            .build()
+        transferUtility =
+            TransferUtility
+                .builder()
+                .context(context)
+                .s3Client(amazonS3Client)
+                .defaultBucket(bucket)
+                .build()
     }
 
     override suspend fun download(key: String): ByteArray {
@@ -83,41 +85,56 @@ internal class DefaultS3Client(
             val id = idGenerator.generateId()
             val tmpFile = File.createTempFile(id, ".tmp")
             val observer = transferUtility.download(bucket, key, tmpFile)
-            observer.setTransferListener(object : TransferListener {
-                override fun onStateChanged(id: Int, state: TransferState?) {
-                    if (TransferState.COMPLETED == state) {
-                        logger.info("S3 download completed successfully.")
-                        if (cont.isActive) {
-                            cont.resume(tmpFile.readBytes())
+            observer.setTransferListener(
+                object : TransferListener {
+                    override fun onStateChanged(
+                        id: Int,
+                        state: TransferState?,
+                    ) {
+                        if (TransferState.COMPLETED == state) {
+                            logger.info("S3 download completed successfully.")
+                            if (cont.isActive) {
+                                cont.resume(tmpFile.readBytes())
+                            }
                         }
                     }
-                }
 
-                override fun onProgressChanged(id: Int, bytesCurrent: Long, bytesTotal: Long) {
-                    logger.debug("S3 download progress changed: id=$id, bytesCurrent=$bytesCurrent, bytesTotal=$bytesTotal")
-                }
+                    override fun onProgressChanged(
+                        id: Int,
+                        bytesCurrent: Long,
+                        bytesTotal: Long,
+                    ) {
+                        logger.debug("S3 download progress changed: id=$id, bytesCurrent=$bytesCurrent, bytesTotal=$bytesTotal")
+                    }
 
-                override fun onError(id: Int, e: Exception?) {
-                    throw S3Exception.DownloadException(e?.message, cause = e)
-                }
-            })
+                    override fun onError(
+                        id: Int,
+                        e: Exception?,
+                    ): Unit = throw S3Exception.DownloadException(e?.message, cause = e)
+                },
+            )
         }
     }
 
-    override suspend fun list(path: String, limit: Int): List<S3Client.S3ObjectInfo> {
+    override suspend fun list(
+        path: String,
+        limit: Int,
+    ): List<S3Client.S3ObjectInfo> {
         logger.info("Listing files from S3.")
         refreshCredentials()
 
-        val listRequest = ListObjectsV2Request().apply {
-            prefix = path
-            maxKeys = limit
-            bucketName = bucket
-        }
+        val listRequest =
+            ListObjectsV2Request().apply {
+                prefix = path
+                maxKeys = limit
+                bucketName = bucket
+            }
         val listResponse = amazonS3Client.listObjectsV2(listRequest)
 
         return listResponse.objectSummaries.map { objectSummary ->
-            val metadata = amazonS3Client.getObjectMetadata(bucket, objectSummary.key)
-                ?: throw S3Exception.MetadataException("Missing S3 object metadata")
+            val metadata =
+                amazonS3Client.getObjectMetadata(bucket, objectSummary.key)
+                    ?: throw S3Exception.MetadataException("Missing S3 object metadata")
             if (metadata.userMetadata == null || metadata.userMetadata.isEmpty()) {
                 throw S3Exception.MetadataException("Empty S3 object user metadata")
             }

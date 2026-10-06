@@ -26,6 +26,7 @@ import java.util.Objects
  * @since 2021-01-04
  */
 interface LegacySudoSiteReputationClient : AutoCloseable {
+    @Suppress("ktlint:standard:property-naming")
     val ENTITLEMENT_NAME: String
 
     companion object {
@@ -46,34 +47,38 @@ interface LegacySudoSiteReputationClient : AutoCloseable {
         /**
          * Provide the application context (required input).
          */
-        fun setContext(context: Context) = also {
-            it.context = context
-        }
+        fun setContext(context: Context) =
+            also {
+                it.context = context
+            }
 
         /**
          * Provide the implementation of the [SudoUserClient] used to perform
          * sign in and ownership operations (required input).
          */
-        fun setSudoUserClient(sudoUserClient: SudoUserClient) = also {
-            it.sudoUserClient = sudoUserClient
-        }
+        fun setSudoUserClient(sudoUserClient: SudoUserClient) =
+            also {
+                it.sudoUserClient = sudoUserClient
+            }
 
         /**
          * Provide the implementation of the [StorageProvider] used to read and write cached
          * metadata and contents and the allow list (optional input). If a value is not supplied
          * a default implementation will be used.
          */
-        fun setStorageProvider(storageProvider: StorageProvider) = also {
-            it.storageProvider = storageProvider
-        }
+        fun setStorageProvider(storageProvider: StorageProvider) =
+            also {
+                it.storageProvider = storageProvider
+            }
 
         /**
          * Provide the implementation of the [Logger] used for logging errors (optional input).
          * If a value is not supplied a default implementation will be used.
          */
-        fun setLogger(logger: Logger) = also {
-            it.logger = logger
-        }
+        fun setLogger(logger: Logger) =
+            also {
+                it.logger = logger
+            }
 
         /**
          * Construct the [LegacySudoSiteReputationClient]. Will throw a [NullPointerException] if

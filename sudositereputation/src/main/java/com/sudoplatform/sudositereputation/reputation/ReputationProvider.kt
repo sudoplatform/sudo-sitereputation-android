@@ -14,13 +14,15 @@ import com.sudoplatform.sudositereputation.types.Ruleset
  * @since 2021-01-05
  */
 internal interface ReputationProvider : AutoCloseable {
-
     /**
      * Set the rules the reputation service should use to determine the reputation of a site from a URL.
      *
      * @param reputationRulesBytes The reputation rules to use.
      */
-    suspend fun setRules(reputationRulesBytes: ByteArray, rulesetType: Ruleset.Type)
+    suspend fun setRules(
+        reputationRulesBytes: ByteArray,
+        rulesetType: Ruleset.Type,
+    )
 
     /**
      * Checks the host or domain in a URL to determine if it is listed as malicious.

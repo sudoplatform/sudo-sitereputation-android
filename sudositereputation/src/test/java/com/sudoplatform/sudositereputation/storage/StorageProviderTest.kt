@@ -25,7 +25,6 @@ import org.robolectric.RobolectricTestRunner
  */
 @RunWith(RobolectricTestRunner::class)
 class StorageProviderTest {
-
     private val context = ApplicationProvider.getApplicationContext<Context>()
     private val storageProvider = DefaultStorageProvider(context)
     private val fileName = "myFile"
@@ -38,57 +37,59 @@ class StorageProviderTest {
     }
 
     @Test
-    fun checkReadWriteDelete() = runBlocking<Unit> {
-        with(storageProvider) {
-            getFile(fileName).exists() shouldBe false
-            read(fileName) shouldBe null
-            delete(fileName) shouldBe false
+    fun checkReadWriteDelete() =
+        runBlocking<Unit> {
+            with(storageProvider) {
+                getFile(fileName).exists() shouldBe false
+                read(fileName) shouldBe null
+                delete(fileName) shouldBe false
 
-            readFileETag(fileName) shouldBe null
-            deleteFileETag(fileName) shouldBe false
+                readFileETag(fileName) shouldBe null
+                deleteFileETag(fileName) shouldBe false
 
-            write(fileName, testData.toByteArray())
-            val file = getFile(fileName)
-            file.exists() shouldBe true
-            file.lastModified() shouldBeGreaterThanOrEqual 0L
+                write(fileName, testData.toByteArray())
+                val file = getFile(fileName)
+                file.exists() shouldBe true
+                file.lastModified() shouldBeGreaterThanOrEqual 0L
 
-            val content = read(fileName)
-            content shouldNotBe null
-            String(content!!) shouldBe testData
+                val content = read(fileName)
+                content shouldNotBe null
+                String(content!!) shouldBe testData
 
-            writeFileETag(fileName, eTag)
-            readFileETag(fileName) shouldBe eTag
-            deleteFileETag(fileName) shouldBe true
+                writeFileETag(fileName, eTag)
+                readFileETag(fileName) shouldBe eTag
+                deleteFileETag(fileName) shouldBe true
 
-            delete(fileName) shouldBe true
-            read(fileName) shouldBe null
-            delete(fileName) shouldBe false
-            getFile(fileName).exists() shouldBe false
+                delete(fileName) shouldBe true
+                read(fileName) shouldBe null
+                delete(fileName) shouldBe false
+                getFile(fileName).exists() shouldBe false
 
-            readFileETag(fileName) shouldBe null
-            deleteFileETag(fileName) shouldBe false
+                readFileETag(fileName) shouldBe null
+                deleteFileETag(fileName) shouldBe false
+            }
         }
-    }
 
     @Test
-    fun checkDeleteAll() = runBlocking<Unit> {
-        with(storageProvider) {
-            read(fileName) shouldBe null
-            readFileETag(fileName) shouldBe null
-            listFiles() shouldHaveSize 0
+    fun checkDeleteAll() =
+        runBlocking<Unit> {
+            with(storageProvider) {
+                read(fileName) shouldBe null
+                readFileETag(fileName) shouldBe null
+                listFiles() shouldHaveSize 0
 
-            write(fileName, testData.toByteArray())
-            listFiles() shouldContainExactlyInAnyOrder listOf(fileName)
+                write(fileName, testData.toByteArray())
+                listFiles() shouldContainExactlyInAnyOrder listOf(fileName)
 
-            writeFileETag(fileName, eTag)
-            readFileETag(fileName) shouldBe eTag
+                writeFileETag(fileName, eTag)
+                readFileETag(fileName) shouldBe eTag
 
-            deleteFiles()
-            deleteFileETags()
+                deleteFiles()
+                deleteFileETags()
 
-            readFileETag(fileName) shouldBe null
-            read(fileName) shouldBe null
-            listFiles() shouldHaveSize 0
+                readFileETag(fileName) shouldBe null
+                read(fileName) shouldBe null
+                listFiles() shouldHaveSize 0
+            }
         }
-    }
 }

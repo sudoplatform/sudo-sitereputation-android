@@ -31,7 +31,6 @@ import java.util.concurrent.CancellationException
  */
 @RunWith(RobolectricTestRunner::class)
 internal class LegacySudoSiteReputationClientGetSiteReputationTest : BaseTests() {
-
     @After
     fun finish() {
         verifyMocksUsedInClientInit()
@@ -45,67 +44,72 @@ internal class LegacySudoSiteReputationClientGetSiteReputationTest : BaseTests()
     }
 
     @Test
-    fun `checkIsUrlMalicious() should call reputation provider`() = runBlocking<Unit> {
-        siteReputationClient.getSiteReputation("a")
-
-        verify(mockReputationProvider).close()
-        verify(mockStorageProvider).read(LAST_UPDATED_FILE)
-        verify(mockStorageProvider, times(3)).read(argWhere { it != LAST_UPDATED_FILE })
-        verify(mockReputationProvider).checkIsUrlMalicious(anyString())
-    }
-
-    @Test
-    fun `checkIsUrlMalicious() should throw when ruleset not downloaded`() = runBlocking<Unit> {
-        mockStorageProvider.stub {
-            on { read(LAST_UPDATED_FILE) } doReturn null
-        }
-
-        shouldThrow<SudoSiteReputationException.RulesetNotFoundException> {
+    fun `checkIsUrlMalicious() should call reputation provider`() =
+        runBlocking<Unit> {
             siteReputationClient.getSiteReputation("a")
-        }
 
-        verify(mockReputationProvider).close()
-        verify(mockStorageProvider).read(LAST_UPDATED_FILE)
-    }
+            verify(mockReputationProvider).close()
+            verify(mockStorageProvider).read(LAST_UPDATED_FILE)
+            verify(mockStorageProvider, times(3)).read(argWhere { it != LAST_UPDATED_FILE })
+            verify(mockReputationProvider).checkIsUrlMalicious(anyString())
+        }
 
     @Test
-    fun `checkIsUrlMalicious() should throw when reputation provider throws`() = runBlocking<Unit> {
-        mockReputationProvider.stub {
-            onBlocking { checkIsUrlMalicious(anyString()) } doThrow SudoSiteReputationException.DataFormatException("mock")
-        }
+    fun `checkIsUrlMalicious() should throw when ruleset not downloaded`() =
+        runBlocking<Unit> {
+            mockStorageProvider.stub {
+                on { read(LAST_UPDATED_FILE) } doReturn null
+            }
 
-        shouldThrow<SudoSiteReputationException.DataFormatException> {
-            siteReputationClient.getSiteReputation("a")
-        }
+            shouldThrow<SudoSiteReputationException.RulesetNotFoundException> {
+                siteReputationClient.getSiteReputation("a")
+            }
 
-        verify(mockReputationProvider).close()
-        verify(mockStorageProvider).read(LAST_UPDATED_FILE)
-        verify(mockStorageProvider, times(3)).read(argWhere { it != LAST_UPDATED_FILE })
-        verify(mockReputationProvider).checkIsUrlMalicious(anyString())
-    }
+            verify(mockReputationProvider).close()
+            verify(mockStorageProvider).read(LAST_UPDATED_FILE)
+        }
 
     @Test
-    fun `checkIsUrlMalicious() should not block coroutine cancellation exception`() = runBlocking<Unit> {
-        mockReputationProvider.stub {
-            onBlocking { checkIsUrlMalicious(anyString()) } doThrow CancellationException("mock")
-        }
+    fun `checkIsUrlMalicious() should throw when reputation provider throws`() =
+        runBlocking<Unit> {
+            mockReputationProvider.stub {
+                onBlocking { checkIsUrlMalicious(anyString()) } doThrow SudoSiteReputationException.DataFormatException("mock")
+            }
 
-        shouldThrow<CancellationException> {
-            siteReputationClient.getSiteReputation("a")
-        }
+            shouldThrow<SudoSiteReputationException.DataFormatException> {
+                siteReputationClient.getSiteReputation("a")
+            }
 
-        verify(mockReputationProvider).close()
-        verify(mockStorageProvider).read(LAST_UPDATED_FILE)
-        verify(mockStorageProvider, times(3)).read(argWhere { it != LAST_UPDATED_FILE })
-        verify(mockReputationProvider).checkIsUrlMalicious(anyString())
-    }
+            verify(mockReputationProvider).close()
+            verify(mockStorageProvider).read(LAST_UPDATED_FILE)
+            verify(mockStorageProvider, times(3)).read(argWhere { it != LAST_UPDATED_FILE })
+            verify(mockReputationProvider).checkIsUrlMalicious(anyString())
+        }
 
     @Test
-    fun `ENTITLEMENT_NAME should not be null and should have the correct value`() = runBlocking {
-        val entitlementName: String = siteReputationClient.ENTITLEMENT_NAME
-        entitlementName shouldNotBe null
-        entitlementName shouldBe "sudoplatform.sr.srUserEntitled"
+    fun `checkIsUrlMalicious() should not block coroutine cancellation exception`() =
+        runBlocking<Unit> {
+            mockReputationProvider.stub {
+                onBlocking { checkIsUrlMalicious(anyString()) } doThrow CancellationException("mock")
+            }
 
-        verify(mockReputationProvider).close()
-    }
+            shouldThrow<CancellationException> {
+                siteReputationClient.getSiteReputation("a")
+            }
+
+            verify(mockReputationProvider).close()
+            verify(mockStorageProvider).read(LAST_UPDATED_FILE)
+            verify(mockStorageProvider, times(3)).read(argWhere { it != LAST_UPDATED_FILE })
+            verify(mockReputationProvider).checkIsUrlMalicious(anyString())
+        }
+
+    @Test
+    fun `ENTITLEMENT_NAME should not be null and should have the correct value`() =
+        runBlocking {
+            val entitlementName: String = siteReputationClient.ENTITLEMENT_NAME
+            entitlementName shouldNotBe null
+            entitlementName shouldBe "sudoplatform.sr.srUserEntitled"
+
+            verify(mockReputationProvider).close()
+        }
 }

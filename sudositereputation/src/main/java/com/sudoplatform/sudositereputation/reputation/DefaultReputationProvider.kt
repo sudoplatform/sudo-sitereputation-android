@@ -20,11 +20,15 @@ private const val COMMENT = '#'
  *
  * @since 2021-01-05
  */
-internal class DefaultReputationProvider(private val logger: Logger) : ReputationProvider {
-
+internal class DefaultReputationProvider(
+    private val logger: Logger,
+) : ReputationProvider {
     private var ruleLists = mutableListOf<SiteReputationRuleList>()
 
-    override suspend fun setRules(reputationRulesBytes: ByteArray, rulesetType: Ruleset.Type) {
+    override suspend fun setRules(
+        reputationRulesBytes: ByteArray,
+        rulesetType: Ruleset.Type,
+    ) {
         try {
             val matchingRuleList = ruleLists.firstOrNull { it.type == rulesetType }
             if (matchingRuleList != null) {
@@ -37,11 +41,9 @@ internal class DefaultReputationProvider(private val logger: Logger) : Reputatio
                 lines
                     .map { line ->
                         line.trim()
-                    }
-                    .filter { line ->
+                    }.filter { line ->
                         line.isNotBlank() && !line.startsWith(COMMENT)
-                    }
-                    .forEach { line ->
+                    }.forEach { line ->
                         ruleList.rules.add(SiteReputationRule(line))
                     }
             }

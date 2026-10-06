@@ -25,7 +25,6 @@ import java.io.IOException
  */
 @RunWith(RobolectricTestRunner::class)
 internal class LegacySudoSiteReputationClientClearStorageTest : BaseTests() {
-
     @After
     fun fini() {
         verifyMocksUsedInClientInit()
@@ -38,50 +37,54 @@ internal class LegacySudoSiteReputationClientClearStorageTest : BaseTests() {
     }
 
     @Test
-    fun `clearStorage() should call storage provider`() = runBlocking<Unit> {
-        siteReputationClient.clearStorage()
+    fun `clearStorage() should call storage provider`() =
+        runBlocking<Unit> {
+            siteReputationClient.clearStorage()
 
-        verify(mockStorageProvider).deleteFiles()
-        verify(mockStorageProvider).deleteFileETags()
-    }
+            verify(mockStorageProvider).deleteFiles()
+            verify(mockStorageProvider).deleteFileETags()
+        }
 
     @Test
-    fun `clearStorage() should throw when storage provider throws`() = runBlocking<Unit> {
-        mockStorageProvider.stub {
-            onBlocking { deleteFiles() } doThrow IOException("mock")
-        }
+    fun `clearStorage() should throw when storage provider throws`() =
+        runBlocking<Unit> {
+            mockStorageProvider.stub {
+                on { deleteFiles() } doThrow IOException("mock")
+            }
 
-        shouldThrow<SudoSiteReputationException.FailedException> {
-            siteReputationClient.clearStorage()
-        }
+            shouldThrow<SudoSiteReputationException.FailedException> {
+                siteReputationClient.clearStorage()
+            }
 
-        verify(mockStorageProvider).deleteFiles()
-    }
+            verify(mockStorageProvider).deleteFiles()
+        }
 
     @Test
-    fun `clearStorage() should throw when storage provider throws from eTags`() = runBlocking<Unit> {
-        mockStorageProvider.stub {
-            onBlocking { deleteFileETags() } doThrow IOException("mock")
-        }
+    fun `clearStorage() should throw when storage provider throws from eTags`() =
+        runBlocking<Unit> {
+            mockStorageProvider.stub {
+                on { deleteFileETags() } doThrow IOException("mock")
+            }
 
-        shouldThrow<SudoSiteReputationException.FailedException> {
-            siteReputationClient.clearStorage()
-        }
+            shouldThrow<SudoSiteReputationException.FailedException> {
+                siteReputationClient.clearStorage()
+            }
 
-        verify(mockStorageProvider).deleteFiles()
-        verify(mockStorageProvider).deleteFileETags()
-    }
+            verify(mockStorageProvider).deleteFiles()
+            verify(mockStorageProvider).deleteFileETags()
+        }
 
     @Test
-    fun `clearStorage() should not block coroutine cancellation exception`() = runBlocking<Unit> {
-        mockStorageProvider.stub {
-            onBlocking { deleteFiles() } doThrow CancellationException("mock")
-        }
+    fun `clearStorage() should not block coroutine cancellation exception`() =
+        runBlocking<Unit> {
+            mockStorageProvider.stub {
+                on { deleteFiles() } doThrow CancellationException("mock")
+            }
 
-        shouldThrow<CancellationException> {
-            siteReputationClient.clearStorage()
-        }
+            shouldThrow<CancellationException> {
+                siteReputationClient.clearStorage()
+            }
 
-        verify(mockStorageProvider).deleteFiles()
-    }
+            verify(mockStorageProvider).deleteFiles()
+        }
 }

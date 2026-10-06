@@ -32,7 +32,6 @@ import java.util.Date
  */
 @RunWith(AndroidJUnit4::class)
 class LegacySudoSiteReputationClientIntegrationTest : BaseIntegrationTest() {
-
     private var siteReputationClient: LegacySudoSiteReputationClient? = null
     private val storageProvider = DefaultStorageProvider(context)
 
@@ -42,23 +41,27 @@ class LegacySudoSiteReputationClientIntegrationTest : BaseIntegrationTest() {
     }
 
     @After
-    fun fini() = runBlocking<Unit> {
-        if (clientConfigFilesPresent()) {
-            siteReputationClient?.clearStorage()
+    fun fini() =
+        runBlocking<Unit> {
+            if (clientConfigFilesPresent()) {
+                siteReputationClient?.clearStorage()
+            }
+            Timber.uprootAll()
         }
-        Timber.uprootAll()
-    }
 
-    private fun createClient() = runBlocking<LegacySudoSiteReputationClient> {
-        siteReputationClient = LegacySudoSiteReputationClient.builder()
-            .setContext(context)
-            .setSudoUserClient(userClient)
-            .setStorageProvider(storageProvider)
-            .setLogger(logger)
-            .build()
-        siteReputationClient!!.clearStorage()
-        siteReputationClient!!
-    }
+    private fun createClient() =
+        runBlocking<LegacySudoSiteReputationClient> {
+            siteReputationClient =
+                LegacySudoSiteReputationClient
+                    .builder()
+                    .setContext(context)
+                    .setSudoUserClient(userClient)
+                    .setStorageProvider(storageProvider)
+                    .setLogger(logger)
+                    .build()
+            siteReputationClient!!.clearStorage()
+            siteReputationClient!!
+        }
 
     @Test
     fun shouldThrowIfRequiredItemsNotProvidedToBuilder() {
@@ -72,14 +75,16 @@ class LegacySudoSiteReputationClientIntegrationTest : BaseIntegrationTest() {
 
         // Context not provided
         shouldThrow<NullPointerException> {
-            LegacySudoSiteReputationClient.builder()
+            LegacySudoSiteReputationClient
+                .builder()
                 .setSudoUserClient(userClient)
                 .build()
         }
 
         // SudoUserClient not provided
         shouldThrow<NullPointerException> {
-            LegacySudoSiteReputationClient.builder()
+            LegacySudoSiteReputationClient
+                .builder()
                 .setContext(context)
                 .build()
         }
@@ -90,7 +95,8 @@ class LegacySudoSiteReputationClientIntegrationTest : BaseIntegrationTest() {
         // Can only run if client config files are present
         assumeTrue(clientConfigFilesPresent())
 
-        LegacySudoSiteReputationClient.builder()
+        LegacySudoSiteReputationClient
+            .builder()
             .setContext(context)
             .setSudoUserClient(userClient)
             .build()
@@ -101,47 +107,48 @@ class LegacySudoSiteReputationClientIntegrationTest : BaseIntegrationTest() {
      * user would be expected to exercise.
      */
     @Test
-    fun completeFlowShouldSucceed() = runBlocking<Unit> {
-        // Can only run if client config files are present
-        assumeTrue(clientConfigFilesPresent())
-        signInAndRegisterUser()
-        val client = createClient()
+    fun completeFlowShouldSucceed() =
+        runBlocking<Unit> {
+            // Can only run if client config files are present
+            assumeTrue(clientConfigFilesPresent())
+            signInAndRegisterUser()
+            val client = createClient()
 
-        val clientImpl = client as DefaultLegacySiteReputationClient
-        val rulesets = clientImpl.listRulesets()
-        rulesets.size shouldBeGreaterThanOrEqual 1
-        with(rulesets[0]) {
-            type shouldNotBe Ruleset.Type.UNKNOWN
-            id shouldNotBe ""
-            eTag shouldNotBe ""
-            updatedAt.time shouldBeGreaterThan 0L
+            val clientImpl = client as DefaultLegacySiteReputationClient
+            val rulesets = clientImpl.listRulesets()
+            rulesets.size shouldBeGreaterThanOrEqual 1
+            with(rulesets[0]) {
+                type shouldNotBe Ruleset.Type.UNKNOWN
+                id shouldNotBe ""
+                eTag shouldNotBe ""
+                updatedAt.time shouldBeGreaterThan 0L
+            }
+
+            // Prior to update there should be no rulesets loaded
+            client.lastUpdatePerformedAt shouldBe null
+            shouldThrow<SudoSiteReputationException.RulesetNotFoundException> {
+                client.getSiteReputation(MALICIOUS.first())
+            }
+
+            // After update there should be a ruleset that will declare sites as malicious
+            val beforeUpdate = Date()
+            client.update()
+            client.lastUpdatePerformedAt shouldNotBe null
+            (client.lastUpdatePerformedAt?.before(beforeUpdate) ?: true) shouldBe false
+            for (url in SHOULD_NOT_BE_BLOCKED) {
+                client.getSiteReputation(url).isMalicious shouldBe false
+            }
+
+            // After close there should be no rulesets loaded so nothing will be malicious
+            client.close()
+            client.lastUpdatePerformedAt shouldNotBe null
+            (client.lastUpdatePerformedAt?.time ?: 0L) shouldBeGreaterThan 0L
+            for (url in MALICIOUS + SHOULD_NOT_BE_BLOCKED) {
+                client.getSiteReputation(url).isMalicious shouldBe false
+            }
+
+            // After clearStorage all the cached data should be gone
+            client.clearStorage()
+            client.lastUpdatePerformedAt shouldBe null
         }
-
-        // Prior to update there should be no rulesets loaded
-        client.lastUpdatePerformedAt shouldBe null
-        shouldThrow<SudoSiteReputationException.RulesetNotFoundException> {
-            client.getSiteReputation(MALICIOUS.first())
-        }
-
-        // After update there should be a ruleset that will declare sites as malicious
-        val beforeUpdate = Date()
-        client.update()
-        client.lastUpdatePerformedAt shouldNotBe null
-        (client.lastUpdatePerformedAt?.before(beforeUpdate) ?: true) shouldBe false
-        for (url in SHOULD_NOT_BE_BLOCKED) {
-            client.getSiteReputation(url).isMalicious shouldBe false
-        }
-
-        // After close there should be no rulesets loaded so nothing will be malicious
-        client.close()
-        client.lastUpdatePerformedAt shouldNotBe null
-        (client.lastUpdatePerformedAt?.time ?: 0L) shouldBeGreaterThan 0L
-        for (url in MALICIOUS + SHOULD_NOT_BE_BLOCKED) {
-            client.getSiteReputation(url).isMalicious shouldBe false
-        }
-
-        // After clearStorage all the cached data should be gone
-        client.clearStorage()
-        client.lastUpdatePerformedAt shouldBe null
-    }
 }

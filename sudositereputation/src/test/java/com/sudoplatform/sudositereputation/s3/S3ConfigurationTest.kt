@@ -27,7 +27,6 @@ import org.robolectric.RobolectricTestRunner
  */
 @RunWith(RobolectricTestRunner::class)
 internal class S3ConfigurationTest : BaseTests() {
-
     private fun configManager(configJson: String): SudoConfigManager {
         return object : SudoConfigManager {
             override fun getConfigSet(namespace: String): JSONObject? {
@@ -46,9 +45,8 @@ internal class S3ConfigurationTest : BaseTests() {
              *
              * @return validation result with the details of incompatible or deprecated service configurations.
              */
-            override suspend fun validateConfig(): ValidationResult {
-                return ValidationResult(listOf<ServiceCompatibilityInfo>(), listOf<ServiceCompatibilityInfo>())
-            }
+            override suspend fun validateConfig(): ValidationResult =
+                ValidationResult(listOf<ServiceCompatibilityInfo>(), listOf<ServiceCompatibilityInfo>())
         }
     }
 
@@ -66,22 +64,24 @@ internal class S3ConfigurationTest : BaseTests() {
             readS3Configuration(mockContext, logger, configManager(emptyConfigJson))
         }
 
-        val missingRegionJson = """
+        val missingRegionJson =
+            """
             {
                 "bucket": "ids-userdata-eml-dev-transientuserdatabucket0d043-5tkr1hts9sja"
             }
-        """.trimIndent()
+            """.trimIndent()
 
         shouldThrow<SudoSiteReputationException.ConfigurationException> {
             readS3Configuration(mockContext, logger, configManager(missingRegionJson))
         }
 
-        val completeConfigJson = """
+        val completeConfigJson =
+            """
             {
                 "region": "us-east-1",
                 "bucket": "foo"
             }
-        """.trimIndent()
+            """.trimIndent()
 
         readS3Configuration(mockContext, logger, configManager(completeConfigJson))
     }

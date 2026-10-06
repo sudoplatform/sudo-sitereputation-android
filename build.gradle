@@ -1,41 +1,60 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.9.24'
-    ext.aws_version = '2.75.2'
-    ext.amplify_version = '2.19.1'
-    ext.dokka_version = '1.9.20'
-    ext.coroutine_version = '1.8.1'
+    ext {
+        agp_version = '9.2.0'
+        kotlin_version = '2.3.0'
+        coroutine_version = '1.8.1'
+        amplify_version = '2.29.2'
+        aws_version = '2.81.0'
+        dokka_version = '2.0.0'
+    }
 
     repositories {
+        gradlePluginPortal()
         google()
         mavenCentral()
-        maven { url "https://plugins.gradle.org/m2/" }
+        if (project.file("${rootProject.projectDir}/util/license-tools.gradle").exists() &&
+                project.hasProperty("nexusUsername") &&
+                project.hasProperty("nexusPassword")) {
+            maven {
+                url = uri("https://repo.tools.anonyome.com/repository/android-releases")
+                credentials {
+                    username = project.property("nexusUsername").toString()
+                    password = project.property("nexusPassword").toString()
+                }
+                content {
+                    includeGroup("com.anonyome")
+                }
+            }
+        }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.5.2'
+        classpath "com.android.tools.build:gradle:$agp_version"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'org.owasp:dependency-check-gradle:8.4.0'
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:$dokka_version"
-        if (project.file("${rootProject.projectDir}/util/sonarqube.gradle").exists()) {
-            classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.1.1"
+        classpath "org.jmailen.gradle:kotlinter-gradle:5.4.2"
+        if (project.file("${rootProject.projectDir}/util/license-tools.gradle").exists()) {
+            classpath "com.anonyome:license-tools:4.0.0"
         }
-        classpath "gradle.plugin.com.cookpad.android.plugin:plugin:1.2.8"
-        classpath "org.jmailen.gradle:kotlinter-gradle:3.16.0"
-        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:4.0.0.2929"
+        if (project.file("${rootProject.projectDir}/util/vulnerability-scan.gradle").exists()) {
+            classpath "org.owasp:dependency-check-gradle:12.2.2"
+        }
+        if (project.file("${rootProject.projectDir}/util/sonarqube.gradle").exists()) {
+            classpath "org.sonarqube:org.sonarqube.gradle.plugin:7.5.0.8588"
+        }
         classpath ("com.squareup.moshi:moshi") {
             version{
                 strictly '1.8.0'
             }
         }
-
     }
 }
 
 plugins {
     id "io.github.gradle-nexus.publish-plugin" version "1.1.0"
     id "com.github.ben-manes.versions" version "0.39.0"
-    id "com.apollographql.apollo3" version "4.0.0-beta.7"
+    id "com.apollographql.apollo" version "4.3.3"
 }
 
 ext {
@@ -59,6 +78,7 @@ if (project.findProperty("tag") && sonatypeStagingProfileId) {
     nexusPublishing {
         repositories {
             sonatype {
+                nexusUrl.set(uri("https://ossrh-staging-api.central.sonatype.com/service/local/"))
                 stagingProfileId = sonatypeStagingProfileId
 
                 username = nexusUsername
@@ -72,7 +92,7 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        maven { url "https://plugins.gradle.org/m2/" }
+        gradlePluginPortal()
         if (internalRepoUsername?.trim()) {
             maven {
                 name = internalSnapshotRepoName
@@ -94,8 +114,8 @@ allprojects {
     }
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+tasks.register("clean", Delete) {
+    delete rootProject.layout.buildDirectory
 }
 
 // Check outdated dependencies with suppressions

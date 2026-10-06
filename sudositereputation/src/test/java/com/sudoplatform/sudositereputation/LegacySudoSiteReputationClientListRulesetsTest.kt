@@ -34,7 +34,6 @@ import java.util.concurrent.CancellationException
  */
 @RunWith(RobolectricTestRunner::class)
 internal class LegacySudoSiteReputationClientListRulesetsTest : BaseTests() {
-
     @After
     fun fini() {
         verifyMocksUsedInClientInit()
@@ -50,89 +49,96 @@ internal class LegacySudoSiteReputationClientListRulesetsTest : BaseTests() {
     }
 
     @Test
-    fun `listRulesets() should call S3 client`() = runBlocking<Unit> {
-        siteReputationClient.listRulesets() shouldHaveSize 1
-        verify(mockS3Client, atLeastOnce()).list(eq(DefaultLegacySiteReputationClient.S3_TOP_PATH), any())
-    }
+    fun `listRulesets() should call S3 client`() =
+        runBlocking<Unit> {
+            siteReputationClient.listRulesets() shouldHaveSize 1
+            verify(mockS3Client, atLeastOnce()).list(eq(DefaultLegacySiteReputationClient.S3_TOP_PATH), any())
+        }
 
     @Test
-    fun `listRulesets() should return none when S3 client does`() = runBlocking<Unit> {
-        mockS3Client.stub {
-            onBlocking { list(anyString(), any()) } doReturn emptyList()
+    fun `listRulesets() should return none when S3 client does`() =
+        runBlocking<Unit> {
+            mockS3Client.stub {
+                onBlocking { list(anyString(), any()) } doReturn emptyList()
+            }
+
+            siteReputationClient.listRulesets() shouldHaveSize 0
+
+            verify(mockS3Client, atLeastOnce()).list(eq(DefaultLegacySiteReputationClient.S3_TOP_PATH), any())
         }
-
-        siteReputationClient.listRulesets() shouldHaveSize 0
-
-        verify(mockS3Client, atLeastOnce()).list(eq(DefaultLegacySiteReputationClient.S3_TOP_PATH), any())
-    }
 
     @Test
-    fun `listRulesets() should not return MALICIOUS_DOMAIN rulesets`() = runBlocking<Unit> {
-        val s3Objects = listOf(
-            S3Client.S3ObjectInfo(
-                key = "malware",
-                eTag = "etag1",
-                lastModified = Date(1L),
-                userMetadata = TestData.S3_REPUTATION_OBJECT_USER_METADATA_MALWARE,
-            ),
-            S3Client.S3ObjectInfo(
-                key = "phishing",
-                eTag = "etag1",
-                lastModified = Date(1L),
-                userMetadata = TestData.S3_REPUTATION_OBJECT_USER_METADATA_PHISHING,
-            ),
-            S3Client.S3ObjectInfo(
-                key = "malicious-domains",
-                eTag = "etag1",
-                lastModified = Date(1L),
-                userMetadata = TestData.S3_REPUTATION_OBJECT_USER_METADATA_MALICIOUSDOMAIN,
-            ),
-        )
-        mockS3Client.stub {
-            onBlocking { list(anyString(), any()) } doReturn s3Objects
+    fun `listRulesets() should not return MALICIOUS_DOMAIN rulesets`() =
+        runBlocking<Unit> {
+            val s3Objects =
+                listOf(
+                    S3Client.S3ObjectInfo(
+                        key = "malware",
+                        eTag = "etag1",
+                        lastModified = Date(1L),
+                        userMetadata = TestData.S3_REPUTATION_OBJECT_USER_METADATA_MALWARE,
+                    ),
+                    S3Client.S3ObjectInfo(
+                        key = "phishing",
+                        eTag = "etag1",
+                        lastModified = Date(1L),
+                        userMetadata = TestData.S3_REPUTATION_OBJECT_USER_METADATA_PHISHING,
+                    ),
+                    S3Client.S3ObjectInfo(
+                        key = "malicious-domains",
+                        eTag = "etag1",
+                        lastModified = Date(1L),
+                        userMetadata = TestData.S3_REPUTATION_OBJECT_USER_METADATA_MALICIOUSDOMAIN,
+                    ),
+                )
+            mockS3Client.stub {
+                onBlocking { list(anyString(), any()) } doReturn s3Objects
+            }
+
+            siteReputationClient.listRulesets() shouldHaveSize 2
+
+            verify(mockS3Client).list(eq(DefaultLegacySiteReputationClient.S3_TOP_PATH), any())
         }
-
-        siteReputationClient.listRulesets() shouldHaveSize 2
-
-        verify(mockS3Client).list(eq(DefaultLegacySiteReputationClient.S3_TOP_PATH), any())
-    }
 
     @Test
-    fun `listRulesets() should throw when s3 client throws`() = runBlocking<Unit> {
-        mockS3Client.stub {
-            onBlocking { list(anyString(), any()) } doThrow S3Exception.DownloadException("mock")
-        }
+    fun `listRulesets() should throw when s3 client throws`() =
+        runBlocking<Unit> {
+            mockS3Client.stub {
+                onBlocking { list(anyString(), any()) } doThrow S3Exception.DownloadException("mock")
+            }
 
-        shouldThrow<SudoSiteReputationException.FailedException> {
-            siteReputationClient.listRulesets()
-        }
+            shouldThrow<SudoSiteReputationException.FailedException> {
+                siteReputationClient.listRulesets()
+            }
 
-        verify(mockS3Client, atLeastOnce()).list(eq(DefaultLegacySiteReputationClient.S3_TOP_PATH), any())
-    }
+            verify(mockS3Client, atLeastOnce()).list(eq(DefaultLegacySiteReputationClient.S3_TOP_PATH), any())
+        }
 
     @Test
-    fun `listRulesets() should throw when s3 client gets bad metadata`() = runBlocking<Unit> {
-        mockS3Client.stub {
-            onBlocking { list(anyString(), any()) } doThrow S3Exception.MetadataException("mock")
-        }
+    fun `listRulesets() should throw when s3 client gets bad metadata`() =
+        runBlocking<Unit> {
+            mockS3Client.stub {
+                onBlocking { list(anyString(), any()) } doThrow S3Exception.MetadataException("mock")
+            }
 
-        shouldThrow<SudoSiteReputationException.DataFormatException> {
-            siteReputationClient.listRulesets()
-        }
+            shouldThrow<SudoSiteReputationException.DataFormatException> {
+                siteReputationClient.listRulesets()
+            }
 
-        verify(mockS3Client, atLeastOnce()).list(eq(DefaultLegacySiteReputationClient.S3_TOP_PATH), any())
-    }
+            verify(mockS3Client, atLeastOnce()).list(eq(DefaultLegacySiteReputationClient.S3_TOP_PATH), any())
+        }
 
     @Test
-    fun `listRulesets() should not block coroutine cancellation exception`() = runBlocking<Unit> {
-        mockS3Client.stub {
-            onBlocking { list(anyString(), any()) } doThrow CancellationException("Mock")
-        }
+    fun `listRulesets() should not block coroutine cancellation exception`() =
+        runBlocking<Unit> {
+            mockS3Client.stub {
+                onBlocking { list(anyString(), any()) } doThrow CancellationException("Mock")
+            }
 
-        shouldThrow<CancellationException> {
-            siteReputationClient.listRulesets()
-        }
+            shouldThrow<CancellationException> {
+                siteReputationClient.listRulesets()
+            }
 
-        verify(mockS3Client, atLeastOnce()).list(eq(DefaultLegacySiteReputationClient.S3_TOP_PATH), any())
-    }
+            verify(mockS3Client, atLeastOnce()).list(eq(DefaultLegacySiteReputationClient.S3_TOP_PATH), any())
+        }
 }

@@ -2,7 +2,7 @@ package com.sudoplatform.sudositereputation
 
 import android.util.LruCache
 import com.amplifyframework.api.graphql.GraphQLResponse
-import com.apollographql.apollo3.exception.ApolloException
+import com.apollographql.apollo.exception.ApolloException
 import com.sudoplatform.sudologging.Logger
 import com.sudoplatform.sudositereputation.graphql.GetSiteReputationQuery
 import com.sudoplatform.sudositereputation.transformers.SudoSiteReputationExceptionTransformer
@@ -15,7 +15,6 @@ internal class APIClient(
     private val logger: Logger,
     private val cache: LruCache<String, SiteReputation>?,
 ) {
-
     fun clearCache() {
         cache?.evictAll()
     }
@@ -35,10 +34,11 @@ internal class APIClient(
             return cache.get(uri)
         } else {
             try {
-                val response = graphQLClient.query<GetSiteReputationQuery, GetSiteReputationQuery.Data>(
-                    GetSiteReputationQuery.OPERATION_DOCUMENT,
-                    mapOf("uri" to uri),
-                )
+                val response =
+                    graphQLClient.query<GetSiteReputationQuery, GetSiteReputationQuery.Data>(
+                        GetSiteReputationQuery.OPERATION_DOCUMENT,
+                        mapOf("uri" to uri),
+                    )
 
                 if (response.hasErrors()) {
                     logger.warning("Unexpected query response. ${response.errors}")

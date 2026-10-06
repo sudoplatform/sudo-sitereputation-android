@@ -5,7 +5,6 @@ import com.sudoplatform.sudositereputation.graphql.type.ReputationStatus
 import com.sudoplatform.sudositereputation.types.SiteReputation
 
 internal object SudoSiteReputationTransformer {
-
     fun toReputationFromGraphQL(result: Reputation): SiteReputation {
         val reputationStatus: SiteReputation.ReputationStatus =
             when (result.reputationStatus) {

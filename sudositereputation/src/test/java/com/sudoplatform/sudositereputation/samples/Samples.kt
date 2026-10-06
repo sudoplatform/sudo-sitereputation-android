@@ -33,7 +33,6 @@ import java.util.Calendar
 @RunWith(RobolectricTestRunner::class)
 @Suppress("UNUSED_VARIABLE")
 class Samples {
-
     @Test
     fun mockTest() {
         // Just to keep junit happy
@@ -48,26 +47,28 @@ class Samples {
         val logger = Logger("MyApplication", AndroidUtilsLogDriver(LogLevel.INFO))
 
         // Create an instance of SudoUserClient to perform registration and sign in.
-        val sudoUserClient = SudoUserClient.builder(context)
-            .setNamespace("com.mycompany.myapplication")
-            .setLogger(logger)
-            .build()
+        val sudoUserClient =
+            SudoUserClient
+                .builder(context)
+                .setNamespace("com.mycompany.myapplication")
+                .setLogger(logger)
+                .build()
 
         // Create an instance of SudoSiteReputationClient block advertisers and trackers
-        val sudoAdTrackerBlocker = LegacySudoSiteReputationClient.builder()
-            .setContext(context)
-            .setSudoUserClient(sudoUserClient)
-            .setLogger(logger)
-            .build()
+        val sudoAdTrackerBlocker =
+            LegacySudoSiteReputationClient
+                .builder()
+                .setContext(context)
+                .setSudoUserClient(sudoUserClient)
+                .setLogger(logger)
+                .build()
     }
 
     private lateinit var client: LegacySudoSiteReputationClient
 
     // This function hides the GlobalScope from the code used in the documentation. The use
     // of GlobalScope is not something that should be recommended in the code samples.
-    private fun launch(
-        block: suspend CoroutineScope.() -> Unit,
-    ) = GlobalScope.launch { block.invoke(GlobalScope) }
+    private fun launch(block: suspend CoroutineScope.() -> Unit) = GlobalScope.launch { block.invoke(GlobalScope) }
 
     fun update() {
         launch {
@@ -84,9 +85,10 @@ class Samples {
     fun lastUpdatePerformedAt() {
         launch {
             try {
-                val yesterday = Calendar.getInstance().apply {
-                    add(Calendar.HOUR_OF_DAY, -24)
-                }
+                val yesterday =
+                    Calendar.getInstance().apply {
+                        add(Calendar.HOUR_OF_DAY, -24)
+                    }
                 if (client.lastUpdatePerformedAt?.before(yesterday.time) == true) {
                     // Reputation rulesets are more than 24 hours old or are missing, update them.
                     withContext(Dispatchers.IO) {
@@ -101,11 +103,12 @@ class Samples {
 
     fun getSiteReputation() {
         launch {
-            val siteReputation = withContext(Dispatchers.IO) {
-                client.getSiteReputation(
-                    url = "http://somedodgyhost.com/somewhere",
-                )
-            }
+            val siteReputation =
+                withContext(Dispatchers.IO) {
+                    client.getSiteReputation(
+                        url = "http://somedodgyhost.com/somewhere",
+                    )
+                }
             if (siteReputation.isMalicious) {
                 // URL should not be loaded
             }

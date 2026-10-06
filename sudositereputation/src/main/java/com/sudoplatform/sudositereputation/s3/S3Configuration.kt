@@ -34,24 +34,27 @@ internal fun readS3Configuration(
     val preamble = "sudoplatformconfig.json does not contain"
     val postamble = "the $CONFIG_SITE_REPUTATION_SERVICE stanza"
 
-    val identityConfig = try {
-        configManager.getConfigSet(CONFIG_SITE_REPUTATION_SERVICE)
-    } catch (e: JSONException) {
-        throw SudoSiteReputationException.ConfigurationException("$preamble $postamble", e)
-    }
+    val identityConfig =
+        try {
+            configManager.getConfigSet(CONFIG_SITE_REPUTATION_SERVICE)
+        } catch (e: JSONException) {
+            throw SudoSiteReputationException.ConfigurationException("$preamble $postamble", e)
+        }
     identityConfig ?: throw SudoSiteReputationException.ConfigurationException("$preamble $postamble")
 
-    val region = try {
-        identityConfig.getString(CONFIG_REGION)
-    } catch (e: JSONException) {
-        throw SudoSiteReputationException.ConfigurationException("$preamble $CONFIG_REGION in $postamble", e)
-    }
+    val region =
+        try {
+            identityConfig.getString(CONFIG_REGION)
+        } catch (e: JSONException) {
+            throw SudoSiteReputationException.ConfigurationException("$preamble $CONFIG_REGION in $postamble", e)
+        }
 
-    val bucket = try {
-        identityConfig.getString(CONFIG_STATIC_DATA_BUCKET)
-    } catch (e: JSONException) {
-        throw SudoSiteReputationException.ConfigurationException("$preamble $CONFIG_STATIC_DATA_BUCKET in $postamble", e)
-    }
+    val bucket =
+        try {
+            identityConfig.getString(CONFIG_STATIC_DATA_BUCKET)
+        } catch (e: JSONException) {
+            throw SudoSiteReputationException.ConfigurationException("$preamble $CONFIG_STATIC_DATA_BUCKET in $postamble", e)
+        }
 
     return S3Configuration(region, bucket)
 }

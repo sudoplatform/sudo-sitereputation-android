@@ -22,15 +22,15 @@ import java.util.Locale
  * @since 2021-01-04
  */
 class RulesetTransformerTest {
-
     @Test
     fun `transformer should convert all Ruleset types`() {
-        val testCases = listOf(
-            "MALICIOUSDOMAIN",
-            "MALWARE",
-            "PHISHING",
-            "UNKNOWN",
-        )
+        val testCases =
+            listOf(
+                "MALICIOUSDOMAIN",
+                "MALWARE",
+                "PHISHING",
+                "UNKNOWN",
+            )
         val types = Ruleset.Type.values().toList()
         var unknownCount = 0
         testCases.forEach { testCase ->
@@ -46,12 +46,13 @@ class RulesetTransformerTest {
 
     @Test
     fun `transformer should convert bad Ruleset types to unknown`() {
-        val testCases = listOf(
-            "xMALICIOUSDOMAINS",
-            "UNKNOWN",
-            "UNKNOWNs",
-            "",
-        )
+        val testCases =
+            listOf(
+                "xMALICIOUSDOMAINS",
+                "UNKNOWN",
+                "UNKNOWNs",
+                "",
+            )
         testCases.forEach { testCase ->
             testCase.toRulesetType() shouldBe Ruleset.Type.UNKNOWN
             testCase.lowercase(Locale.ROOT).toRulesetType() shouldBe Ruleset.Type.UNKNOWN
@@ -61,46 +62,51 @@ class RulesetTransformerTest {
 
     @Test
     fun `transformer should convert S3 data to Ruleset`() {
-        val s3ObjectInfo = listOf(
-            S3Client.S3ObjectInfo(
-                key = "key",
-                eTag = "42",
-                lastModified = Date(1L),
-                userMetadata = mapOf(
-                    RulesetTransformer.METADATA_BLOB to """{
+        val s3ObjectInfo =
+            listOf(
+                S3Client.S3ObjectInfo(
+                    key = "key",
+                    eTag = "42",
+                    lastModified = Date(1L),
+                    userMetadata =
+                        mapOf(
+                            RulesetTransformer.METADATA_BLOB to """{
                         "${RulesetTransformer.METADATA_TYPE}": "MALICIOUSDOMAIN"
                     }""",
+                        ),
                 ),
-            ),
-            S3Client.S3ObjectInfo(
-                key = "keyGood",
-                eTag = "42",
-                lastModified = Date(1L),
-                userMetadata = mapOf(
-                    RulesetTransformer.METADATA_BLOB to """{
+                S3Client.S3ObjectInfo(
+                    key = "keyGood",
+                    eTag = "42",
+                    lastModified = Date(1L),
+                    userMetadata =
+                        mapOf(
+                            RulesetTransformer.METADATA_BLOB to """{
                         "${RulesetTransformer.METADATA_TYPE}": "MALWARE"
                     }""",
+                        ),
                 ),
-            ),
-            S3Client.S3ObjectInfo(
-                key = "key2",
-                eTag = "43",
-                lastModified = Date(1L),
-                userMetadata = mapOf(
-                    RulesetTransformer.METADATA_BLOB to """{
+                S3Client.S3ObjectInfo(
+                    key = "key2",
+                    eTag = "43",
+                    lastModified = Date(1L),
+                    userMetadata =
+                        mapOf(
+                            RulesetTransformer.METADATA_BLOB to """{
                         "${RulesetTransformer.METADATA_TYPE}": "unsupported"
                     }""",
+                        ),
                 ),
-            ),
-            S3Client.S3ObjectInfo(
-                key = "key3",
-                eTag = "44",
-                lastModified = Date(1L),
-                userMetadata = mapOf(
-                    RulesetTransformer.METADATA_BLOB to "{",
+                S3Client.S3ObjectInfo(
+                    key = "key3",
+                    eTag = "44",
+                    lastModified = Date(1L),
+                    userMetadata =
+                        mapOf(
+                            RulesetTransformer.METADATA_BLOB to "{",
+                        ),
                 ),
-            ),
-        )
+            )
         val rulesetList = RulesetTransformer.toRulesetList(s3ObjectInfo)
         rulesetList shouldHaveSize 1
         with(rulesetList[0]) {

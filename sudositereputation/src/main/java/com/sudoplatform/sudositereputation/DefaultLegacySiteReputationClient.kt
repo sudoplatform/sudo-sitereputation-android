@@ -45,8 +45,8 @@ internal class DefaultLegacySiteReputationClient(
     @get:VisibleForTesting
     private val reputationProvider: ReputationProvider = DefaultReputationProvider(logger),
     override val ENTITLEMENT_NAME: String = "sudoplatform.sr.srUserEntitled",
-) : LegacySudoSiteReputationClient, CoroutineScope {
-
+) : LegacySudoSiteReputationClient,
+    CoroutineScope {
     companion object {
         /** Reputation Ruleset file names and paths */
         @VisibleForTesting
@@ -84,6 +84,9 @@ internal class DefaultLegacySiteReputationClient(
         try {
             storageProvider.deleteFiles()
             storageProvider.deleteFileETags()
+        } catch (e: CancellationException) {
+            // Never suppress this exception it's used by coroutines to cancel outstanding work
+            throw e
         } catch (e: Throwable) {
             logger.debug("Error $e")
             throw SudoSiteReputationExceptionTransformer.interpretException(e)
@@ -116,6 +119,7 @@ internal class DefaultLegacySiteReputationClient(
             throw SudoSiteReputationExceptionTransformer.interpretException(e)
         }
     }
+
     override suspend fun update() {
         try {
             var isReputationProviderSetupRequired = false
@@ -148,12 +152,13 @@ internal class DefaultLegacySiteReputationClient(
     }
 
     private fun Ruleset.Type.toPathAndFileName(): Pair<String, String>? {
-        val subPath = when (this) {
-            Ruleset.Type.MALICIOUS_DOMAINS -> MALICIOUS_DOMAINS_SUBPATH
-            Ruleset.Type.MALWARE -> MALWARE_DOMAINS_SUBPATH
-            Ruleset.Type.PHISHING -> PHISHING_DOMAINS_SUBPATH
-            else -> return null
-        }
+        val subPath =
+            when (this) {
+                Ruleset.Type.MALICIOUS_DOMAINS -> MALICIOUS_DOMAINS_SUBPATH
+                Ruleset.Type.MALWARE -> MALWARE_DOMAINS_SUBPATH
+                Ruleset.Type.PHISHING -> PHISHING_DOMAINS_SUBPATH
+                else -> return null
+            }
         return Pair(subPath, "$BASE_RULESET_FILENAME-$subPath.txt")
     }
 
@@ -196,18 +201,20 @@ internal class DefaultLegacySiteReputationClient(
     }
 
     private fun getRules(rulesetType: Ruleset.Type): ByteArray? {
-        val (_, fileName) = rulesetType.toPathAndFileName()
-            ?: run {
-                logger.debug("Unsupported ruleset $rulesetType requested")
-                return null
-            }
+        val (_, fileName) =
+            rulesetType.toPathAndFileName()
+                ?: run {
+                    logger.debug("Unsupported ruleset $rulesetType requested")
+                    return null
+                }
         return storageProvider.read(fileName)
     }
 
     private fun calculateLastUpdatePerformedAt(): Date? {
         try {
-            val timestampBytes = storageProvider.read(LAST_UPDATED_FILE)
-                ?: return null
+            val timestampBytes =
+                storageProvider.read(LAST_UPDATED_FILE)
+                    ?: return null
             val timestamp = String(timestampBytes, Charsets.UTF_8)
             return Date(timestamp.toLong())
         } catch (e: Throwable) {

@@ -26,7 +26,6 @@ private const val MAX_URL_CHECKING_MS = 5L
  * @since 2021-01-05
  */
 class ReputationProviderTest : BaseIntegrationTest() {
-
     private val reputationProvider = DefaultReputationProvider(logger)
 
     private val maliciousDomainsFile by lazy {
@@ -45,24 +44,27 @@ class ReputationProviderTest : BaseIntegrationTest() {
     }
 
     @Test
-    fun shouldBlockPrivacyViolatorUrls() = runBlocking<Unit> {
-        reputationProvider.setRules(maliciousDomainsFile, Ruleset.Type.MALICIOUS_DOMAINS)
+    fun shouldBlockPrivacyViolatorUrls() =
+        runBlocking<Unit> {
+            reputationProvider.setRules(maliciousDomainsFile, Ruleset.Type.MALICIOUS_DOMAINS)
 
-        for (testCase in MALICIOUS) {
-            reputationProvider.checkIsUrlMalicious(testCase.toUrl()) shouldBe true
+            for (testCase in MALICIOUS) {
+                reputationProvider.checkIsUrlMalicious(testCase.toUrl()) shouldBe true
+            }
         }
-    }
 
     @Test
-    fun shouldNotBlockGoodUrls() = runBlocking<Unit> {
-        reputationProvider.setRules(maliciousDomainsFile, Ruleset.Type.MALICIOUS_DOMAINS)
+    fun shouldNotBlockGoodUrls() =
+        runBlocking<Unit> {
+            reputationProvider.setRules(maliciousDomainsFile, Ruleset.Type.MALICIOUS_DOMAINS)
 
-        for (testCase in SHOULD_NOT_BE_BLOCKED) {
-            reputationProvider.checkIsUrlMalicious(testCase.toUrl()) shouldBe false
+            for (testCase in SHOULD_NOT_BE_BLOCKED) {
+                reputationProvider.checkIsUrlMalicious(testCase.toUrl()) shouldBe false
+            }
         }
-    }
 
     // disabled for now because the CI machines are slow and this test often fails.
+
     /*
     @Test
     fun timingTest() = runBlocking<Unit> {

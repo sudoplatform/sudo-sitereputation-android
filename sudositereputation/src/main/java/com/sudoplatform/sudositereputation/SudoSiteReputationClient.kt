@@ -21,7 +21,6 @@ import java.util.Objects
  * @since 2021-01-04
  */
 interface SudoSiteReputationClient : AutoCloseable {
-
     companion object {
         /** Create a [Builder] for [LegacySudoSiteReputationClient]. */
         @JvmStatic
@@ -41,34 +40,38 @@ interface SudoSiteReputationClient : AutoCloseable {
         /**
          * Provide the application context (required input).
          */
-        fun setContext(context: Context) = also {
-            it.context = context
-        }
+        fun setContext(context: Context) =
+            also {
+                it.context = context
+            }
 
         /**
          * Provide the implementation of the [SudoUserClient] used to perform
          * sign in and ownership operations (required input).
          */
-        fun setSudoUserClient(sudoUserClient: SudoUserClient) = also {
-            it.sudoUserClient = sudoUserClient
-        }
+        fun setSudoUserClient(sudoUserClient: SudoUserClient) =
+            also {
+                it.sudoUserClient = sudoUserClient
+            }
 
         /**
          * Provide an [GraphQLClient] for the [SiteReputationClient] to use
          * (optional input). If this is not supplied, an [GraphQLClient] will
          * be constructed and used.
          */
-        fun setGraphQLClient(graphQLClient: GraphQLClient) = also {
-            this.graphQLClient = graphQLClient
-        }
+        fun setGraphQLClient(graphQLClient: GraphQLClient) =
+            also {
+                this.graphQLClient = graphQLClient
+            }
 
         /**
          * Provide the implementation of the [Logger] used for logging errors (optional input).
          * If a value is not supplied a default implementation will be used.
          */
-        fun setLogger(logger: Logger) = also {
-            it.logger = logger
-        }
+        fun setLogger(logger: Logger) =
+            also {
+                it.logger = logger
+            }
 
         /**
          * Construct the [LegacySudoSiteReputationClient]. Will throw a [NullPointerException] if

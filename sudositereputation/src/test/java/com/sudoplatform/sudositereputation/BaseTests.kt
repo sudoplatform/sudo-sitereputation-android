@@ -100,7 +100,8 @@ internal abstract class BaseTests : PropertyResetter by ActualPropertyResetter()
         )
     }
 
-    protected fun verifyMocksUsedInClientInit() = runBlocking<Unit> {
-        verify(mockStorageProvider, atLeastOnce()).read(anyString())
-    }
+    protected fun verifyMocksUsedInClientInit() =
+        runBlocking<Unit> {
+            verify(mockStorageProvider, atLeastOnce()).read(anyString())
+        }
 }

@@ -19,8 +19,8 @@ internal class DefaultSudoSiteReputationClient(
     context: Context,
     private val logger: Logger,
     val apiClient: APIClient,
-) : SudoSiteReputationClient, CoroutineScope {
-
+) : SudoSiteReputationClient,
+    CoroutineScope {
     override val coroutineContext: CoroutineContext = Dispatchers.IO
 
     override fun close() {
@@ -36,7 +36,5 @@ internal class DefaultSudoSiteReputationClient(
         }
     }
 
-    override suspend fun getSiteReputation(url: String): SiteReputation {
-        return apiClient.getSiteReputation(url)
-    }
+    override suspend fun getSiteReputation(url: String): SiteReputation = apiClient.getSiteReputation(url)
 }

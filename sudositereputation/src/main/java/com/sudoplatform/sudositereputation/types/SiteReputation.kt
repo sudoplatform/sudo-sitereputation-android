@@ -9,7 +9,6 @@ public data class SiteReputation(
     val status: ReputationStatus,
     val categories: List<String>,
 ) : Parcelable {
-
     enum class ReputationStatus {
         /** site is known to be malicious */
         MALICIOUS,
