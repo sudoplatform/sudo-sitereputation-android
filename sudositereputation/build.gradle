@@ -247,9 +247,7 @@ if (project.file("${rootProject.projectDir}/util/sonarqube.gradle").exists()) {
     apply from: "${rootProject.projectDir}/util/sonarqube.gradle"
 }
 
-
-// License checking
-if (project.file("${rootProject.projectDir}/util/license-tools.gradle").exists()) {
+// License checking - only include this not publishing externally. Presence of "tag" property means publishing externally.
+if (project.file("${rootProject.projectDir}/util/license-tools.gradle").exists() && !project.hasProperty("tag")) {
     apply from: "${rootProject.projectDir}/util/license-tools.gradle"
 }
-

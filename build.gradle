@@ -14,9 +14,11 @@ buildscript {
         gradlePluginPortal()
         google()
         mavenCentral()
+        // Only include this repo when not publishing externally. Presence of "tag" property means publishing externally.
         if (project.file("${rootProject.projectDir}/util/license-tools.gradle").exists() &&
                 project.hasProperty("nexusUsername") &&
-                project.hasProperty("nexusPassword")) {
+                project.hasProperty("nexusPassword") &&
+                !project.hasProperty("tag")) {
             maven {
                 url = uri("https://repo.tools.anonyome.com/repository/android-releases")
                 credentials {
@@ -34,7 +36,8 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:$dokka_version"
         classpath "org.jmailen.gradle:kotlinter-gradle:5.4.2"
-        if (project.file("${rootProject.projectDir}/util/license-tools.gradle").exists()) {
+        // Only include this plugin when not publishing externally. Presence of "tag" property means publishing externally.
+        if (project.file("${rootProject.projectDir}/util/license-tools.gradle").exists() && !project.hasProperty("tag")) {
             classpath "com.anonyome:license-tools:4.0.0"
         }
         if (project.file("${rootProject.projectDir}/util/vulnerability-scan.gradle").exists()) {
